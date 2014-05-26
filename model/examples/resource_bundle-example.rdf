@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<rdf:RDF 
+	 xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	 xmlns:foaf="http://xmlns.com/foaf/0.1/" 
+	 xmlns:dc="http://purl.org/dc/elements/1.1/" 
+	 xmlns:dcterms="http://purl.org/dc/terms/"
+	 xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" 
+	 xmlns:sioc="http://rdfs.org/sioc/ns#" 
+	 xmlns:scot="http://scot-project.org/scot/ns#" 
+	 xmlns:skos="http://www.w3.org/2004/02/skos/core#" 
+	 xmlns:xsd="http://www.w3.org/2001/XMLSchema#" 
+	 xmlns:rdfg="http://www.w3.org/2004/03/trix/rdfg-1/"
+	 xmlns:role="http://purl.org/role/terms/" 
+	>
+
+<!-- Annotation example of a minimal bundle with only one role:ConfiguredTool -->
+  <role:Bundle rdf:about="http://www.role-widgetstore.eu/semantics/bundle/bundle01">
+	<dcterms:title xml:lang="en-US">bundle title</dcterms:title>
+	<dcterms:description xml:lang="en-US">
+       bundle description
+    </dcterms:description>
+	<foaf:maker>
+    	<foaf:Person rdf:about="http://www.role-widgetstore.eu/semantices/person/daniel">
+        	<foaf:name>daniel</foaf:name>
+        	<foaf:mbox>daniel@role-project.eu</foaf:mbox>
+    	</foaf:Person>
+	</foaf:maker>
+	<dcterms:created>1994-11-05T08:15:30-05:00</dcterms:created>
+	<dcterms:modified>1994-11-05T08:15:30-05:00</dcterms:modified>
+	<foaf:img>default screenshot of the bundle</foaf:img>
+	<foaf:depiction>thumbnail of the bundle</foaf:depiction>
+	<role:hasConfiguredTool><!-- gives the ref to one of the configured tool use in this bundle -->
+		<role:ConfiguredTool rdf:about="http://www.role-widgetstore.eu/content/configuredTool01">
+			<dcterms:source rdf:resource="http://www.role-widgetstore.eu/content/xmpp-multiuser-chat" /><!-- URI of the Tool -->
+			<dcterms:description>Description how the tool is used in the bundle</dcterms:description>
+			<role:userPreferences>XML of valid user preferences </role:userPreferences>
+		</role:ConfiguredTool>
+	</role:hasConfiguredTool>
+  </role:Bundle> 
+</rdf:RDF>

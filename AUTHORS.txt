@@ -1,0 +1,7 @@
+Contributors:
+
+RWTH Aachen University, Germany:
+Dominik Renzel, István Koren, Andreas Guth, Ke Li, Jens Bavendiek
+
+KTH Royal Institute of Technology, Sweden:
+Erik Isaksson, Matthias Palmér

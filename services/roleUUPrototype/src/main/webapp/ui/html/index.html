@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- <title>Index</title> -->
+<script src="/d/openapp"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+<style>
+	body { font-family: sans; font-size: 80%; background: #fff; color: #000; margin: 0px }
+	ul { margin-bottom: 1em; }
+	li { margin-top: .5em; }
+	hr { background: #aaa; color: #aaa; height: 2px; border: 0px; margin: 0px; }
+	section { padding: 1em; border-top: 2px solid #aaa; }
+	.object { margin-left: 10em; display: block; }
+	.object:first-child, .short { margin-left: 1em; display: inline; }
+	#header { padding: 1em; color: #fff; background: rgb(30,87,153); /* Old browsers */
+background: -moz-linear-gradient(top, rgba(30,87,153,1) 0%, rgba(41,137,216,1) 50%, rgba(32,124,202,1) 51%, rgba(125,185,232,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(30,87,153,1)), color-stop(50%,rgba(41,137,216,1)), color-stop(51%,rgba(32,124,202,1)), color-stop(100%,rgba(125,185,232,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, rgba(30,87,153,1) 0%,rgba(41,137,216,1) 50%,rgba(32,124,202,1) 51%,rgba(125,185,232,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, rgba(30,87,153,1) 0%,rgba(41,137,216,1) 50%,rgba(32,124,202,1) 51%,rgba(125,185,232,1) 100%); /* Opera11.10+ */
+background: -ms-linear-gradient(top, rgba(30,87,153,1) 0%,rgba(41,137,216,1) 50%,rgba(32,124,202,1) 51%,rgba(125,185,232,1) 100%); /* IE10+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#7db9e8',GradientType=0 ); /* IE6-9 */
+background: linear-gradient(top, rgba(30,87,153,1) 0%,rgba(41,137,216,1) 50%,rgba(32,124,202,1) 51%,rgba(125,185,232,1) 100%); /* W3C */ }
+	.panel {  padding: .5em; }
+	iframe { border: 2px solid #aaa; }
+	a { color: darkblue; }
+	h1 { margin: 0em; padding: .5em; }
+	h2 { margin: 0em; }
+	h1 a { color: darkblue; }
+	h2, h2 a, #summary1 a {  }
+	.meta h2, .meta h2 a, #summary2 a {  }
+	.model, .system, .datameta { background-image: -webkit-gradient(
+    linear,
+    right top,
+    left top,
+    color-stop(0.46, rgb(255,255,255)),
+    color-stop(0.73, rgb(242,255,240))
+);
+background-image: -moz-linear-gradient(
+    center bottom,
+    rgb(242,255,240) 46%,
+    rgb(255,255,255) 73%
+); }
+	.data { background-image: -webkit-gradient(
+    linear,
+    right top,
+    left top,
+    color-stop(0.46, rgb(255,255,255)),
+    color-stop(0.73, rgb(255,240,255))
+);
+background-image: -moz-linear-gradient(
+    center bottom,
+    rgb(251,245,255) 46%,
+    rgb(255,255,255) 73%
+); }
+	.domain { background-image: -webkit-gradient(
+    linear,
+    right top,
+    left top,
+    color-stop(0.46, rgb(255,255,255)),
+    color-stop(0.73, rgb(240,240,255))
+);
+background-image: -moz-linear-gradient(
+    center bottom,
+    rgb(251,245,255) 46%,
+    rgb(255,255,255) 73%
+); }
+	.model, .datameta { /*display: none;*/ }
+section:hover { background: #fff; }
+#header a { color: #fff; }
+</style>
+</head>
+<body>
+	<div id="header" style="overflow: auto;"></div>
+	<!-- <div class="panel"><table>
+		<tr id="summary0"><td rowspan="3" style="padding-right: 1em;"><strong>Information<br/>resources:</strong></td><td style="padding-right: 2em;"><em>System:</em></td><td><a href="#context">:context</a></td><td><a href="#content">:content</a></td><td><a href="#concept">:concept</a></td><td><a href="#control">:control</a></td></tr>
+		<tr id="summary1"><td style="padding-right: 2em;"><em>Resource:</em></td><td><a href="#meta">:meta</a></td><td><a href="#external">:external</a></td><td><a href="#representationmeta">:representation</a></td></tr>
+		<tr id="summary2"><td style="padding-right: 2em;"><em>Resource-meta:</em></td><td><a href="#metameta">:metameta</a></td><td><a href="#externalmeta">:externalmeta</a></td><td><a href="#representationmeta">:representationmeta</a></td></tr>
+	</table></div> -->
+	<section id="system" class="system"></section>
+	<!--  <section id="context" class="model"></section>
+	<section id="content" class="model"></section>
+	<section id="concept" class="model"></section>
+	<section id="control" class="model"></section> -->
+	<section id="metadata" class="data"></section>
+	<!-- <section id="metametadata" class="data"></section> -->
+	<section id="representation" class="data"></section>
+	<!-- <section id="representationmetadata" class="data"></section> -->
+	<div id="domain"></div>
+    <hr/>
+    <div class="panel">Powered by <a href="http://code.google.com/p/open-app/">OpenApp</a></div>
+	
+	<script id="headerTemplate" type="text/x-jQuery-tmpl">
+		<div><strong>Context: <a href="${defaultTopic(data[contentUri]["http://www.w3.org/1999/02/22-rdf-syntax-ns#subject"][0].value)}">
+			${data[contentUri]["http://www.w3.org/1999/02/22-rdf-syntax-ns#subject"][0].value}</a></strong></div>
+		<div><em>Role: <a href="${data[contentUri]["http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate"][0].value}">
+			${data[contentUri]["http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate"][0].value}</a></em>
+		<div>Concept resource:</div>
+        <h1 style="margin-top: 0em;"><a href="${uri}">${uri}</a></h1>
+    </script>
+	<script id="compactGraphTemplate" type="text/x-jQuery-tmpl">
+		<div><em>Topic: <a href="${sectionPredicate}">${sectionPredicate}</a></em></div>
+		<div>Information resource:</div>
+		<h2>{{if contentUri}}<a href="${contentUri}">${sectionTitle}</a>{{else}}${sectionTitle}{{/if}}</h2>
+		{{if data && (data[uri] || data[""])}}<ul>{{each data[uri] || data[""]}}<li>
+			<strong><em><a href="${$index}">${$index}</a>:</em></strong>
+			<span>{{each $value}}<span class="object">
+				{{if $value.type == "uri"}}
+					<a href="${$value.value}">${$value.value}</a>
+				{{else}}
+					${$value.value}
+				{{/if}}
+				{{if $data.data[$value.value] && $value.value !== $data.uri}}
+					<ul>{{each $data.data[$value.value]}}<li>
+						<em><a href="${$index}">${$index}</a>:</em>
+						<span>{{each $value}}<span class="object">
+							{{if $value.type == "uri"}}
+								<a href="${$value.value}">${$value.value}</a>
+							{{else}}
+								${$value.value}
+							{{/if}}
+						</span>{{/each}}</span>
+					</li>{{/each}}</ul>
+				{{/if}}
+	        </span>{{/each}}</span>
+        </li>{{/each}}</ul>{{else}}
+			<p><em>{{if contentUri}}Empty.{{else}}Not available.{{/if}}</em></p>
+		{{/if}}
+    </script>
+	<script id="fullGraphTemplate" type="text/x-jQuery-tmpl">
+		<div><em>Topic: <a href="${sectionPredicate}">${sectionPredicate}</a></em></div>
+		<div>Information resource:</div>
+		<h2>{{if contentUri}}<a href="${contentUri}">${sectionTitle}</a>{{else}}${sectionTitle}{{/if}}</h2>
+		{{if data && (data[uri] || data[""])}}<ul>{{each data[uri] || data[""]}}
+			<!--<hr/>-->
+			<li><strong><em><a href="${$index}">${$index}</a>:</em></strong></li>
+			<ul>{{each $value}}
+				{{if $value.type == "uri"}}
+					<li><strong><a href="${defaultTopic($value.value)}">${$value.value}</a></strong></li>
+				{{else}}
+					<li>${$value.value}</li>
+				{{/if}}
+				{{if $data.data[$value.value] && $value.value !== $data.uri}}
+					<ul>{{each $data.data[$value.value]}}<li>
+						<em><a href="${$index}">${$index}</a>:</em>
+						<span>{{each $value}}<span class="object">
+							{{if $value.type == "uri"}}
+								<a href="${$value.value}">${$value.value}</a></li>
+							{{else}}
+								${$value.value}
+							{{/if}}
+						</span>{{/each}}</span>
+					</li>{{/each}}</ul>
+				{{/if}}
+				<!--<hr/>-->
+	        {{/each}}</ul>
+        {{/each}}</ul>{{else}}
+			<p><em>{{if contentUri}}Empty.{{else}}Not available.{{/if}}</em></p>
+		{{/if}}
+    </script>
+	<script id="hybridGraphTemplate" type="text/x-jQuery-tmpl">
+		<div><em>Topic: <a href="${sectionPredicate}">${sectionPredicate}</a></em></div>
+		<div>Information resource:</div>
+		<h2>{{if contentUri}}<a href="${contentUri}">${sectionTitle}</a>{{else}}${sectionTitle}{{/if}}</h2>
+		{{if data && (data[uri] || data[""])}}<ul>{{each data[uri] || data[""]}}
+			{{if $index === "http://www.w3.org/2002/07/owl#sameAs" || $index === "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+			  || $index === "http://www.w3.org/2000/01/rdf-schema#seeAlso"}}
+				<li><strong><em><a href="${$index}">${$index}</a>:</em></strong>
+				<span>{{each $value}}<span class="object{{if $value.value.indexOf(":") > $value.value.indexOf("/")}} short{{/if}}">
+					{{if $value.type == "uri"}}
+						<a href="${$value.value}">${$value.value}</a>
+					{{else}}
+						${$value.value}
+					{{/if}}
+					{{if $data.data[$value.value] && $value.value !== $data.uri}}
+						<ul>{{each $data.data[$value.value]}}<li>
+							<em><a href="${$index}">${$index}</a>:</em>
+							<span>{{each $value}}<span class="object">
+								{{if $value.type == "uri"}}
+									<a href="${$value.value}">${$value.value}</a>
+								{{else}}
+									${$value.value}
+								{{/if}}
+							</span>{{/each}}</span>
+						</li>{{/each}}</ul>
+					{{/if}}
+		        </span>{{/each}}</span></li>
+			{{else}}
+				<li><strong><em><a href="${$index}">${$index}</a>:</em></strong></li>
+				<ul>{{each $value}}
+					{{if $value.type == "uri"}}
+						<li><strong><a href="${defaultTopic($value.value)}">${$value.value}</a></strong></li>
+					{{else}}
+						<li>${$value.value}</li>
+					{{/if}}
+					{{if $data.data[$value.value] && $value.value !== $data.uri}}
+						<ul>{{each $data.data[$value.value]}}<li>
+							<em><a href="${$index}">${$index}</a>:</em>
+							<span>{{each $value}}<span class="object">
+								{{if $value.type == "uri"}}
+									<a href="${$value.value}">${$value.value}</a></li>
+								{{else}}
+									${$value.value}
+								{{/if}}
+							</span>{{/each}}</span>
+						</li>{{/each}}</ul>
+					{{/if}}
+		        {{/each}}</ul>
+			{{/if}}
+        {{/each}}</ul>{{else}}
+			<p><em>{{if contentUri}}Empty.{{else}}Not available.{{/if}}</em></p>
+		{{/if}}
+    </script>
+    <script id="iframeTemplate" type="text/x-jQuery-tmpl">
+		<div><em>Topic: <a href="${sectionPredicate}">${sectionPredicate}</a></em></div>
+		<div>Information resource:</div>
+		<h2>{{if contentUri}}<a href="${contentUri}">${sectionTitle}</a>{{else}}${sectionTitle}{{/if}}</h2>
+		{{if data}}
+			{{if contentUri}}
+				<iframe src="${contentUri}" width="90%" height="300px" frameborder="0"></iframe>
+			{{else}}
+				<iframe src="${removeTopic(document.location.toString())}?openapp.ns.rdf=http%3A%2F%2Fwww.w3.org%2F1999%2F02%2F22-rdf-syntax-ns%23&openapp.rdf.predicate=http%3A%2F%2Fkmr.csc.kth.se%2Frdf%2Fconserve%2Frepresentation" width="90%" height="300px" frameborder="0"></iframe>
+			{{/if}}
+        {{else}}
+			<p><em>{{if contentUri}}Empty.{{else}}Not available.{{/if}}</em></p>
+		{{/if}}
+    </script>
+    <script id="domainTemplate" type="text/x-jQuery-tmpl">
+		{{each link.rdf}}{{if $index.length > 0}}
+			<section class="domain">
+    			<div><em>Topic: <a href="${$index}">${$index}</a></em></div>
+				<div>Information resource:</div>
+				<h2><a href="${$value.self[0].value}">${parseTopicId($value.self[0].value)}</a></h2>
+			</section>
+		{{/if}}{{/each}}
+    </script>
+    
+	<script type="text/javascript">
+		var trailingSlash = /\/$/;
+		var leadingSlash = /^\//;
+		var defaultTopic = function(uri, topic) {
+			//return !uri.match(/^https?\:/) || uri.match(/\/[\w\d]*\:[\w\d]+$/)
+			//	? uri : uri.replace(trailingSlash, "") + "/:index";
+			if (!uri.match(/https?:/)) {
+				return uri;
+			}
+			return uri.match(/(\/|^)[\w\d]*\:[\w\d]+$/)
+				? uri : uri.replace(trailingSlash, "") + "/" + (topic || parseTopicId(document.location.href));
+		};
+		var removeTopic = function(uri) {
+			var queryStart = uri.indexOf("?");
+			return uri.substring(0, uri.lastIndexOf("/", queryStart !== -1 ? queryStart : uri.length));
+		};
+		var parseTopicId = function(uri) {
+			return uri.match(/[\w\d\:]*$/);
+		};
+		var resolveUri = function(contextUri, uri) {
+			return removeTopic(contextUri).replace(trailingSlash, "") + "/" + uri.replace(leadingSlash, "");
+		};
+		
+		var conceptUri = removeTopic(document.location.href);
+		$("<base/>").attr("href", conceptUri).appendTo($("head"));
+		
+		openapp.resource.get(conceptUri, function(context) {
+			document.title = context.uri;
+			//$("#headerTemplate").tmpl(context).appendTo("#header");
+			//$("#domainTemplate").tmpl(context).appendTo("#domain");
+			context.sectionPredicate = "http://purl.org/openapp/info";
+			context.sectionTitle = ":info";
+			context.contentUri = resolveUri(context.uri, context.contentUri);
+			$("#hybridGraphTemplate").tmpl(context).appendTo("#system");
+		}, { "http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate":
+			"http://purl.org/openapp/info" });
+	
+		openapp.resource.get(conceptUri, function(context) {
+			document.title = context.uri;
+			context.contentUri = resolveUri(context.uri, context.contentUri);
+			$("#headerTemplate").tmpl(context).appendTo("#header");
+			$("#domainTemplate").tmpl(context).appendTo("#domain");
+			//context.sectionPredicate = "http://purl.org/openapp/concept";
+			//context.sectionTitle = ":concept";
+			//$("#hybridGraphTemplate").tmpl(context).appendTo("#concept");
+		}, { "http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate":
+			"http://purl.org/openapp/concept" });
+		
+		/*openapp.resource.get(conceptUri, function(context) {
+			context.sectionPredicate = "http://purl.org/openapp/context";
+			context.sectionTitle = ":context";
+			context.contentUri = resolveUri(context.uri, context.contentUri);
+			$("#fullGraphTemplate").tmpl(context).appendTo("#context");
+		}, { "http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate":
+			"http://purl.org/openapp/context" });
+		
+		openapp.resource.get(conceptUri, function(context) {
+			context.sectionPredicate = "http://purl.org/openapp/content";
+			context.sectionTitle = ":content";
+			context.contentUri = resolveUri(context.uri, context.contentUri);
+			$("#fullGraphTemplate").tmpl(context).appendTo("#content");
+		}, { "http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate":
+			"http://purl.org/openapp/content" });
+		
+		openapp.resource.get(conceptUri, function(context) {
+			context.sectionPredicate = "http://purl.org/openapp/control";
+			context.sectionTitle = ":control";
+			context.contentUri = resolveUri(context.uri, context.contentUri);
+			$("#compactGraphTemplate").tmpl(context).appendTo("#control");
+		}, { "http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate":
+			"http://purl.org/openapp/control" });*/
+		
+		openapp.resource.get(conceptUri, function(context) {
+			context.sectionPredicate = "http://purl.org/openapp/metadata";
+			context.sectionTitle = ":metadata";
+			context.contentUri = resolveUri(context.uri, context.contentUri);
+			$("#compactGraphTemplate").tmpl(context).appendTo("#metadata");
+		}, { "http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate":
+			"http://purl.org/openapp/metadata" });
+		
+		/*openapp.resource.get(conceptUri, function(context) {
+			context.sectionPredicate = "http://purl.org/openapp/metametadata";
+			context.sectionTitle = ":metametadata";
+			context.contentUri = resolveUri(context.uri, context.contentUri);
+			$("#compactGraphTemplate").tmpl(context).appendTo("#metametadata");
+		}, { "http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate":
+			"http://purl.org/openapp/metametadata" });*/
+		
+		openapp.resource.get(conceptUri, function(context) {
+			context.sectionPredicate = "http://purl.org/openapp/representation";
+			context.sectionTitle = ":representation";
+			if (typeof context.contentUri !== "undefined") {
+				context.contentUri = resolveUri(context.uri, context.contentUri);
+			}
+			$("#iframeTemplate").tmpl(context).appendTo("#representation");
+		}, { "http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate":
+			"http://purl.org/openapp/representation" });
+		
+		/*openapp.resource.get(conceptUri, function(context) {
+			context.sectionPredicate = "http://purl.org/openapp/representationmetadata";
+			context.sectionTitle = ":representationmetadata";
+			$("#compactGraphTemplate").tmpl(context).appendTo("#representationmetadata");
+		}, { "http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate":
+			"http://purl.org/openapp/representationmetadata" });*/
+	</script>
+</body>
+</html>

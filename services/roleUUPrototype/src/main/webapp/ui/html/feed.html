@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+<head>
+<title>Feed</title>
+<script src="/d/openapp"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+<script src="/role/libraries/cometd/cometd.js"></script>
+<script src="/role/libraries/cometd/jquery.cometd.js"></script>
+<style>
+	body { font-family: sans; font-size: 80%; background: #fff; color: #000; margin: 0px }
+	ul { margin-bottom: 1em; }
+	li { margin-top: .5em; }
+	hr { background: #aaa; color: #aaa; height: 2px; border: 0px; margin: 0px; }
+	section { padding: 1em; border-top: 2px solid #aaa; }
+	.object { margin-left: 10em; display: block; }
+	.object:first-child, .short { margin-left: 1em; display: inline; }
+	#header { padding: 1em; color: #fff; background: rgb(30,87,153); /* Old browsers */
+background: -moz-linear-gradient(top, rgba(30,87,153,1) 0%, rgba(41,137,216,1) 50%, rgba(32,124,202,1) 51%, rgba(125,185,232,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(30,87,153,1)), color-stop(50%,rgba(41,137,216,1)), color-stop(51%,rgba(32,124,202,1)), color-stop(100%,rgba(125,185,232,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, rgba(30,87,153,1) 0%,rgba(41,137,216,1) 50%,rgba(32,124,202,1) 51%,rgba(125,185,232,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, rgba(30,87,153,1) 0%,rgba(41,137,216,1) 50%,rgba(32,124,202,1) 51%,rgba(125,185,232,1) 100%); /* Opera11.10+ */
+background: -ms-linear-gradient(top, rgba(30,87,153,1) 0%,rgba(41,137,216,1) 50%,rgba(32,124,202,1) 51%,rgba(125,185,232,1) 100%); /* IE10+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#7db9e8',GradientType=0 ); /* IE6-9 */
+background: linear-gradient(top, rgba(30,87,153,1) 0%,rgba(41,137,216,1) 50%,rgba(32,124,202,1) 51%,rgba(125,185,232,1) 100%); /* W3C */ }
+	.panel {  padding: .5em; }
+	iframe { border: 2px solid #aaa; }
+	a { color: darkblue; }
+	h1 { margin: 0em; padding: .5em; }
+	h2 { margin: 0em; }
+	h1 a { color: darkblue; }
+	h2, h2 a, #summary1 a {  }
+	.meta h2, .meta h2 a, #summary2 a {  }
+	.model, .system, .datameta { background-image: -webkit-gradient(
+    linear,
+    right top,
+    left top,
+    color-stop(0.46, rgb(255,255,255)),
+    color-stop(0.73, rgb(242,255,240))
+);
+background-image: -moz-linear-gradient(
+    center bottom,
+    rgb(242,255,240) 46%,
+    rgb(255,255,255) 73%
+); }
+	.data { background-image: -webkit-gradient(
+    linear,
+    right top,
+    left top,
+    color-stop(0.46, rgb(255,255,255)),
+    color-stop(0.73, rgb(255,240,255))
+);
+background-image: -moz-linear-gradient(
+    center bottom,
+    rgb(251,245,255) 46%,
+    rgb(255,255,255) 73%
+); }
+	.domain { background-image: -webkit-gradient(
+    linear,
+    right top,
+    left top,
+    color-stop(0.46, rgb(255,255,255)),
+    color-stop(0.73, rgb(240,240,255))
+);
+background-image: -moz-linear-gradient(
+    center bottom,
+    rgb(251,245,255) 46%,
+    rgb(255,255,255) 73%
+); }
+	.model, .datameta { /*display: none;*/ }
+section:hover { background: #fff; }
+#header a { color: #fff; }
+code { font-size: 1.2em; }
+</style>
+</head>
+<body>
+	<div id="header" style="overflow: auto;"></div>
+	<section id="feed"></section>
+    <hr/>
+    <div class="panel">Powered by <a href="http://code.google.com/p/open-app/">OpenApp</a></div>
+	
+	<script id="headerTemplate" type="text/x-jQuery-tmpl">
+		<div><strong>Context: <a href="${data[contentUri]["http://www.w3.org/1999/02/22-rdf-syntax-ns#subject"][0].value}" onclick="window.location='${defaultTopic(data[contentUri]["http://www.w3.org/1999/02/22-rdf-syntax-ns#subject"][0].value)}';return false">
+			${data[contentUri]["http://www.w3.org/1999/02/22-rdf-syntax-ns#subject"][0].value}</a></strong></div>
+		<div><em>Role: <a href="${data[contentUri]["http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate"][0].value}">
+			${data[contentUri]["http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate"][0].value}</a></em>
+		<div>Concept resource:</div>
+        <h1 style="margin-top: 0em;"><a href="${uri}">${uri}</a></h1>
+    </script>
+	<script id="entryTemplate" type="text/x-jQuery-tmpl">
+		<section><code>${JSON.stringify($data)}</code></section>
+    </script>
+        
+	<script type="text/javascript">
+		var trailingSlash = /\/$/;
+		var leadingSlash = /^\//;
+		var defaultTopic = function(uri) {
+			return uri.match(/(\/|^)[\w\d]*\:[\w\d]+$/)
+				? uri : uri.replace(trailingSlash, "") + "/:index";
+		};
+		var removeTopic = function(uri) {
+			var queryStart = uri.indexOf("?");
+			return uri.substring(0, uri.lastIndexOf("/", queryStart !== -1 ? queryStart : uri.length));
+		};
+		var parseTopicId = function(uri) {
+			return uri.match(/[\w\d\:]*$/);
+		};
+		var resolveUri = function(contextUri, uri) {
+			return removeTopic(contextUri).replace(trailingSlash, "") + "/" + uri.replace(leadingSlash, "");
+		};
+		
+		var conceptUri = removeTopic(document.location.href);
+		
+		var cometd = $.cometd;
+		var endpoint = document.location.toString().match(/\w+:\/\/[\w\.]+(:\d+)?/)[0] + '/cometd';
+		cometd.init(endpoint);
+		
+		openapp.resource.get(conceptUri, function(context) {
+			document.title = context.uri;
+			context.contentUri = resolveUri(context.uri, context.contentUri);
+			$("#headerTemplate").tmpl(context).appendTo("#header");
+			
+			var channelId = context.uri.replace(/\w+:\/\/[\w\.]+(:\d+)?/, "");
+			/*var subscription1 = cometd.addListener('/meta/connect', function(message) {
+				$("#entryTemplate").tmpl(message).appendTo("#feed");			    	
+			});*/
+			var subscription2 = cometd.subscribe(channelId, function(message) {
+				$("#entryTemplate").tmpl(message).appendTo("#feed");			    	
+			});
+			
+			
+		}, { "http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate":
+			"http://kmr.csc.kth.se/rdf/conserve/concept" });
+		
+	</script>
+</body>
+</html>

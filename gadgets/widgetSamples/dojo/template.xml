@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+  <ModulePrefs title="Dojo example" author_email="mpalmer@gmail.com" description="Shows how a widget can rely on the dojo toolkit." height="500">
+	<Optional feature="content-rewrite">
+	    <Param name="exclude-url">*</Param>
+	</Optional>
+  </ModulePrefs>
+  <Content type="html"><![CDATA[
+  	<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojo/dojo.xd.js" 
+		djConfig="parseOnLoad: true, locale: 'en'" type="text/javascript"></script>
+	<style>
+		@import "http://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dijit/themes/tundra/tundra.css";
+	</style>
+	<script>
+		gadgets.util.registerOnLoadHandler(function(){
+		
+			//This is the place to require all your dojo classes you depend upon.
+			dojo.require("dijit.form.Button");
+			
+			//Have to do everything after dojo is loaded, which has to be after the gadget initialization is done.
+			dojo.addOnLoad(function() {
+			
+				//Adding the tundra class to the body to allow the stylesheet to kick in
+				//must be on the body not on subdivs, otherwise for instance dialogs will be unstyled.
+				dojo.addClass(dojo.body(), "tundra");
+				
+				//The following row replaces the div with id buttonNode with a dojo button, replace with custom code.
+				new dijit.form.Button({label: "Press me!", onClick: function(){alert("A dojo button!")}}, "buttonNode");
+			});
+		});
+	</script>
+	<div id="buttonNode"></div>
+  ]]></Content>
+</Module>

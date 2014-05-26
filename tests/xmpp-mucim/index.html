@@ -1,0 +1,243 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<html>
+	<head>
+	<title>XMPP IM/MUC</title>
+	<!-- if enclosed in an iframe, the following parametrized URI format can be used to login a user and add him to a chatroom.
+	${base.url}/tests/xmpp-mucim/?<params>
+	
+		* jid=<userjid>
+		* resource=<resource-prefix>
+		* passwd =<password> (optional)
+		* room=<room-jid> (optional)
+		* room.name=<room-name> (optional)
+		* room.desc=<room-description> (optional)
+	-->
+	<!-- default container look and feel -->
+	<link rel="stylesheet" href="/lib/container/gadgets.css">
+	<style type="text/css">
+		.gadgets-gadget { width: 100%; }
+	</style>
+	<!-- Makes this html file into a Shindig supported container,
+		Provides the gadgets, shindig, and osapi javascript APIs.-->
+	<script type="text/javascript" src="/gadgets/js/shindig-container:rpc:pubsub?c=1&debug=1&nocache=1"></script>	
+	<!-- Loads container level OpenApp support. -->
+	<script type="text/javascript" src="/lib/openapp/openapp.js"></script>
+	<!-- Test container bootstrap stuff, to make this html file easier to read.-->
+	<script type="text/javascript" src="/tests/container-bootstrap.js"></script>
+	<!-- Add support for jQuery framework -->
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+	
+	<script type="text/javascript">
+		
+		my = {};
+		var ps;
+		//----------Stuff to override in each test------------------//
+
+		//Overrride this array with uris to gadget specifications (xml files).
+		my.gadgetSpecUrls = [];
+
+		//Overrride this function to do get logging of openapp events.
+		my.log = function(message) {
+			  document.getElementById("output").innerHTML += gadgets.util.escapeString(message) + "<br/>";
+		}
+
+		//-----------End of stuff to override ----------------------//
+
+		my.baseUrl = "http://"+ window.location.host + "/";
+		console.log("Base URL: " + my.baseUrl);
+
+		my.init = function() {	
+			gadgets.pubsubrouter.init(
+				function(id) {
+					return my.gadgetSpecUrls[parseInt(id[id.length - 1])];
+				},
+				{
+					onSubscribe: function(sender, channel) {
+					  my.log(sender + " subscribes to channel '" + channel + "'");
+					  // return true to reject the request.
+					},
+					onUnsubscribe: function(sender, channel) {
+					  my.log(sender + " unsubscribes from channel '" + channel + "'");
+					  // return true to reject the request.
+					},
+					onPublish: function(sender, channel, message) {
+					  my.log(sender + " publishes '" + message + "' to channel '" + channel + "'");
+					  // return true to reject the request.
+					}
+				});
+		};
+
+		my.renderGadgets = function() {
+			var chromeNames = [];
+			var gadgets = [];
+			
+			my.getGadgetSpecs(function() {
+				for (var i = 0; i < my.gadgetSpecUrls.length; ++i) {
+					var gadget = shindig.container.createGadget({specUrl: my.gadgetSpecs[i].url});
+					if (my.gadgetSpecs[i].height != null) {
+						gadget.height = my.gadgetSpecs[i].height;
+					}
+					if (my.gadgetSpecs[i].title != null) {
+						gadget.title = my.gadgetSpecs[i].title;
+					}
+					gadgets.push(gadget);
+					shindig.container.addGadget(gadget);
+					chromeNames.push("gadget-chrome-"+i);
+				}
+				shindig.container.layoutManager.setGadgetChromeIds(chromeNames);
+				for (var j = 0; j < gadgets.length; ++j) {
+					shindig.container.renderGadget(gadgets[j]);
+				}		
+			});
+		};
+
+
+		my.getGadgetSpecs = function(callback) {
+			var _gadgets = [];
+			for (var i = 0; i < my.gadgetSpecUrls.length; ++i) {
+				my.gadgetSpecUrls[i] = my.baseUrl+my.gadgetSpecUrls[i];
+				_gadgets.push({url: my.gadgetSpecUrls[i], moduleId: 1});
+			}
+			
+			var request = {
+				context: {
+					country: "default",
+					language: "default",
+					view: "default",
+					container: "default"
+				},
+				gadgets: _gadgets
+			};
+			
+			var makeRequestParams = {
+				"CONTENT_TYPE" : "JSON",
+				"METHOD" : "POST",
+				"POST_DATA" : gadgets.json.stringify(request)
+			};
+			
+			var secureToken = "john.doe:john.doe:appid:cont:url:0:default";
+			var serverBase = "/gadgets/";
+			var url = serverBase +"metadata?st=" + secureToken;
+			
+			gadgets.io.makeNonProxiedRequest(url,
+				handleJSONResponse,
+				makeRequestParams,
+				"application/javascript"
+			);
+			
+			function handleJSONResponse(obj) {
+				//Unfortunately the gadget specs sometimes come back in the wrong order, sort via my.gadgetSpecUrls.
+				my.gadgetSpecs = [];
+				var gSpecs = {};
+				var toSort = obj.data.gadgets;
+				for (var i=0;i<toSort.length;i++) {
+					gSpecs[toSort[i].url] = toSort[i];
+				}
+				for (var j = 0; j < my.gadgetSpecUrls.length;j++) {
+					my.gadgetSpecs[j] = gSpecs[my.gadgetSpecUrls[j]];
+				}
+				callback();
+			}
+		};
+		
+		my.gadgetSpecUrls = [
+			'gadgets/xmpp/im-kaazing.xml'
+		];
+		
+		function getUrlParams()
+			{
+				var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+				var p = {};
+				for(var i = 0; i < hashes.length; i++){
+					var hash = hashes[i].split('=');
+					p[hash[0]] = hash[1];
+				}
+				if(p["p"] != null){
+					var t = p["p"].split(";");
+					var pars = new Array();
+					for(var i=0;i<t.length;i++){
+						pars.push(t[i]);
+					}
+					return pars;
+				}
+				else{
+					return [];
+				}
+		}
+		
+		function generateUniqueResource(){
+			return (new Date()).getTime() + "-" + Math.abs(Math.floor(Math.random()*10000));
+		}
+		
+		function initChat(){
+			ps = getUrlParams();
+			console.log(ps);
+			if(ps.length >= 2 && ps[0] != "" && ps[1] != ""){
+				var jid = ps[0];
+				var res = ps[1] + "-" + generateUniqueResource();
+				var fulljid = jid + "/" + res ;
+				var pass = fulljid.split("@")[0];
+			
+				if(ps.length >= 3 && ps[2] != ""){
+					pass = ps[2];
+				}
+				
+				gadgets.openapp.publish({"type": "namespaced-properties", "event": "enter" }, 
+				{
+				"http://purl.org/dc/terms/type" : "xmpp.session",
+				"http://purl.org/dc/terms/mediator" : jid,
+				"http://purl.org/dc/terms/identifier" : res,
+				"http://purl.org/dc/terms/accessRights" : pass
+				});
+				
+				console.log("Published Event on entering session");
+			
+			}
+		}
+		
+		function enterRoom(){
+			
+			if(ps.length >= 4 && ps[3] != ""){
+				var jid = ps[0];
+				var name = ps[0].split("@")[0];
+				var descr = "";
+				var room = ps[3];
+				
+				gadgets.openapp.publish({"type": "namespaced-properties", "event": "enter" }, 
+					{
+					"http://purl.org/dc/terms/type" : "xmpp.room",
+					"http://purl.org/dc/terms/URI" : room,
+					"http://purl.org/dc/terms/mediator" : jid,
+					"http://purl.org/dc/terms/title" : name,
+					"http://purl.org/dc/terms/subject" : descr
+					}
+				);
+			}
+		}
+		
+		
+		function iwcEventCallback(envelope, message){
+			
+			if(envelope.event == "dummy"){
+				initChat();
+			}
+			else if(envelope.event == "enter" && 
+				message["http://purl.org/dc/terms/type"] == "xmpp.session" &&
+				message["http://purl.org/dc/terms/creator"] != null){
+				enterRoom();
+			}
+		}
+	
+		gadgets.openapp.connect(iwcEventCallback);
+		
+		
+		
+	</script>	
+	</head>
+	
+	<body onLoad="my.init();my.renderGadgets();">
+		<div id="output-0" style="clear: left;">
+			<div id="gadget-chrome-0" class="gadgets-gadget-chrome" style="width:600px;"></div>
+		</div>
+	</body>
+</html>

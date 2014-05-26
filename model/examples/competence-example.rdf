@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<rdf:RDF 
+	 xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	 xmlns:foaf="http://xmlns.com/foaf/0.1/" 
+	 xmlns:dc="http://purl.org/dc/elements/1.1/" 
+	 xmlns:dcterms="http://purl.org/dc/terms/"
+	 xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" 
+	 xmlns:sioc="http://rdfs.org/sioc/ns#" 
+	 xmlns:scot="http://scot-project.org/scot/ns#" 
+	 xmlns:skos="http://www.w3.org/2004/02/skos/core#" 
+	 xmlns:xsd="http://www.w3.org/2001/XMLSchema#" 
+	 xmlns:rdfg="http://www.w3.org/2004/03/trix/rdfg-1/"
+	 xmlns:cco="http://purl.org/ontology/cco/cognitivecharacteristics.owl#"
+	 xmlns:wo="http://purl.org/ontology/wo/weightingontology.owl#"
+	 xmlns:role="http://purl.org/role/terms/" 
+	>
+
+<!-- Annotation example of a competence -->
+	<!-- This states that Freddy from ROLE has one identified competence  -->
+  <foaf:Person rdf:about="http://role.org/user/freddy">
+     <role:state_competence rdf:resource="http://purl.org/role/instances/competence1212"/>
+  </foaf:Person>
+  
+  <!-- Details about Freddy's competence  -->
+  <cco:CognitiveCharacteristic rdf:about="http://purl.org/role/instances/competence1212">
+	<dcterms:title xml:lang="en-US">Web development with RUBY</dcterms:title>
+	<dcterms:description xml:lang="en-US">Developping web applications with Ruby language</dcterms:description>
+	<dcterms:created>1994-11-05T08:15:30-05:00</dcterms:created>
+	<dcterms:modified>1994-11-05T08:15:30-05:00</dcterms:modified>
+	<cco:characteristic rdf:resource="http://purl.org/role/terms/domain_competence"/>
+	<cco:topic rdf:resource="http://dbpedia.org/page/Ruby_%28programming_language"/>
+	<wo:weight>
+		<wo:Weight> <!-- blank node here -->
+			<wo:scale rdf:resource="http://ec.europa.eu/education/policies/educ/eqf/"/>
+			<wo:weight_value rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">5.0</wo:weight_value>
+		</wo:Weight>
+	</wo:weight>
+  </cco:CognitiveCharacteristic>
+</rdf:RDF>

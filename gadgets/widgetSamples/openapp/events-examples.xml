@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+  <ModulePrefs title="Example events" author_email="mpalmer@gmail.com" height="320" description="Provides a range of example events, which vocabularies to use etc.">
+    <Optional feature="openapp" />
+    <Optional feature="content-rewrite">
+	    <Param name="exclude-url">*</Param>
+	</Optional>
+  </ModulePrefs>
+  <Content type="html"><![CDATA[
+
+    <!-- ========= Style section ============ -->
+	<style>
+		img {max-width:68px; border: 1px solid white;}
+		h1 {margin-bottom: 3px;font-size: large;}
+	</style>
+	
+	
+    <!-- ========= HTML section (inline content) ============ -->
+   	<h1>Click an image to send event</h1>
+    <div>
+      <img id="person" title="A person" src="http://png-5.findicons.com/files//icons/2117/nuove/128/user_male.png"></img>
+      <img id="tweet" title="A tweet" src="http://findicons.com/files//icons/2480/simplegreen_sustainable_business_icons_set/128/tweet_bird.png"></img>
+      <img id="post" title="A post" src="http://png-2.findicons.com/files//icons/808/on_stage/128/chat_2.png"></img>
+      <img id="location" title="A geographical location" src="http://png-3.findicons.com/files//icons/2229/social_media_mini/48/fireeagle_location.png"></img>
+      <img id="event" title="An ical event" src="http://png-2.findicons.com/files//icons/486/dashboard/128/calendar.png"></img>
+      <img id="wikipedia" title="A wikipedia entry" src="http://png-4.findicons.com/files//icons/111/popular_sites/128/wikipedia_globe_icon.png"></img>
+      <img id="news" title="A newsitem" src="http://findicons.com/files//icons/914/cemagraphics/128/news.png"></img>
+	  
+      <!-- chemical element, a company-->
+    </div>
+
+   <!--======   JavaScript section    ========->
+   <!-- For simplicity, lets rely on jquery for manipulating the DOM. -->
+   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" type="text/javascript"></script>
+   <script>
+   	
+   	 // When gadget is inited
+	 gadgets.util.registerOnLoadHandler(function() {
+
+		$("#person").click(function() {
+			var message = {}, url = "http://www.computerhistory.org/fellowawards/hall/bios/Linus,Torvalds";
+			message[openapp.ns.rdfs+"seeAlso"] = url;
+			message[openapp.ns.foaf+"name"] = "Linus Torvalds";
+			message[openapp.ns.rdf+"type"] = openapp.ns.foaf+"Agent";
+			gadgets.openapp.publish({uri: url}, message);
+       });
+
+		$("#tweet").click(function() {
+			var message = {}, url = "https://twitter.com/matthiaspalmer/status/27435798547";
+			message[openapp.ns.rdf+"type"] = "http://rdfs.org/sioc/types#MicroblogPost";
+			message[openapp.ns.dcterms+"title"] = "Matthias Palmér tweeted something at 15 october 2010";
+			message[openapp.ns.dcterms+"created"] = "2010-10-15";
+			message["http://rdfs.org/sioc/ns#content"] = "4 hour lost on getting SVN in eclipse to work on Ubuntu 10.10. Solution was Ganymede Subversive plugin with SVNKit 1.3 connector, Obvious?";
+			message["http://rdfs.org/sioc/ns#avatar"] = "https://si0.twimg.com/profile_images/484402793/avatar-cropped_normal.jpg";
+			message[openapp.ns.rdfs+"seeAlso"] = url;
+			gadgets.openapp.publish({uri: url}, message);
+       });
+
+		$("#post").click(function() {
+			var message = {}, url = "http://roy.gbiv.com/untangled/2008/on-software-architecture";
+			message[openapp.ns.rdf+"type"] = "http://rdfs.org/sioc/types#BlogPost";
+			message[openapp.ns.dcterms+"title"] = "On software architecture";
+			message[openapp.ns.dcterms+"created"] = "2008-03-22";
+			message["http://rdfs.org/sioc/ns#content"] = "I ran across a spout yesterday about the uniform interface in REST. Actually, it is more of an attack on resource-oriented architecture (ROA) with the usual sideswipes at REST...";
+			message["http://rdfs.org/sioc/ns#avatar"] = "http://roy.gbiv.com/pics/roy_fielding.jpg";
+			message[openapp.ns.rdfs+"seeAlso"] = url;
+			gadgets.openapp.publish({uri: url}, message);
+       });
+
+		$("#location").click(function() {
+			var message = {}, url = "http://sws.geonames.org/2661886/";
+			var gn="http://www.geonames.org/ontology#", wgs84_pos = "http://www.w3.org/2003/01/geo/wgs84_pos#";
+			message[openapp.ns.rdf+"type"] = gn+"Feature";
+			message[openapp.ns.dcterms+"title"] = "Sweden";
+			message[gn+"name"] = "Sweden";
+			message[openapp.ns.rdfs+"isDefinedBy"] = "http://sws.geonames.org/2661886/about.rdf";
+			message[gn+"countryCode"] = "SE";
+			message[wgs84_pos + "lat"] = "62";
+			message[wgs84_pos + "long"] = "15";
+			message[gn+"wikipediaArticle"] = "http://en.wikipedia.org/wiki/Sweden";
+			message[openapp.ns.rdfs+"seeAlso"] = "http://dbpedia.org/resource/Sweden";
+			gadgets.openapp.publish({uri: url}, message);
+       });
+
+		$("#event").click(function() {
+			var message = {};
+			var ical = "http://www.w3.org/2002/12/cal/ical#";
+			message[openapp.ns.rdf+"type"] = ical+"Vevent";
+			message[openapp.ns.dcterms+"title"] = "The millenium bug";
+			message[ical+"summary"] = "The millenium bug";
+			message[ical+"URL"] = "http://en.wikipedia.org/wiki/Year_2000_problem";
+			message[openapp.ns.rdfs+"seeAlso"] = "http://dbpedia.org/resource/Year_2000_problem";
+			message[ical + "dtstart"] = "2000-01-01T00:00:00Z";
+			gadgets.openapp.publish({}, message);
+       });
+
+		$("#wikipedia").click(function() {
+			var message = {}, url = "http://dbpedia.org/resource/Pulp_Fiction";
+			message["http://www.w3.org/2002/07/owl#sameAs"] = "http://rdf.freebase.com/ns/m/0f4_l";
+			message[openapp.ns.rdf+"type"] = "http://dbpedia.org/ontology/Film";
+			message[openapp.ns.dcterms+"title"] = "Pulp Fiction";
+			message[openapp.ns.rdfs+"label"] = "Pulp Fiction";
+			message[openapp.ns.rdfs+"comment"] = "Pulp Fiction is a 1994 American crime film directed by Quentin Tarantino, who cowrote its screenplay with Roger Avary. The film is known for its rich, eclectic dialogue, ironic mix of humor and violence, nonlinear storyline, and host of cinematic allusions and pop culture references. The film was nominated for seven Oscars, including Best Picture; Tarantino and Avary won for Best Original Screenplay. It was also awarded the Palme d&#39;Or at the 1994 Cannes Film Festival.";
+			message[openapp.ns.rdfs+"seeAlso"] = "http://dbpedia.org/page/Pulp_Fiction";
+			message["http://dbpedia.org/ontology/runtime"] = "9240.0";
+			gadgets.openapp.publish({uri:url}, message);
+       });
+
+		$("#news").click(function() {
+			var message = {}, url = "http://www.scientificamerican.com/article.cfm?id=the-semantic-web";
+			message[openapp.ns.rdf+"type"] = "http://purl.org/dc/dcmitype/Text";
+			message[openapp.ns.dcterms+"title"] = "The Semantic Web";
+			message[openapp.ns.dc+"creator"] = "Tim Berners-Lee, James Hendler and Ora Lassila";
+			message[openapp.ns.dc+"publisher"] = "Scientific American";
+			message[openapp.ns.dcterms+"created"] = "2001-05-17";
+			message[openapp.ns.dcterms+"alternative"] = "A new form of Web content that is meaningful to computers will unleash a revolution of new possibilities";			
+			message[openapp.ns.rdfs+"seeAlso"] = "http://dbpedia.org/page/Semantic_Web";
+			gadgets.openapp.publish({uri:url}, message);
+       });
+     });
+   </script>
+]]></Content>
+</Module>

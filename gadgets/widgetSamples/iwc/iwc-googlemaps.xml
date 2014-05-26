@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+	<ModulePrefs
+		title="IWC Map"
+		description="A widget demonstrating how people can show each other locations on a map. Original version from Sharique Javaid."
+		author="Dominik Renzel, Chair of Computer Science 5, RWTH Aachen University, Germany"
+		author_email="renzel@dbis.rwth-aachen.de"
+		width="450"
+		height="320">
+		<Require feature="dynamic-height" />
+		
+	</ModulePrefs>
+	<Content>
+	<![CDATA[
+	
+		<script src="http://open-app.googlecode.com/files/openapp.js"></script>
+		
+		<!-- if you consider to use a specific version of ROLE IWC, replace "trunk" with "tags/mX-gunpowder" (X in 1,2,3,4,5) in the URL below -->
+        <!-- if you consider to use the local version of ROLE IWC bundled with the ROLE SDK, use the URL http://127.0.0.1:8073/role/lib/iwc/iwc.js" -->
+		<script src="http://role-project.svn.sourceforge.net/svnroot/role-project/trunk/libraries/iwc/src/main/javascript/iwc.js"></script>		
+		<script type="text/javascript"
+			src="http://maps.google.com/maps/api/js?sensor=false">
+		</script>
+	
+		<script type="application/javascript">
+			
+			var map;
+			var iwcClient;
+			
+			var lrlat,lrlng,lrzom;
+			
+			function init(){
+				iwcClient = new iwc.Client(["*"]);
+				iwcClient.connect(iwcCallback);
+				
+				var myLatlng = new google.maps.LatLng(50.801216, 6.479573);
+				
+				var myOptions = {
+					zoom: 1,
+					center: myLatlng,
+					navigationControl: false,
+					scaleControl: false,
+					mapTypeId: google.maps.MapTypeId.ROADMAP
+				};
+				
+				map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+				google.maps.event.addListener(map, 'dragend', function() {
+					mapTabParSend();		
+				});
+				google.maps.event.addListener(map, 'zoom_changed', function() {
+					mapTabParSend();		
+				});
+				
+			}
+			
+			var iwcCallback = function(intent){
+				if(intent.action == "ACTION_MAPSET_COORDS" && 
+					intent.extras.lat && 
+					intent.extras.lng && 
+					intent.extras.zoom){
+					syncMap(intent);
+				}
+			};
+			
+			function syncMap(intent){
+				
+				lrlat = intent.extras.lat;
+				lrlng = intent.extras.lng;
+				lrzom = intent.extras.zoom;
+				
+				var lat_lng = new google.maps.LatLng(lrlat,lrlng);
+				map.setCenter(lat_lng);
+				map.setZoom(lrzom);				
+			}
+			
+			function sendIntent(intent) {
+				if(iwc.util.validateIntent(intent)) {
+					iwcClient.publish(intent);
+				}
+				else {
+					alert("Intent not valid!");
+				}
+			}
+			
+			// sends the map parameters to the other map when map moved or zoomed by the user
+			function mapTabParSend() {
+				
+				var c=map.getCenter();	
+				var ll=c.lat();
+				var ln=c.lng();
+				var z=map.getZoom();
+						
+				if (lrzom != z || lrlat !=ll || lrlng != ln){
+			
+					var intent = {
+						"component":"",
+						"action":"ACTION_MAPSET_COORDS",
+						"data":"",
+						"dataType":"",
+						"flags":["PUBLISH_GLOBAL"],
+						"extras": {"lat" : ll, "lng": ln, "zoom": z }
+					};
+					
+					sendIntent(intent);
+				}
+			}
+			 
+			gadgets.util.registerOnLoadHandler(init);
+			
+		</script>
+		
+		<div id="map_canvas" style="width: 450px; height: 320px"></div>	
+
+	]]>
+	</Content>
+</Module>

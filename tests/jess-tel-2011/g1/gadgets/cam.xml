@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+    <ModulePrefs title="CAM Activity Meter">
+	<Require feature="opensocial-0.8" />
+    	<Require feature="pubsub"/>
+    	<Require feature="dynamic-height"/>
+    	<Require feature="osapi"/>
+    </ModulePrefs>
+    
+    <Content type="html">
+    	<![CDATA[
+			<!------------- 
+                imports
+            --------------->
+            <link rel="stylesheet" type="text/css" href="http://role-project.svn.sourceforge.net/viewvc/role-project/trunk/gadgets/cam/cam.css">
+            <script type="text/javascript" src="http://d2hv4ldeur9lfv.cloudfront.net/opensocial-jquery-1.3.2.5.min.js"></script>
+			<script type="text/javascript" src="http://role-project.svn.sourceforge.net/viewvc/role-project/trunk/gadgets/cam/jquery.flot.js"></script>
+			<script type="text/javascript" src="http://open-app.googlecode.com/files/openapp.js"></script>
+			<script type="text/javascript" src="http://role-project.svn.sourceforge.net/viewvc/role-project/trunk/gadgets/cam/CamWsLocation.js"></script>
+			<script type="text/javascript" src="http://role-project.svn.sourceforge.net/viewvc/role-project/trunk/gadgets/cam/CamMappingRules.js"></script> 
+						    	
+		    <!-----------------------------
+                 set height of the gadget 
+            ------------------------------->
+			<script type="text/javascript">
+				var initialize = function() {
+					$(window).adjustHeight(500);
+				};
+				gadgets.util.registerOnLoadHandler(initialize);
+			</script>
+			    	
+			<!----------------
+                Forms 
+            ----------------->        
+            
+            <div style="background-color:#F2F2F2;overflow:auto;">
+            <SPACER TYPE=BLOCK HEIGHT=2 WIDTH=50 ALIGN=LEFT>
+            
+	        <div id="placeholder" style="width:500px;height:150px"></div>
+	        <div id="checkbox" > <input type="checkbox" name="aggregate" id="aggregate" onChange='queryCam()'> total activity in course </div>
+	        <div id="button" > <input type="button" id="refresh" onclick='refresh()' value="refresh"> </div>
+	        <div id="userId"></div>
+	        
+	        <form name="unmappedEvents" id="unmappedEvents">
+	        </form>
+	        <SPACER TYPE=BLOCK HEIGHT=5 WIDTH=50 ALIGN=LEFT>
+	        </div>
+	        <!-------------------- 
+                Scripting Area 
+            ---------------------->
+	        <script type="text/javascript">
+	        
+	        	function refresh() {
+	        		queryCam();
+	        		// send message
+                	message = {};
+                    message["http://purl.org/dc/terms/title"] = "CAM Activity Meter";
+                	gadgets.openapp.publish(
+                    {
+                        type: "namespaced-properties",                 	
+                	    event: "refresh",
+                		userid: userId,
+                        viewer: userId 
+                    }, message);
+	        		
+	        	}
+	        	// TODO: CHANGE
+	        	var livedb = "true";
+	        	var cam_gadgetname = "/cam.xml";
+	        	
+	        	var userId = null;
+	        	var opensocialUserId = null;	
+	        		        	
+	        	var camMappingRules = null;
+	        	var wsUrl = null;
+	        	var myToken = null;
+	        	var mySpace = "";
+	        	
+///////////////////
+// on startup
+	        	window.onload = function() {
+	        		// connect to pubsub channel
+     				gadgets.openapp.connect(eventCallbackFunction);
+					camMappingRules = readRulesfile(rulesfile);
+					if (osapi.context != undefined) {
+						osapi.context.get().execute(function(context){
+	                    	mySpace = context.contextId;
+					    });
+					}
+					
+					getViewer();
+					userId = opensocialUserId;
+					
+					// send dummy event on startup to initialize required parameter
+					gadgets.openapp.publish({
+ 						event: "dummy_for_init",
+					    type: "namespaced-properties",					    
+					});	
+ 				}
+
+
+// ###############################################################################################
+// ##########																			##########
+// ##########							CAM MONITORING									##########
+// ##########							IRRELEVANT FOR DEMO								##########
+// ##########																			##########
+// ############################################################################################### 	
+ 				
+//////////////////////////////////////////
+// eventCallbackFunction:
+// Receive Events
+// handle event -> CAM Mapping and Persist
+ 				function eventCallbackFunction(envelope, message) {
+ 					// set correct userId for personalization!!
+ 				    if (userId == null || userId == undefined || userId == "unknown") {
+ 				    	userId = envelope.userid;
+ 				       	if (userId == null || userId == undefined  || userId == "unknown") {
+ 				       		userId = envelope.viewer;
+ 				       		if (userId == null || userId == undefined  || userId == "unknown") {
+ 				       			getViewer();
+								userId = opensocialUserId;
+ 				       		}
+ 				       	}
+ 				    }
+ 				    var str = "userId: " + userId;
+ 				    document.getElementById("userId").innerHTML = str;
+ 				    
+                    if (envelope.event.indexOf("dummy") > -1) {
+                    	for (var key in serviceUrl) { 
+		                    if (envelope.origin.indexOf(key) > -1) {
+		                    	wsUrl = serviceUrl[key];
+		                    	myToken = tokens[key];
+		                    }
+		                }
+		                
+ 						// show last events
+						queryCam();
+					
+				// persist the actual event if cam monitoring is enabled
+ 					} else if (getPrivacy() != "off" || (envelope.sender.indexOf(cam_gadgetname) > -1 && envelope.event == "change")) {
+ 						var rulekey = "ignore";
+ 						var rule = null;
+ 						// get OpenApp --> CAM Mapping Rule
+ 						rulekey = getRuleKey(envelope, message);
+ 						if (rulekey != "ignore") { 
+ 							rule = camMappingRules[rulekey];
+ 						}
+ 						
+ 						// now persist if rulekey found	
+ 						if (rule != null && rule != undefined) {
+							persistEvent(envelope, message, rule);
+						} else {
+							// print unknown event
+					        if (rulekey != "ignore") {
+        					   	// Display event that is not yet monitored by CAM
+        						var unmonitoredEventsHtmlString = "";
+                        		unmonitoredEventsHtmlString = unmonitoredEventsHtmlString + "<table class='history' style='table-layout:fixed'> ";
+                        		unmonitoredEventsHtmlString = unmonitoredEventsHtmlString + "<tr> <td class='historyHeader'> Received Unmonitored Event: </td> </tr> ";
+                        		var tmp = formatDate(new Date());
+                        		unmonitoredEventsHtmlString = unmonitoredEventsHtmlString + "<tr> <td class='historyColumn' > event: " + envelope.event + ", sender: " + envelope.sender + ", date: " + tmp + ", origin: " + envelope.origin + ", envelope.viewer: " + envelope.viewer + ", userId: " + userId + " --- " + JSON.stringify(message) + " </td></tr>";
+                        		unmonitoredEventsHtmlString = unmonitoredEventsHtmlString + "</table>";
+        						document.getElementById("unmappedEvents").innerHTML = unmonitoredEventsHtmlString;
+                            }     
+						}
+ 					}
+ 				}
+ 				
+//////////////////////////////////////
+// persistEvent:
+// map event to CAM based on rules!
+// 1) put all information into key-value map
+// 2) convert key-value map into json representation
+// 3) call WS method - createCamFromJson() - with all required parameters 
+ 				function persistEvent(envelope, message, rule) {
+ 				    // format the date
+ 					var tmpDate = new Date(envelope.date);
+ 					if (isNaN(tmpDate)) {
+ 						tmpDate = new Date();
+ 					}
+ 					envelope.date = formatDate(tmpDate);
+ 					if (envelope.viewer == undefined || envelope.viewer == "unknown") {
+                    	envelope.viewer = userId; 
+                    }
+                    
+                    // merge all attributes into one "hashmap"
+                    var mergedAttributes = {};
+					mergedAttributes["domain"] = envelope.origin;
+					
+                    mergedAttributes["space"] = mySpace;
+                    console.info("mySpace: " + mySpace);
+                    				
+                    for (key in envelope) {
+                        if (envelope[key] != null) {
+                            mergedAttributes[key] = envelope[key].toString();
+                        }
+                    }
+                    
+                    for (key in message) {
+                        mergedAttributes["message["+key+"]"] = message[key];
+                    }
+                    
+                    var mergedAttributesString = JSON.stringify(mergedAttributes);
+                    var params  = {};
+                    
+                    var camInstance = applyRule(mergedAttributes, rule);
+                    var camInstanceJson = JSON.stringify(camInstance);
+                    var postdata = {
+                    	jsonCam : camInstanceJson,
+                    	token : myToken,
+                    	livedb : livedb 
+                    };
+                    
+                    params[gadgets.io.RequestParameters.METHOD] = gadgets.io.MethodType.POST;
+                    params[gadgets.io.RequestParameters.POST_DATA]= gadgets.io.encodeValues(postdata);
+                    params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.Text;
+                    // all requests via monet, because of port 80 (accessability)
+                    // redirect zu duccio../axis2/services/
+                    var url = wsUrl + "CamService/createCamFromJson";
+                    gadgets.io.makeRequest(url, storeCamCallback, params);
+ 				}
+ 				
+////////////////////////////////////////////
+// storeCamCallback:
+//handles the result of the storeCam Method
+				function storeCamCallback(obj){
+					// update the history AFTER storage proceeded
+					// has to be here because otherwise the query is performed, before the new event is in the DB
+					queryCam();
+				}
+
+// ###############################################################################################
+// ##########																			##########
+// ##########									UTILS									##########
+// ##########																			##########
+// ############################################################################################### 	
+
+ 				///////////////////////////////////////
+ 				// READ RULESFILE
+ 				function readRulesfile(rulesFile) {
+ 					var params  = {};
+                    params[gadgets.io.RequestParameters.METHOD] = gadgets.io.MethodType.GET;
+                    //params[gadgets.io.RequestParameters.POST_DATA]= gadgets.io.encodeValues(postdata);
+                    params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.Text;
+                    gadgets.io.makeRequest(rulesfile, readRulesfileCallback, params);
+ 				}
+ 				
+ 				function readRulesfileCallback(obj) {
+ 					camMappingRules = getRules(obj.text);
+				}
+			
+				//////////////////////////////////
+		        // which radiobutton is selected?
+		        function getPrivacy() {
+		            return "on";
+		        }  
+		    
+		        ///////////////////////////////
+		        // pretty formating the date
+		    	function formatDate(d) {
+					var curr_date = d.getDate();
+					curr_date = (curr_date < 10) ? "0" + curr_date : curr_date; 
+					var curr_month = d.getMonth();
+					curr_month++;
+					curr_month = (curr_month < 10) ? "0" + curr_month : curr_month;
+					var curr_year = d.getFullYear();
+					var curr_hour = d.getHours();
+					curr_hour = (curr_hour < 10) ? "0" + curr_hour : curr_hour;
+					var curr_min = d.getMinutes();
+					curr_min = (curr_min < 10) ? "0" + curr_min : curr_min;
+					var curr_sec = d.getSeconds();
+					curr_sec = (curr_sec < 10) ? "0" + curr_sec : curr_sec;
+					var prettyDate = curr_year + "-" + curr_month + "-" + curr_date + " " + curr_hour + ":" + curr_min + ":" + curr_sec;
+					return prettyDate;
+				}
+				
+				function getViewer() {
+					osapi.people.getViewer().execute(function(result){
+						if (!result.error) {
+							opensocialUserId = result.id;
+						}
+					});	
+				}
+				
+// ###############################################################################################
+// ##########																			##########
+// ##########							QUERY CAM 										##########
+// ##########																			##########
+// ############################################################################################### 	
+ 				
+ 		// is called everytime a new Event is stored in the DB
+ 				function queryCam() {
+ 					// query the database: count course activity per minute
+					// checkbock unchecked
+					var detailedQuery = "select DATE(e.dateTime) as date, HOUR(e.dateTime) as hour, MINUTE(e.dateTime) DIV 10 as minute, count(*) as count, er.relatedentityId, r.entityId " +
+								"from Event e, EventRelatedentity er, Relatedentity r " + 
+								"where DATE(e.dateTime) = CURDATE() " + 
+								"and er.eventId = e.id and er.role = \"viewer\" and er.relatedentityId = r.id " +
+								"and e.id in (select eventId from EventRelatedentity er, Relatedentity r where er.role = \"space\" and er.relatedentityId = r.id  and r.entityId = \"" + mySpace + "\") "+
+								"group by date, hour, minute, er.relatedentityId " +
+								"order by date, er.relatedentityId, hour, minute";
+					
+					// checkbock checked			
+					var aggregatedQuery = 	"select date, hour, minute, sum(count) as count from ( " +
+											"select DATE(e.dateTime) as date, HOUR(e.dateTime) as hour, MINUTE(e.dateTime) DIV 10 as minute, count(*) as count, er.relatedentityId, r.entityId " +
+											"from Event e, EventRelatedentity er, Relatedentity r " +
+											"where DATE(e.dateTime) = CURDATE() and er.eventId = e.id and er.role = \"viewer\" and er.relatedentityId = r.id " +
+											"and e.id in (select eventId from EventRelatedentity er, Relatedentity r where er.role = \"space\" and er.relatedentityId = r.id  and r.entityId = \"" + mySpace + "\") "+
+											"group by date, hour, minute, er.relatedentityId order by date, er.relatedentityId, hour, minute) as t group by hour, minute";
+											
+					// after defining differend queries for different purposes
+					// choose query by user selection (checkbox checked or not)											
+					var query = detailedQuery;
+					if (document.getElementById("aggregate").checked == true) {
+						query = aggregatedQuery;
+					}
+					
+					// result of both queries looks like this:
+ 					//			date	|	hour  |	minute  |  count
+ 					//		2011-05-06	|	  9	  |	  10	| 	18
+					//		2011-05-06	|	  9	  |	  11	| 	79
+					//		2011-05-06	|	  9	  |	  14	| 	15
+					//		2011-05-06	|	  9	  |	  15	| 	 5
+ 					
+ 					
+ 			// prepare POST method call
+ 					// interface of the WebService method: 
+ 					// <method name="POST" id="doQuery">
+ 					// <param type="xs:string" style="query" name="statement"/>
+ 					// <param default="true" type="xs:string" style="query" name="livedb"/>
+ 					// <param type="xs:string" style="query" name="token"/>
+ 					// <response><representation mediaType="application/json"/></response>
+                    var postdata = {
+                    	statement : query,
+                    	token : myToken,
+                    	livedb : livedb 
+                    };
+
+					var params  = {};                     
+                    params[gadgets.io.RequestParameters.METHOD] = gadgets.io.MethodType.POST;
+                    params[gadgets.io.RequestParameters.POST_DATA]= gadgets.io.encodeValues(postdata);
+                    params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.JSON;
+                    var url = wsUrl + "CamService/doQuery";
+                    
+                    // execute POST Method Call -- result can be parsed in queryCamCallback() function
+                    gadgets.io.makeRequest(url, queryCamCallback, params);
+				}
+				
+				
+		// Callback Method for gadgets.io.makeRequest()
+		// parses the result of the above given SQL query 
+				function queryCamCallback(queryResult) {
+					// get the result data
+					var result = queryResult.data;
+				
+					// helper variables for iterating correctly over the result table
+					var lastEntry = -1;		// index of the last entry
+					var firstTick = -1;		// index of first regular tick (full hour, e.g. at 9:00 or 13:00)
+					var lastTick = -1;		// index of last regular data entry
+					
+					var curDate = new Date();	// time of the next existing entry 
+					var prevDate = new Date(curDate);		// cache of the previous entry to fill gaps to next entry with 0 
+					var startDate = new Date(curDate);		// store time of the first regular entry to put a label on the left-outer point of x-axis
+					var maxTime = new Date(curDate);		// needed to put a label on the right-outer point of x-axis
+						
+					var data = new Array();			// stores the data values shown in the line-chart
+					var ticks = [];				// stores the grid-line positions shown in the line-chart
+					var tickInterval = 6;		// grid-line interval (every x minutes)
+					var i=0;
+					
+					var curUserId = "";
+					var userData = new Array();
+
+				// The CamService/doQuery method returns a JSON array.
+				// each row of the resulting table (SQL Query produces a table) is represented by an array-entry
+				// parsing the query result by iterating over each table-row
+					// get min time as starting point for diagram
+					for (key in result) {
+						var line = result[key];
+						var tmpDate = new Date();
+						tmpDate.setMinutes(line["minute"]*10);
+						tmpDate.setHours(line["hour"]);
+						if (startDate.getTime() > tmpDate.getTime()) {
+							startDate = new Date(tmpDate);
+							prevDate = new Date(startDate);
+						}
+					}
+					
+				// The CamService/doQuery method returns a JSON array.
+				// each row of the resulting table (SQL Query produces a table) is represented by an array-entry
+				// parsing the query result by iterating over each table-row
+				// aggregate activities for each 10 minutes
+					for (key in result) {
+						var line = result[key];
+						// set time of current regular entry
+						curDate.setMinutes(line["minute"]*10);
+						curDate.setHours(line["hour"]);
+						
+						// result table is ordered by userIds
+						// user-change --> previous user is finished --> reset all iterator values to start over with next user
+						if (curUserId != line["entityId"]) {
+							if (data.length > 0) {
+								// add 0 to data array for smoothness of the diagram
+								data.push([i, 0]);
+								userData.push(data);	
+							}
+							prevDate = new Date(startDate);
+							curUserId = line["entityId"];
+							i=0;
+							data = new Array();
+							if (startDate.getTime() > curDate.getTime()) {
+								startDate = new Date(curDate);
+								firstTick = -1;
+							}
+						}
+						
+						// fill gaps between non existing entries
+						// fill gaps with 0 (no activity)
+						while (prevDate.getTime() < curDate.getTime()) {
+							data.push([i, 0]);
+							if (prevDate.getMinutes() == 0 && firstTick < 0) {
+								firstTick = i;
+							}
+							prevDate.setMinutes(prevDate.getMinutes() + 10);
+							i++;							
+						}
+						
+						// add regular value to data array
+						data.push([i, line["count"]]);
+						if (curDate.getMinutes() == 0 && firstTick < 0) {
+							firstTick = i;
+						}
+						
+						// cache time of last regular entry
+						prevDate = new Date(curDate);
+						prevDate.setMinutes(prevDate.getMinutes() + 10);
+						i++;
+						if (lastEntry < i) {
+							lastEntry = i;
+							maxTime = new Date(curDate);
+							lastTick = lastEntry+1;
+						}
+					}
+					// add 0 to data array for smoothness of the diagram
+					data.push([i, 0]);
+					userData.push(data);
+					
+					// enter grid-line labels 
+					ticks.push([0, startDate.getHours() + ":" + startDate.getMinutes()]);
+					startHour = startDate.getHours()+1;
+					for (j=firstTick; j<lastTick; j=j+tickInterval) {
+						ticks.push([j, startHour + ":00"]);
+						startHour++;
+					}
+					maxTime.setMinutes(maxTime.getMinutes()+10);
+					if (maxTime.getMinutes() > 0) {
+						ticks.push([lastEntry, maxTime.getHours() + ":" + maxTime.getMinutes()]);
+					} 
+					
+					// use jquery Flot to render the result		
+					var visData = [];
+					for (key in userData) {
+						visData.push({ data : userData[key]});
+					}
+					$.plot($("#placeholder"), visData, {xaxis: {ticks: ticks}}, { yaxis: { max: 80 } });
+				}
+	        </script>
+		]]>
+    </Content>
+</Module>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="ROLEUUPrototype" version="2.4"
+	xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<display-name>ROLE-UU-Prototype</display-name>
+	<!-- <servlet>
+		<servlet-name>default</servlet-name>
+		<init-param>
+			<param-name>dirAllowed</param-name>
+			<param-value>false</param-value>
+		</init-param>
+		<init-param>
+			<param-name>listings</param-name>
+			<param-value>false</param-value>
+		</init-param>
+	</servlet> -->
+	<filter>
+		<filter-name>guiceFilter</filter-name>
+		<filter-class>com.google.inject.servlet.GuiceFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>guiceFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<listener>
+		<listener-class>se.kth.csc.kmr.conserve.core.ServerAttributeListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>eu.role_project.service.resource.ServletConfig</listener-class>
+	</listener>
+</web-app>

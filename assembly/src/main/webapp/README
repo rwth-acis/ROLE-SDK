@@ -1,0 +1,27 @@
+========================================================
+     This is a distribution of the ROLE Project SDK
+========================================================
+
+RUNNING THE SDK
+===============
+1) Enter the "bin" directory and run the appropriate "start" command.
+(There is a start.sh for UNIX-like environments and a start.cmd for
+Windows.)
+
+2) Point your browser to http://127.0.0.1:8073/
+(Avoid using "localhost" instead of 127.0.0.1 since there are problems with
+setting cookies on localhost in some browsers.)
+You can log on with username "testuser" and password "roleabdc".
+This SDK and all of its contents will be mounted at http://127.0.0.1:8073/role/
+
+
+DOCUMENTATION
+===============
+Documentation is available through:
+http://127.0.0.1:8073/role/
+
+More documentation can be found at the developer wiki:
+http://sourceforge.net/apps/mediawiki/role-project/
+
+The ROLE project's website can be found at:
+http://www.role-project.eu/

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="ROLE Space Microblog"
+		description="A widget for real-time microblogging within a ROLE space. Uses ROLE interwidget communication and OpenApp space resource management."
+		author="Dominik Renzel"
+		author_email="renzel@dbis.rwth-aachen.de"
+		height="600">
+  	<Require feature="opensocial-0.8" />
+    <Require feature="openapp" />
+    <OAuth>
+		<Service name="openapp" xmlns:openapp="http://www.role-project.eu/xml/openapp/opensocialext/" 
+			openapp:service="http://purl.org/role/terms/spaceService"
+			openapp:permitReadAppend="http://purl.org/role/terms/data">
+			<Request method="" url=""/>
+			<Authorization url=""/>
+			<Access method="" url=""/>
+		</Service>
+    </OAuth>
+  </ModulePrefs>
+  <Content type="html">
+    <![CDATA[
+		
+		<style type="text/css">
+			* {
+				font-family: Verdana;
+				sans-serif; 
+				font-size: 8pt;
+			}
+			
+			.ui-widget {
+				margin: 5pt;
+			}
+			
+			.ui-widget-content, .ui-widget-header {
+				padding: 2pt;
+			}
+			
+			#entries {
+				height: 530px;
+				overflow: auto;
+			}
+			
+			#input-entry {
+				width: 100%;
+			}
+		</style>
+		
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/themes/cupertino/jquery-ui.css" type="text/css" media="all" />
+		
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/jquery-ui.min.js"></script>
+		
+		<!-- ROLE IWC: import IWC client definition -->
+		<script type="text/javascript" src="http://dbis.rwth-aachen.de/gadgets/iwc/lib/iwc.js"></script>
+		  
+		<script>
+
+			// OpenApp: space as a resource
+			var space = new openapp.oo.Resource(openapp.param.space());
+				
+			// OpenApp: Define a namespace for your data
+			var microblogType = "http://dbis.rwth-aachen.de/gadgets/microblog/rdf/entry";
+			
+			// ROLE IWC: Maintain interwidget communication client connected to space context as global variable
+			var iwcClient;
+			
+			//On document and gadget load:
+			gadgets.util.registerOnLoadHandler(function(){
+
+				// ROLE IWC: as soon as space context is initialized, initialize IWC client and connect a callback function reacting to incoming intents
+				iwcClient = new iwc.Client();
+				iwcClient.connect(iwcCallback);
+				
+				renderUI();
+			});
+			
+			
+			// ROLE IWC: implement a callback function reacting to intents
+			function iwcCallback(intent){
+				console.log("Microblogging Widget: received intent");
+				console.log(intent);
+				
+				// ROLE IWC: differentiate between different types of intents.
+				// In this example we are only interested in those intents having intent.action specified as 'ACTION_UPDATE' and
+				// containing an element 'microblog' in intent.categories.
+				if(intent.action == "ACTION_UPDATE" && $.inArray("microblog",intent.categories) > -1){
+					renderEntry(new openapp.oo.Resource(intent.data));
+				}
+			}
+			
+			// This function renders the complete user interface of the widget. This function is called in particular, when the widget is (re)loaded.
+			function renderUI(){
+				// use jQuery to define a button triggering the publication of a new microblog entry
+				$("#button-publish").button().click(function() {
+					publishEntry();
+				});
+			
+				
+				// Flush the DOM container element for rendering microblog entries. 
+				$("#entries").html("");
+
+				// OpenApp: afterwards, retrieve a list of all space data sub-resources of a certain type. 
+				// The type is given as a namespace URI, which in this example is given as a custom namespace. 
+				space.getSubResources({
+					  relation: openapp.ns.role + "data",
+					  type: microblogType,
+					  onEach: renderEntry
+				});
+			};
+			
+			// This function renders a specific microblog entry given by its resource URI.
+			function renderEntry(entryResource){ //TODO change uri to entry
+				var entryHtml = $("<div class='ui-widget ui-corner-all ui-state-default' id='" + entryResource.getURI() + "'></div>");
+				
+				// Append the constructed HTML div element to the DOM container element for microblog entries.
+				entryHtml.appendTo($("#entries"));
+				
+				//OpenApp: first, we use the microblog entry's URI to fetch its metadata asynchronously
+				entryResource.getMetadata(null, function(entryProperties) {
+					
+					// OpenApp: then, we use the entry's publisher URI contained in the respective metadata property to get a human-readable name for the entry's publisher.
+					var publisherResource = new openapp.oo.Resource(entryProperties[openapp.ns.dcterms + "publisher"]);
+					publisherResource.getMetadata(null, function(publisherProperties) {
+						// Use jQuery to insert the information about the microblog entry.
+						entryHtml.append("<div class='ui-widget-header'><a href='" + (entryProperties[openapp.ns.dcterms + "publisher"]) + "/:index'>" + publisherProperties[openapp.ns.dcterms + "title"] + "</a> (" + entryProperties[openapp.ns.dcterms + "issued"] + ") </div><div class='ui-widget-content'>" + (entryProperties[openapp.ns.dcterms + "abstract"]) + "</div>");
+					});
+				});
+			};
+			
+			// This function is called as soon as somebody pushes the 'Publish' button. First, user input for a blog entry is collected from the UI. Then, the entry is stored as a space data sub-resource. 
+			// Finally, on successful storage a ROLE IWC intent is broadcasted to all space members to update their widgets regarding the newly published entry. 
+			function publishEntry(){
+
+				// OpenApp: Prepare a metadata object with title, creator, and creation date for the new entry using terms from the Dublin Core Metadata Initiative
+				// (a full list of all available DCMI terms is available at http://dublincore.org/documents/dcmi-terms) 
+				// (you can also use any other ontology for your purposes, e.g. FOAF, SIOC.)
+				var md = {};
+				md[openapp.ns.dcterms + "abstract"] = $("#input-entry").val(); // add entry text from input element as abstract
+				md[openapp.ns.dcterms + "publisher"] = openapp.param.user(); // add URI of the current user as publisher
+				md[openapp.ns.dcterms + "issued"] = new Date(); // add current time as date of publication
+				
+				// OpenApp: within the space create a new data sub-resource as a new entry typed with the respective namespace (you defined above). 
+				// also provide the metadata.
+				space.create({
+					relation: openapp.ns.role + "data",
+					type: microblogType,
+					metadata: md,
+					callback: function(subResource) {
+						// ROLE IWC: on successful entry metadata storage, broadcast an interwidget communication message to notify other space members to update their UIs.  
+						notifyResourceUpdate(subResource.getURI());
+					}
+				});
+			};
+			
+			// ROLE IWC: this function formulates and then broadcasts a ROLE IWC intent to update the data behind the URI given as parameter to all space members.
+			// OpenApp: the URI passed to this function could also be an OpenApp resource URI. In this widget, we make use of this function after successful storage of a microblog entry.
+			function notifyResourceUpdate(uri){
+				
+				// ROLE IWC: formulate an intent; notice that no sender needs to be specified. The ROLE IWC framework will set the sender automatically.
+				var intent = {
+				  "component": "",
+				  "data": uri,
+				  "categories": ["microblog"],
+				  "dataType": "text/json",
+				  "action": "ACTION_UPDATE",
+				  "flags"	:["PUBLISH_GLOBAL"]
+				};
+				
+				// ROLE IWC: finally use the ROLE IWC client to publish the intent to the whole space and its members.
+				iwcClient.publish(intent);
+			}
+			
+		</script>
+		
+		<!-- Main widget UI -->
+		<div>
+			<div class="ui-widget-header">
+				<label for="input-entry">New entry:</label><br/> 
+				<input type="text" id="input-entry" class='text ui-widget-content ui-corner-all' />
+				<button id="button-publish" class="fg-button ui-corner-all">Publish</button>
+			</div>
+			<div id="entries"></div>
+		</div>
+		
+    ]]>
+  </Content>
+</Module>

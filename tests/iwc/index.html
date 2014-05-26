@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<html>
+	<head>
+	<title>ROLE Interwidget Communication (IWC) Demonstrator</title>
+	<!-- default container look and feel -->
+	<link rel="stylesheet" href="/lib/container/gadgets.css">
+	<style type="text/css">
+		* { 
+			color: black; 
+			font-family: Verdana;
+			sans-serif; 
+		}
+		
+		.gadgets-gadget { width: 100%; }
+	</style>
+	<!-- Makes this html file into a Shindig supported container,
+		Provides the gadgets, shindig, and osapi javascript APIs.-->
+	<script type="text/javascript" src="/gadgets/js/shindig-container:rpc:pubsub?c=1&debug=1&nocache=1"></script>	
+	<!-- Loads container level OpenApp support. -->
+	<script type="text/javascript" src="/lib/openapp/openapp.js"></script>
+	<!-- Test container bootstrap stuff, to make this html file easier to read.-->
+	<script type="text/javascript" src="/tests/container-bootstrap.js"></script>
+	<script type="text/javascript">
+		
+		//------------------List of gadgets to show-----------------------------
+		my.gadgetSpecUrls = [
+			'gadgets/widgetSamples/iwc/iwc-proxy.xml',
+			'gadgets/widgetSamples/iwc/iwc-youtube.xml',
+			'gadgets/widgetSamples/iwc/iwc-googlemaps.xml',
+			'gadgets/widgetSamples/iwc/iwc-paint.xml'
+		];
+		//----------------------------------------------------------------------------------
+		
+	</script>	
+	</head>
+	
+	<body onLoad="my.init();my.renderGadgets()">
+		<img src="http://www.role-project.eu/wp-content/uploads-role/2009/08/spidericon100x40.png" width="100" height="40" alt="ROLE" style="float: right; padding: 5px; background: #fff;"/>
+		<h1 style="background: #35A035; color: #fff; font-family: Verdana; font-size: 1.4em; margin: 0px; padding: .4em .2em .1em .2em; border-bottom: 3px solid #35a035;">
+			ROLE Interwidget Communication (IWC) Demonstrator
+		</h1>		
+		<div id="fb-root" style="margin:10px"></div><script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script>
+		<fb:like href="http://role-is.dbis.rwth-aachen.de/tests/iwc/" send="false" width="200" show_faces="false" font="arial"></fb:like>
+		<img src="http://l.yimg.com/hr/img/delicious.small.gif" height="10" width="10" alt="Delicious" />
+<a href="http://www.delicious.com/save" onclick="window.open('http://www.delicious.com/save?v=5&noui&jump=close&url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title), 'delicious','toolbar=no,width=550,height=550'); return false;"> Bookmark this on Delicious</a>
+		<div style='font-size: 11pt'>
+		<p>
+		On this page we demonstrate multi-user-multi-browser remote interwidget communication in a set of widgets created for remote realtime collaboration scenarios among learners.
+		</p>
+		
+		<h3>Prerequisites</h3>
+		Your browser must support the WebSocket API. We recommend <a href="http://www.google.com/chrome">Google Chrome</a>.  
+		
+		<h3>Instructions</h3>
+		<ol>
+			<li> Open multiple different browser instances with this page.
+			<li> In each browser instance login with a separate account in the "IWC Proxy" Widget. Create accounts in the "IWC Proxy" widget.
+			<li> Interact with the widgets in any browser instance and see what is happening in the other browser instances.
+		</ol>
+		<h3>Available Widgets</h3>
+		<ul>
+			<li><span style="font-weight: bold;">IWC Proxy</span> - gateway for outgoing/incoming interwidget communication</li>
+			<li><span style="font-weight: bold;">IWC Video Player - watch videos together in real-time:</span> Seek to a position and push "Publish Seek" to broadcast.</li>
+			<li><span style="font-weight: bold;">IWC Map - navigate maps together in real-time:</span> Zoom &amp; pan the map to broadcast navigation.
+			<li><span style="font-weight: bold;">IWC Paint - paint together in real-time:</span> Set color and linewidth. Paint on the canvas to broadcast paint operations.
+		</ul>
+		<div style="height:120px;vertical-align:middle;margin: 20px">
+			<img style="height:120px;margin: 0px 50px 0px 0px;float:left;" src="http://www.role-project.eu/wp-content/uploads-role/2011/06/ROLE_Enchantment_Logo.png"/>
+			<div style="font-size:14pt"><span style="font-weight:bold;">Having a great idea for an IWC widget?</span>
+				<ol>
+					<li>Tell us in the <a href="http://www.cs.le.ac.uk/projects/ROLE/sre/">ROLE Requirements Bazaar</a>.</li>
+					<li>Code it with the <a href="http://sourceforge.net/projects/role-project/files/role-m1-sdk/role-m1-sdk.zip/download">ROLE SDK</a>.</li>
+					<li>Share it in the  <a href="http://www.role-widgetstore.eu/">ROLE Widgetstore</a>.</li>
+					<li>Win fabulous prizes in the <a href="http://www.role-project.eu/?page_id=1291">ROLE Widget Enchantment</a> Competition!</li>
+				<ol>
+			</div>
+		</div>
+		</div>
+		
+		<!------------------CHANGE HERE------------------------------------------------------------------>
+		<!--One div for each gadget (id = gadget-chrome-X) divided into rows  (divs with id = output-Y)-->
+		<div id="output-0">
+			<div id="gadget-chrome-0" class="gadgets-gadget-chrome" style="width:250px"></div>
+			<div>
+				<div id="gadget-chrome-1" class="gadgets-gadget-chrome" style="width:490px"></div>
+				<div id="gadget-chrome-2" class="gadgets-gadget-chrome" style="width:450px"></div>
+				<div id="gadget-chrome-3" class="gadgets-gadget-chrome" style="width:950px"></div>
+			</div>
+		</div>
+		<!----------------------------------------------------------------------------------------------->
+		<br/><br/>
+		
+	</body>
+</html>

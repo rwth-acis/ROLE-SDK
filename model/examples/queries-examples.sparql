@@ -1,0 +1,60 @@
+PREFIX foaf:<http://xmlns.com/foaf/0.1/>
+PREFIX sioc:<http://rdfs.org/sioc/ns#>
+PREFIX scot:<http://scot-project.org/scot/ns#>
+PREFIX xsd:<http://www.w3.org/2001/XMLSchema#>
+PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
+PREFIX dc:<http://purl.org/dc/elements/1.1/>
+PREFIX dcterms:<http://purl.org/dc/terms/>
+PREFIX role:<http://purl.org/role/terms/>
+PREFIX cco:<http://purl.org/ontology/cco/cognitivecharacteristics.owl#>
+PREFIX wo:<http://purl.org/ontology/wo/weightingontology.owl#>
+
+#++++++++++++++++
+#  Competences 
+# Search for a person with a competence in Ruby programming language
+# use regex with case-insensitive flag to search in title and topic
+SELECT ?person ?comp ?topic ?title
+WHERE {
+	?person role:state_competence ?comp
+	{?comp dcterms:title ?title
+	FILTER( regex(?title, '(?i)ruby'))}
+	UNION{
+	?comp cco:topic ?topic
+	 FILTER( regex(?topic, '(?i)ruby'))}	
+}
+GROUP BY ?comp
+
+#++++++++++++++++
+#Retrieve all tools
+DESCRIBE ?tool
+WHERE
+{
+ ?tool rdf:type role:Tool
+}
+
+#++++++++++++++++
+#retrieve all tools instances with additional info about the functionalities of these tools
+SELECT ?tool ?tit ?cat ?func ?funcN ?funcDes
+WHERE
+{
+ ?tool rdf:type role:Tool
+ ?tool dcterms:title ?tit
+ ?tool role:category ?cat
+ ?tool role:toolFunctionality ?func
+ ?func role:hasName ?funcN
+ ?func role:hasDescription ?funcDes
+}
+
+#++++++++++++++++
+#retrieve all bundle instances and get info on the configured tools
+SELECT ?bundle ?bDescr ?bMaker ?confT ?tool ?prefs ?cTDescr
+WHERE 
+{
+	?bundle rdf:type role:ResourceBundle
+	?bundle dcterms:description ?bDescr
+	?bundle foaf:maker ?bMaker
+	?bundle role:hasConfiguredTool ?confT
+	?confT dcterms:source ?tool
+	?confT dcterms:description ?cTDescr
+	?confT role:userPreferences ?prefs
+}

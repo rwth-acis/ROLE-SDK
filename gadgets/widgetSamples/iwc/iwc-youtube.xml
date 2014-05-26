@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+	<ModulePrefs
+		title="IWC Video Player"
+		description="A widget demonstrating how people can watch and seek videos together synchronously."
+		author="Dominik Renzel, Chair of Computer Science 5, RWTH Aachen University, Germany"
+		author_email="renzel@dbis.rwth-aachen.de"
+		height="320">
+		<Require feature="dynamic-height" />
+	</ModulePrefs>
+	<Content>
+	<![CDATA[
+		<style type="text/css">
+		  #videoDiv { 
+			margin-right: 3px;
+		  }
+		  #videoInfo {
+			margin-left: 3px;
+		  }
+		</style>
+		
+		<script src="http://www.google.com/jsapi" type="text/javascript"></script>
+		<script src="http://open-app.googlecode.com/files/openapp.js"></script>
+		
+		<!-- if you consider to use a specific version of ROLE IWC, replace "trunk" with "tags/mX-gunpowder" (X in 1,2,3,4,5) in the URL below -->
+        <!-- if you consider to use the local version of ROLE IWC bundled with the ROLE SDK, use the URL http://127.0.0.1:8073/role/lib/iwc/iwc.js" -->
+		<script src="http://role-project.svn.sourceforge.net/svnroot/role-project/trunk/libraries/iwc/src/main/javascript/iwc.js"></script>
+		
+		<script type="text/javascript">
+		  google.load("swfobject", "2.1");
+		</script>
+		
+		<script type="application/javascript">
+			
+			var iwcClient;
+			var ytplayer;
+			var cvurl;
+			
+			function init(){
+				iwcClient = new iwc.Client(["*"]);
+				iwcClient.connect(iwcCallback);
+				
+				google.setOnLoadCallback(loadPlayer);
+			}
+			
+			function loadPlayer() {
+				cvurl = "http://www.youtube.com/v/CQYELiTtUs8" 
+				var params = { allowScriptAccess: "always" };
+				var atts = { id: "ytPlayer" };
+		
+				swfobject.embedSWF(cvurl + 
+								   "&enablejsapi=1&playerapiid=player1", 
+								   "videoDiv", "480", "295", "8", null, null, params, atts);
+			}
+			
+			function iwcCallback(intent){
+				//console.log("********************************************");
+				//console.log(intent);
+				//console.log("********************************************");
+				
+				if(intent.action == "ACTION_SEEK" && intent.dataType == "video/flv" && intent.extras["position"] != null){
+					console.log("received video seek event");
+					var time = intent.extras["position"];
+					ytplayer.seekTo(time,true);
+					
+				}
+				
+				if(intent.action == "ACTION_OPEN" && intent.dataType == "video/flv" && intent.data != null){
+					console.log("received video open event");
+					ytplayer.loadVideoByUrl(intent.data);
+				}
+			}
+			
+			function updateHTML(elmId, value) {
+				document.getElementById(elmId).innerHTML = value;
+			}
+			
+			function sendIntent(intent) {
+				if(iwc.util.validateIntent(intent)) {
+					iwcClient.publish(intent);
+				}
+				else {
+					alert("Intent not valid!");
+				}
+			};
+			
+			function gui_videoseek(){
+				if(ytplayer){
+					var ctime = ytplayer.getCurrentTime();
+					var intent = {
+						"component":"",					
+						"action":"ACTION_SEEK",
+						"data":cvurl,
+						"dataType":"video/flv",
+						"flags":["PUBLISH_GLOBAL"],
+						"extras":{"position":ctime}
+					};
+					sendIntent(intent);
+				}
+			}
+			
+			function gui_videoopen(){
+			
+				var selectBox = document.getElementById("videoSelection");
+				cvurl = selectBox.options[selectBox.selectedIndex].value;
+
+				if(ytplayer) {
+					
+					var intent = {
+						"component":"",					
+						"action":"ACTION_OPEN",
+						"data":cvurl,
+						"dataType":"video/flv",
+						"flags":["PUBLISH_GLOBAL"]
+					};
+					sendIntent(intent);
+				}
+				
+			}
+			
+			function onYouTubePlayerReady(playerId) {
+				ytplayer = document.getElementById("ytPlayer");
+				ytplayer.addEventListener("onStateChange", "onPlayerStateChange");
+				
+				ytplayer.play();
+			}
+			
+			function onPlayerStateChange(state) {
+				console.log("Player state changed:" + state);
+			}
+
+			gadgets.util.registerOnLoadHandler(init);
+			
+		</script>
+		
+		<div id="videoDiv">Loading...</div>
+		<div id="videoControls">
+			Select video:
+			<select id="videoSelection" onchange="gui_videoopen();">
+				<option value="http://www.youtube.com/v/ysVcAYo7UPI" selected>Math: Imaginary Unit</option>
+				<option value="http://www.youtube.com/v/MmRgMAZyYN0">History: Communism</option>
+				<option value="http://www.youtube.com/v/CQYELiTtUs8">Physics: Newton's 1st Law of Motion</option>
+			</select>
+			<input type="button" onclick="gui_videoseek()" value="Publish Seek"/>
+		</div>
+	]]>
+	</Content>
+</Module>

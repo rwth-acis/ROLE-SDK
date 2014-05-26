@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="Tasks" height="300">
+  	<Require feature="opensocial-0.9" />
+    <Require feature="openapp" />
+    <OAuth>
+      <Service name="openapp" xmlns:openapp="http://www.role-project.eu/xml/openapp/opensocialext/"
+               openapp:service="http://purl.org/role/terms/spaceService"
+               openapp:permitReadAppend="http://purl.org/role/terms/data">
+	<Request method="" url=""/>
+	<Authorization url=""/>
+	<Access method="" url=""/>
+      </Service>
+    </OAuth>
+  </ModulePrefs>
+  <Content type="html">
+    <![CDATA[
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+      <script>
+	var myContext;
+	myNS = {};
+	myNS.ex = "http://www.example.com/rdf/";
+
+	// Get a list of the goals
+        openapp.resource.get(openapp.param.space(), (function(space) {
+	  var list, i, metadata, task;
+	  myContext = space;
+          list = openapp.resource.context(myContext).sub(openapp.ns.role + "data")
+	      .type(myNS.ex + "task").list();
+
+	  // Loop through the list of the goals
+	  for (i = 0; i < list.length; i++)  {
+
+	    // Get goal metadata
+            openapp.resource.context(list[i]).metadata().get((function(metadata) {
+	      var properties = openapp.resource.content(metadata).properties(), item, itemList;
+	      item = $("<li/>").text(properties[openapp.ns.dcterms + "title"] || "")
+	          .append($("<input type='button' value='&#x2715;'/>").click((function(){
+	            openapp.resource.del(metadata.uri, (function(){ alert("Deleted"); window.location.reload(); }) );
+	          })))
+	          .append($("<input type='button' value='add subgoal'/>").click((function(){
+		    openapp.resource.get(metadata.uri, (function(task){
+		      addTask(task);
+		    }));
+	          })));
+	      itemList = $("<ul/>").appendTo(item);
+	      item.appendTo($("#tasks"));
+
+	      // Add subgoals
+	      (function(itemList){
+	        openapp.resource.get(metadata.uri, (function(task){
+		  var i, list;
+		  list = openapp.resource.context(task).sub(openapp.ns.role + "data")
+		      .type(myNS.ex + "task").list();
+		  for (i = 0; i < list.length; i++) {
+
+		    // Get subgoal metadata
+		    openapp.resource.context(list[i]).metadata().get((function(metadata){
+		      var properties = openapp.resource.content(metadata).properties(), subitem;
+		      subitem = $("<li/>").text(properties[openapp.ns.dcterms + "title"] || "")
+			 .append($("<input type='button' value='&#x2715;'/>").click((function(){
+			     openapp.resource.del(metadata.uri, (function(){ alert("Deleted"); window.location.reload(); }) );
+			  })))
+			 .append($("<input type='button' value='&#x2714;'/>").click((function(){
+
+			     // User clicked the Done-button: mark subgoal as done in its metadata
+			     var graph = openapp.resource.context(metadata).metadata().graph()
+				  .literal(openapp.ns.dcterms + "title", properties[openapp.ns.dcterms + "title"]);
+			     if (properties[myNS.ex + "taskStatus"] !== myNS.ex + "Done") {
+			         graph.resource(myNS.ex + "taskStatus", myNS.ex + "Done" )
+			     }
+			     graph.put((function(){ window.location.reload(); }));
+
+	                  })));
+		      if (properties[myNS.ex + "taskStatus"] === myNS.ex + "Done") {
+			subitem.css("text-decoration", "line-through").css("font-style", "italic");
+		      }
+		      subitem.appendTo(itemList);
+		    }));
+
+		  }
+	        }));
+	      })(itemList);
+
+	    }));
+          }
+        }));
+
+	addTask = function(toParent) {
+	  openapp.resource.context(toParent || myContext).sub(openapp.ns.role + "data")
+	      .type("http://www.example.com/rdf/task").create((function(task) {
+	    openapp.resource.context(task).metadata().graph()
+	        .literal(openapp.ns.dcterms + "title", $("#text").val()).put((function(){ window.location.reload(); }));
+	  }));
+	};
+
+      </script>
+      <style>
+	body { font-size: 90%; }
+	ul { margin: 0px; padding: 0px; }
+	li { list-style-type: none; margin-top: .5em; padding-left: 1em; border-top: 5px solid #aaaaff; font-weight: bold; }
+	li li { border-top: 1px solid #aaaaaa; font-weight: normal; }
+	input { margin-left: .5em; }
+      </style>
+      <form onsubmit="addTask(); return false">
+	<input id="text" /> <input id="add" type="submit" value="add goal" />
+      </form>
+      <ul id="tasks"></ul>
+    ]]>
+  </Content>
+</Module>

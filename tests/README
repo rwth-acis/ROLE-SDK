@@ -1,0 +1,4 @@
+Create directories here for test bundles. 
+Each directory should contain a test environment as an index page.
+The testTemplate directory contains a working template that is suitable to start from.
+For more information see the documentation in testTemplate/index.html.

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="User resource read widget" height="300">
+  	<Require feature="opensocial-0.9" />
+    <Require feature="openapp" />
+    <OAuth>
+      <Service name="openapp" xmlns:openapp="http://www.role-project.eu/xml/openapp/opensocialext/"
+               openapp:service="http://purl.org/role/terms/spaceService"
+               openapp:permitReadAppend="http://purl.org/role/terms/data">
+	<Request method="" url=""/>
+	<Authorization url=""/>
+	<Access method="" url=""/>
+      </Service>
+    </OAuth>
+  </ModulePrefs>
+  <Content type="html">
+    <![CDATA[
+      <script>
+      	gadgets.util.registerOnLoadHandler(function() {
+	        
+	        //The user service top resource
+	        var userRes = new openapp.oo.Resource(openapp.param.user());
+    	    
+    	    //Get metadata for the user top resource in default format, i.e. as a object, can be specificed explicitly with "properties" instead of null.
+    	    userRes.getMetadata(null, function(metadata) {
+        	    document.getElementById("content").innerText = metadata["http://purl.org/dc/terms/title"];
+        	});
+        	
+        });
+      </script>
+      <h1 id="content">Loading</h1>
+    ]]>
+  </Content>
+</Module>

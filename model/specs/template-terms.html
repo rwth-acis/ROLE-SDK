@@ -1,0 +1,236 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
+<html 
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:mvcb="http://webns.net/mvcb/"
+  xml:lang="en"
+> 
+
+  <head>
+    <title>ROLE Ontology Specification</title>
+    <meta http-equiv="content-type" content="text/xhtml+xml; charset=utf-8" />
+    <link rel="mvcb:generatorAgent" type="application/rdf+xml" title="DOAP" href="http://rdfohloh.wikier.org/project/specgen" />
+    <link href="xmlns-style.css" rel="stylesheet" type="text/css" />
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body>
+    <h1 id="title">ROLE Ontology Specification</h1>
+
+    <h2 id="subtitle">Specification of the ROLE (Responsive Open Learning Environment) Ontology</h2>
+
+    <h3 id="mymw-doctype">Working draft november 2012</h3>
+
+    <dl>
+      <dt>This version:</dt>
+      <dd><a href="http://role-project.sourceforge.net/model/specs/20121114/terms.html">http://role-project.sourceforge.net/model/specs/20121114/terms.html</a></dd>
+      <dt>Latest version:</dt>
+      <dd><a href="http://purl.org/role/specs/terms">http://purl.org/role/specs/terms</a></dd>
+
+      <dt>Last Update:</dt>
+      <dd>14:th of november, 2012 </dd>
+
+      <dt>Editors:</dt>
+      <dd>Freddy Limpens, EPFL, Switzerland; Matthias Palmer, University Uppsala, Sweden</dd>
+
+      <dt>Contributors:</dt>
+      <dd>Ingo Dahn, University of Koblenz, Germany; Andreas Kiefel, University Koblenz, Germany</dd>
+    </dl>
+
+    <p class="copyright">© ROLE Consortium 2009-2012. The Role project is supported by the European Commission, in the theme ICT-2007 Digital Libraries and technology-enhanced learning, as a Large-scale integrating project (IP), under the 7th Framework Programme, Grant agreement no.: 231396.</p>
+
+    <!-- ===================================================================== -->
+
+    <hr />
+
+
+    <h2 id="abstract">Abstract</h2>
+
+    <p>
+      The ROLE Responsive Open Learning Environments (ROLE) is a European collaborative
+      project with 16 internationally renowned research groups from 6 EU countries and China. 
+      ROLE´s main task is to deliver and test prototypes of highly responsive Personal Learning 
+      Environments (PLE), offering breakthrough levels of effectiveness, flexibility, user-control
+      and mass-individualisation. 
+      
+      This document is the specification of the ROLE ontology describing the classes and properties that compose it. 
+  
+    </p>
+
+
+
+    <h2 id="status">Status of this Document</h2>
+
+    <p>
+      <strong>This is a work in progress!</strong> This document is changing
+      on a daily if not hourly basis. Comments are very welcome, please send
+      them to the Technical Coordinator of the ROLE project <a href="klamma@informatik.rwth-aachen.de">klamma@informatik.rwth-aachen.de</a> 
+      indicating in the subject that your message is about ROLE ontology. Thank you.
+    </p>
+
+<!-- TOC -->
+
+    <h2 id="contents">Table of Contents</h2>
+    <ol id="toc">
+      <li><a href="#intro">Introduction</a></li>
+      <li><a href="#sec-glance">ROLE Ontology at a glance</a></li>
+      <li>
+        <a href="#overview">ROLE Ontology overview and examples</a>
+        <ol>
+          <li><a href="#s31">Overview</a></li>
+          <li><a href="#s32">Examples</a></li>
+        </ol>
+      </li>
+      <li><a href="#reference">Cross-reference for ROLE Ontology classes and properties</a></li>
+    </ol>
+
+
+
+    <h3>Appendixes</h3>
+
+    <ol id="appendix" style="list-style-type:upper-alpha;">
+      <li><a href="#references">Normative References</a></li>
+      <li><a href="#changes">Changes in this version</a> (Non-Normative)</li>
+      <li><a href="#acknowledgements">Acknowledgements</a> (Non-Normative)</li>
+    </ol>
+
+
+    <hr />
+
+    <!-- ===================================================================== -->
+
+
+    <h2 id="intro">1 Introduction</h2>
+
+    <p>The ROLE ontology is meant to serve as basis to perform reasonning on repositories of tools and learning 
+    resources used in the context of self-directed learning. It describe both tools and learning processes from a Technology-enhanced 
+    learning perspective. New classes and properties have therefore been introduced to precisely account for the specificity of this 
+    application domain, but we also took care to reuse and anchor our classes and properties to existing ontologies (such as DCTerms, FOAF, SIOC)
+    whenever this was possible. It has been designed to fulfill the need of the ROLE project in terms of meta-modelling and description of 
+    learning tools and processes.</p>
+    
+     <p>For example, the <a href="http://www.role-widgetstore.eu">ROLE Widget Store</a> is a repository for all ROLE widgets that can be selected and used within a personal 
+     learning environment or LMS. The ROLE widget store offers the filtering, recommendation and search of widgets that fit
+     to a specific need of a user. The widget store is also open to widgets from many providers; therefore, it offers functionalities 
+     to manage widgets from different vendors or partners of ROLE. The ROLE ontology provides the concepts and properties to
+     precisely describe each tool in relation to, e.g., the learning domain or the learning-wise functionalities. The goal in this 
+     respects is to expose the descriptions of the tools and allow third-party agents to exploit ROLE catalogue of widgets.</p>
+     
+     <p>Another innovation proposed by the ROLE framework is th ability to organize documents, tools, and other resources in 
+     context-relevant bundles of learning resources. These bundle can be shared to the communities in online catalog like the ROLE 
+     Widget Store. These bundle can then instantiated in web spaces within a space-enabled container (Moodle, Graaasp, etc.). A 
+     space consists in a bundle of resources, participants, and tools. For example, students can create a space dedicated to 
+     one course where they can invite classmates, the teacher, etc., and collect and organize relevant resources and applications 
+     by linking them to the space. Spaces, Resource bundles and their properties can be precisely described with ROLE ontology.</p>
+
+    <!-- ===================================================================== -->
+
+    <h2 id="sec-glance">2. ROLE Ontology at a glance</h2>
+
+    <p>
+      An alphabetical index of ROLE terms, by class (concepts) and by property 
+      (relationships, attributes), are given below. All the terms are hyperlinked 
+      to their detailed description for quick reference.
+    </p>
+
+    <!-- The list of classes and properties goes here -->
+    %s
+    <!-- End of the terms list -->
+
+   <!-- <p>...</p> -->
+
+    <!-- ===================================================================== -->
+
+    <h2 id="overview">3. ROLE Ontology overview and examples</h2>
+    
+    
+    <h3 id="s31">3.1. Overview</h3>
+
+    <p>This following figure gives an overview of the classes and properties defined in the ROLE ontology. The model is divided into three colors:
+      <dl>
+	<dt>Core ontology - orange boxes</dt>
+	<dd>Used to define a context for learning in the form of <em>bundles</em> containing tools and learning resources. 
+	  A bundle is a recipe which can be instantiated at any time into a concrete <em>space</em> where also 
+	  <em>persons</em> are associated with the space as <em>owners</em> or <em>members</em>. </dd>
+	
+	<dt>Learning ontology - blue boxes</dt>
+	<dd>Centered on <em>Learning activities</em>, <em>Learning strategies</em>, and <em>Functionalities</em>.
+	  The Learning strategies organizes several learning activities and functionalities provides a bridge to the use of <em>tools</em>.</dd>
+	
+	<dt>Competence ontology - green boxes</dt>
+	<dd>Provides a way to describe comptencies, both those already aquired and those planned in the form of goals.</dd>
+      </dl>
+    	<img src="terms.png"></img>
+
+ 	<h3 id="s32">3.2. Example</h3>
+
+    <p>Here is example describing a Widget registered at the ROLE Widget Store:</p>
+
+    <div class="example">
+      <pre>&lt;role:Widget rdf:about="http://www.role-widgetstore.eu/content/xmpp-multiuser-chat"&gt;
+    &lt;dcterms:source rdf:resource="http://role-is.dbis.rwth-aachen.de/gadgets/chat/xmpp-muc-gadget.xml"/&gt;
+    &lt;dcterms:title xml:lang="en-US"&gt;XMPP Multiuser Chat &lt;/dcterms:title&gt;
+    &lt;dcterms:description xml:lang="en-US"&gt;An XMPP Multiuser Chat Gadget&lt;/dcterms:description&gt; 
+    &lt;foaf:maker&gt;
+        &lt;foaf:Person rdf:about="http://www.role-widgetstore.eu/semantices/person/daniel"&gt;
+            &lt;foaf:name&gt;daniel&lt;/foaf:name&gt;
+            &lt;foaf:mbox&gt;daniel@role-project.eu&lt;/foaf:mbox&gt;
+    	&lt;/foaf:Person&gt;
+    &lt;/foaf:maker&gt;  
+    &lt;foaf:img&gt;default screenshot of the Tool&lt;/foaf:img&gt;
+    &lt;foaf:depiction&gt;thumbnail of the Tool&lt;/foaf:depiction&gt; 
+    &lt;role:category rdf:resource="http://dbpedia.org/page/Category:Communication"/&gt;
+    &lt;role:toolFunctionality rdf:resource="http://purl.org/role/terms/FunctionalityTF1" /&gt;
+&lt;/role:Widget&gt;</pre>
+    </div>
+
+    <p></p>
+
+    <!-- ===================================================================== -->
+
+    <h2 id="reference">4. Cross-reference for ROLE Ontology classes and properties</h2>
+
+    <!-- The following is the script-generated list of classes and properties -->
+    %s
+    <!-- End of the terms list -->
+
+    <!-- ===================================================================== -->
+
+    <h2 id="references">A References</h2>
+
+    <dl>
+      <dt class="label" id="ref-some">name</dt>
+      <dd><em><a href="http://.../">long name</a></em> description...</dd>
+    </dl>
+
+    <h3 id="references-other">A.2 Other references</h3>
+
+    <dl>
+      <dt class="label" id="ref-rfc2119">IETF RFC 2119</dt>
+      <dd>
+        <em><a href="http://www.ietf.org/rfc/rfc2119.txt">RFC 2119: Key words
+        for use in RFCs to Indicate Requirement Levels</a></em>. Internet
+        Engineering Task Force, 1997 (see http://www.ietf.org/rfc/rfc2119.txt).
+      </dd>
+
+    </dl>
+
+    <!-- ===================================================================== -->
+
+
+
+    <h2 id="changes">B Changes in this version (Non-Normative)</h2>
+
+
+    <ul>
+      <li><p>(1st version)</p></li> 
+    </ul>
+
+    <h2><a id="acknowledgements"></a>C Acknowledgements (Non-Normative)</h2>
+
+
+    <p></p>
+
+
+  </body>
+
+</html>

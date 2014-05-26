@@ -1,0 +1,17 @@
+<!-- This is an (incomplete) example of a widget before it was transformed into a ROLE widget -->
+<!-- See the file exampleWithOpenApp.xml for the extended widget -->
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+  <ModulePrefs 
+      author="Joe Dobbs" 
+      title="E-testme IELTS gadget"
+      ...
+  </ModulePrefs>
+  <Content type="html">
+    <![CDATA[   
+	     <table >
+	     .....
+	     </table>
+    ]]>
+  </Content>
+</Module>

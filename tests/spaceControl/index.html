@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<html>
+	<head>
+	<title>Test template - Container with set of gadgets</title>
+	<!-- default container look and feel -->
+	<link rel="stylesheet" href="/lib/container/gadgets.css">
+	<style type="text/css">
+		.gadgets-gadget { width: 100%; }
+	</style>
+	<!-- Makes this html file into a Shindig supported container,
+		Provides the gadgets, shindig, and osapi javascript APIs.-->
+	<script type="text/javascript" src="/gadgets/js/shindig-container:rpc:pubsub?c=1&debug=1&nocache=1"></script>	
+	<!-- Loads container level OpenApp support. -->
+	<script type="text/javascript" src="/lib/openapp/openapp.js"></script>
+	<!-- Test container bootstrap stuff, to make this html file easier to read.-->
+	<script type="text/javascript" src="/tests/container-bootstrap.js"></script>
+	<script type="text/javascript">
+		
+		//------------------CHANGE HERE:List of gadgets to show-----------------------------
+		my.gadgetSpecUrls = [
+			'gadgets/rss/gadget.xml?spaceControl=true',
+			'gadgets/space/gadget_spacecontrol.xml',
+			'gadgets/space/gadget_usesresources.xml',
+			'gadgets/space/gadget_migration.xml'
+		];
+		//----------------------------------------------------------------------------------
+		
+	</script>	
+	</head>
+	
+	<body onLoad="my.init();my.renderGadgets()">
+		<h2 style="font-fanily:Verdana">Test template - Container with set of gadgets</h2>		
+
+		<!------------------CHANGE HERE------------------------------------------------------------------>
+		<!--One div for each gadget (id = gadget-chrome-X) divided into rows  (divs with id = output-Y)-->
+		<div id="output-0" style="clear: left;">
+			<div id="gadget-chrome-0" class="gadgets-gadget-chrome" style="width:400px"></div>
+			<div id="gadget-chrome-1" class="gadgets-gadget-chrome" style="width:400px"></div>
+		</div>
+		<div id="output-1" style="clear: left;">
+			<div id="gadget-chrome-2" class="gadgets-gadget-chrome" style="width:400px"></div>
+			<div id="gadget-chrome-3" class="gadgets-gadget-chrome" style="width:400px"></div>
+		</div>
+		<!----------------------------------------------------------------------------------------------->
+
+	</body>
+</html>

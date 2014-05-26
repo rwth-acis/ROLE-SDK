@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+	<ModulePrefs title="__UP_titleUserPref__" height="610" width="960"
+	 description="TODO a description and a pointer to the original source"
+	 author="TODO your name" 
+	 author_email="TODO your email"
+	 title_url="TODO link to original source">
+	  <Require feature="opensocial-0.9"/>
+	  <Require feature="dynamic-height"/>
+	  <Require feature="osapi"/>
+	</ModulePrefs>
+	<UserPref name="titleUserPref" display_name="Title" default_value="TODO add the title" datatype="string"/>
+	<Content type="html"><![CDATA[
+	<script src="http://widgets.onlinesjtu.com/gadgets/libs/jquery-1.4.3.min.js"></script>
+	<script src="http://widgets.onlinesjtu.com/gadgets/libs/openapp.js"></script>
+	<script type="text/javascript" src="https://role-project.svn.sourceforge.net/svnroot/role-project/trunk/libraries/rapidWidgetCreation/rapidWidgetCreationInit.js"></script>
+	<div id="importedGadget">
+		<iframe height="600" id="foo" src="TODO add the source link" width="950"></iframe>
+	</div>
+	]]></Content>
+</Module>

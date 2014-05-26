@@ -1,0 +1,2027 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:dcterms="http://purl.org/dc/terms" 
+	 xmlns:owl="http://www.w3.org/2002/07/owl#" 
+	 xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+	 xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	 xmlns:role="http://purl.org/role/terms/">
+	<owl:Ontology rdf:about="">
+		<owl:imports rdf:resource="learning-ontologyV2.rdf"/>
+	</owl:Ontology>
+	<!-- Instances -->
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA1">
+		<dcterms:title>describe goal(s) in own words</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF104"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF40"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA2">
+		<dcterms:title>identify rewards for making goal progress</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA1"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF40"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA3">
+		<dcterms:title>identify punishment for failing</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA2"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF40"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA4">
+		<dcterms:title>track attention while doing an activity</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA3"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF35"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA5">
+		<dcterms:title>monitor progress towards own goals</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA4"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF35"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA6">
+		<dcterms:title>order goals and respective sub-goals hierarchically</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA5"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF40"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA8">
+		<dcterms:title>assign a set of the domain-skills, tool-skills and SRL skills to your goals and sub-goals</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA6"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF40"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA9">
+		<dcterms:title>describe obstacles, which could hinder goal and sub goal achievement</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA8"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF104"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF40"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA10">
+		<dcterms:title>describe cause of obstacles</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA9"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF104"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF40"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA11">
+		<dcterms:title>define activities, which could eliminate obstacles</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA10"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF104"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF113"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF40"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA13">
+		<dcterms:title>formulate your request</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF104"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA14">
+		<dcterms:title>describe your problem/difficulty in own words</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA13"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF104"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA15">
+		<dcterms:title>define the necessity of the request</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA14"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF104"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA16">
+		<dcterms:title>define the content of the request</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA15"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF104"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA17">
+		<dcterms:title>identify helpful outside resources</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA16"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA19">
+		<dcterms:title>interact with other more knowledgeable people</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA17"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF1"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF10"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF15"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF2"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA23">
+		<dcterms:title>analyze and define priorities for your tasks/activities</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF104"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF34"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA25">
+		<dcterms:title>allocate time for different activities</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA23"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF41"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA26">
+		<dcterms:title>map goals and sub-goals to the respective time-slots</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA25"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF40"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF41"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA29">
+		<dcterms:title>enter personal data</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF11"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF116"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF31"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA30">
+		<dcterms:title>enter physical characteristics</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA29"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF11"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF116"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF31"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA31">
+		<dcterms:title>enter education history</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA30"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF11"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF116"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF31"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA32">
+		<dcterms:title>enter demographic data</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA31"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF11"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF116"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF31"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA33">
+		<dcterms:title>enter interests</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA32"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF11"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF116"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF31"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA34">
+		<dcterms:title>enter learning preferences</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA33"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF11"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF116"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF31"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA35">
+		<dcterms:title>enter social data</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA34"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF11"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF116"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF31"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA36">
+		<dcterms:title>enter skills</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA35"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF11"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF116"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF31"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA38">
+		<dcterms:title>describe your information need</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF104"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA39">
+		<dcterms:title>identify  appropriate (also already used) information sources</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA38"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF104"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF58"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA41">
+		<dcterms:title>start with initial search</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA39"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF69"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA43">
+		<dcterms:title>follow the references or links obtained through reading and personal contacts</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA41"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF23"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF27"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA44">
+		<dcterms:title>check your information need</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA43"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF104"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA46">
+		<dcterms:title>look for information in areas of potential interest</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA44"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF60"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF69"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA47">
+		<dcterms:title>scan the recently published resources</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA46"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF69"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA48">
+		<dcterms:title>work up the relevant and related information</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA47"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF58"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA49">
+		<dcterms:title>revisit favorite or bookmarked resources for new information</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA48"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA50">
+		<dcterms:title>searching for resources</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA54">
+		<dcterms:title>write down why are you making this presentation</dcterms:title>
+		<dcterms:description>What is the objective: Do you need to inform, to persuade, to train or to sell? Your objective should be clear in your mind. If it is not clear in your mind, it cannot possibly be clear to your audience.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF117"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF120"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF122"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF3"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF51"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF6"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA55">
+		<dcterms:title>write down who are you making this presentation to</dcterms:title>
+		<dcterms:description>What is your audience? Sometimes this will be obvious, but not always. You should try to inform yourself. How many people? Who are they? Business people? Professional people? Political people? Experts or non-experts? Will it be a small, intimate group of 4 colleagues or a large gathering of 400 competitors? How much do they know already and what will they expect from you? Origin of audience (culture, political, religion).</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA54"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF117"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF120"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF122"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF3"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF51"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF6"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA56">
+		<dcterms:title>write down where are you making this presentation</dcterms:title>
+		<dcterms:description>In a small hotel meeting-room or a large conference hall? What facilities and equipment are available? What are the seating arrangements?</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA55"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF117"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF120"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF122"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF3"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF51"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF6"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA57">
+		<dcterms:title>write down when are you making this presentation and how long will it be</dcterms:title>
+		<dcterms:description>Will it be 5 minutes or 1 hour? Just before lunch, when your audience will be hungry, or just after lunch, when your audience will be sleepy?</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA56"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF117"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF120"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF122"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF3"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF51"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF6"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA58">
+		<dcterms:title>highlight relevant Information in your notes</dcterms:title>
+		<dcterms:description>What is relevant to your audience and your objective? Remember, in general, less is better than more (a little is better than a lot). You can always give additional information during the questions after the presentation.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/DecisionActivityAD3"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF117"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF120"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF122"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF3"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF51"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF6"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA59">
+		<dcterms:title>create a title for your presentation and write it down</dcterms:title>
+		<dcterms:description>The title will help you to focus on the subject.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/DecisionActivityAD4"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF117"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF120"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF122"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF3"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF51"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF6"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA60">
+		<dcterms:title>create a prompt and write it down</dcterms:title>
+		<dcterms:description>Create a prompt.  Example: Prompts begin with items such as ?The task is to?? or ?I/We want to ?? A prompt could also be a description of a project. The most effective prompts for this activity are statements that are focused clearly enough so that there is a direct link to the purpose of the session. </dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF117"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF120"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF122"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF3"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF51"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF6"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA61">
+		<dcterms:title>generate questions and write them down</dcterms:title>
+		<dcterms:description>If you are doing group work be careful to write them down exactly as they are said. Do not stop to discuss or answer the questions. Write down as many questions as you can. Rephrase statements as questions.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA60"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF117"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF120"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF122"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF3"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF51"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF6"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA62">
+		<dcterms:title>identify open and closed questions</dcterms:title>
+		<dcterms:description>Put an ?O? by all of the open-ended questions. That are questions with many possible answers  Put a ?C? by questions that elicit one answer. E.g. a ?yes/no? question or a question with a factual answer.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA61"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF117"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF120"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF122"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF3"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF51"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF6"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA63">
+		<dcterms:title>prioritise questions and write them down as your result</dcterms:title>
+		<dcterms:description>Prioritise questions and write them down as your result.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA62"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF117"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF120"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF122"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF3"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF51"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF6"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA64">
+		<dcterms:title>select 3 questions from the list</dcterms:title>
+		<dcterms:description>It could be the three questions most interesting, important, or the three questions that need to be addressed first.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA63"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF117"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF120"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF122"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF3"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF51"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF6"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA65">
+		<dcterms:title>write down the purpose or topic at the head of a sheet</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF117"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF120"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF122"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF3"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF51"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF6"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA66">
+		<dcterms:title>everyone in the group verbalises their ideas and they are all written down so that they can be analysed later</dcterms:title>
+		<dcterms:description>You should all follow the standard brainstorming rules: 1. Postpone and withhold your judgment of ideas 2. Encourage wild and exaggerated ideas 3. Quantity counts at this stage, not quality 4. Build on the ideas put forward by others 5. Every person and every idea has equal worth. </dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA65"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF117"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF120"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF122"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF3"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF51"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF6"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA67">
+		<dcterms:title>if idea generation becomes slow return to the ideas which have already been generated and build on them</dcterms:title>
+		<dcterms:description>Your brainstorming session can last anywhere from 5 minutes to 2 hours depending on the experience of the participants and the nature of the problem to be solved. However the time should be split up into approximately 5- to 15-minute sections in order to keep people fresh.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA66"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA68">
+		<dcterms:title>write down your decision on what approach you want to use: Formal or informal</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF117"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF120"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF122"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF3"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF51"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF6"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA69">
+		<dcterms:title>write down your decision if you want to use lots of visual aids or only a few</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA68"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF117"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF120"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF122"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF3"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF51"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF6"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA70">
+		<dcterms:title>write down your ideas according to your decision if you want to include some anecdotes and humour for variety</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA69"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF117"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF120"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF122"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF3"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF51"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF6"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA71">
+		<dcterms:title>lay down the basic structure of your presentation</dcterms:title>
+		<dcterms:description>A well organised presentation with a clear structure is easier for the audience to follow. It is therefore more effective. Most presentations are organised in three parts: Beginning, Middle, End.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA70"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF117"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF120"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF122"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF3"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF51"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF6"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA74">
+		<dcterms:title>use visualisation techniques to prepare your visual aids/diagrams</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/DecisionActivityAD5"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA75">
+		<dcterms:title>use charting to prepare your visual aids/diagrams</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA74"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA76">
+		<dcterms:title>copy titles of each section to one presentation sheet each</dcterms:title>
+		<dcterms:description>Take the top level points of your basic structure of your presentation as section titles.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF7"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA77">
+		<dcterms:title>copy keywords in the textfield according to the headings on the sheets</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA76"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF7"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA78">
+		<dcterms:title>design your presentation according to basic designing rules</dcterms:title>
+		<dcterms:description>Check out the following internet resource: http://owl.english.purdue.edu/owl/resource/686/03/</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA77"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF7"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA79">
+		<dcterms:title>write down just the title of each section of your notes on your cards</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA78"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF20"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA80">
+		<dcterms:title>write down keywords on your card to remind them</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA79"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF20"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA81">
+		<dcterms:title>generalizing: Look over each individual piece of information you have and assign it to a general category</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF117"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF120"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF51"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF6"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA82">
+		<dcterms:title>order your most general categories</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA81"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF117"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF120"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF51"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF6"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA83">
+		<dcterms:title>order the smaller categories</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA82"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF117"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF120"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF51"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF6"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA84">
+		<dcterms:title>repeat this procedure on the smallest level</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA83"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF117"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF120"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF51"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF6"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA85">
+		<dcterms:title>putting It all together</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA84"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF117"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF120"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF51"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF6"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA86">
+		<dcterms:title>start with a word or image that symbolizes what you want to think about placed in the middle of the page</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF120"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA87">
+		<dcterms:title>draw at least 4 thick organic looking branches radiating outwards from the central image </dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA86"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF120"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA88">
+		<dcterms:title>write ?key topic? words along these branches that represent the central image and the topic you are mapping</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA87"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF120"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA89">
+		<dcterms:title>draw additional branches that extend from your main branches </dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA88"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF120"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA90">
+		<dcterms:title>keep expanding the Mind Map outwards with additional sub-topics / key words and branches</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA89"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF120"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA91">
+		<dcterms:title>learning contract</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA92">
+		<dcterms:title>todo list</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA93">
+		<dcterms:title>Eisenhower Principles</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA94">
+		<dcterms:title>calendaring</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA95">
+		<dcterms:title>keeping records</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA96">
+		<dcterms:title>listing main ideas</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA97">
+		<dcterms:title>concept-mapping</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA98">
+		<dcterms:title>scout method</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA99">
+		<dcterms:title>summarizing</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA100">
+		<dcterms:title>highlighting</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA101">
+		<dcterms:title>paraphrasing</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA102">
+		<dcterms:title>collaborating</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA103">
+		<dcterms:title>creating analogies</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA104">
+		<dcterms:title>producing questions/ responding to questions</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA105">
+		<dcterms:title>note-taking</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA106">
+		<dcterms:title>index cards</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA107">
+		<dcterms:title>listening to records</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA108">
+		<dcterms:title>reorganizing list of notes and rehears</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA109">
+		<dcterms:title>mnemonic_technique</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA110">
+		<dcterms:title>adapting</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA111">
+		<dcterms:title>reviewing </dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA112">
+		<dcterms:title>checking</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA113">
+		<dcterms:title>learning diary</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA114">
+		<dcterms:title>learning journal</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/ConcreteActivityA115">
+		<dcterms:title>avoiding disturbance</dcterms:title>
+		<dcterms:description/>
+		<rdf:type rdf:resource="http://purl.org/role/terms/ConcreteActivity"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD1">
+		<dcterms:title>find out what is the content of your presentation</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningStrategyS2"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA57"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD2">
+		<dcterms:title>think about how you want to make this presentation</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningStrategyS3"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/DecisionActivityAD1"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD3">
+		<dcterms:title>select method to find topics.</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT11"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT30"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD4">
+		<dcterms:title>to compile relevant information and topic aspects, please select a method.</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT10"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT9"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA58"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD5">
+		<dcterms:title>please select what method you want to use for organising the points you wish to make in logical categories.</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT10"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT9"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/ConcreteActivityA71"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD6">
+		<dcterms:title>please select what method you want to use for your presentation.</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT31"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT32"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD7">
+		<dcterms:title>PPIM_planning</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningStrategyS14"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD8">
+		<dcterms:title>PPIM_searching</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningStrategyS15"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/DecisionActivityAD7"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD9">
+		<dcterms:title>PPIM_learning</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningStrategyS16"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/DecisionActivityAD8"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD10">
+		<dcterms:title>PPIM_reflecting</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningStrategyS17"/>
+		<role:requiresCompletionOf rdf:resources="http://purl.org/role/instances/DecisionActivityAD9"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD11">
+		<dcterms:title>profile-setting</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningStrategyS12"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD12">
+		<dcterms:title>goal-setting</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningStrategyS4"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD13">
+		<dcterms:title>time managing</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningStrategyS5"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD15">
+		<dcterms:title>help-seeking</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningStrategyS7"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD16">
+		<dcterms:title>setting profile</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT34"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD17">
+		<dcterms:title>setting goals</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT35"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD18">
+		<dcterms:title>learning contract</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT27"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD19">
+		<dcterms:title>todo list</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT28"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD20">
+		<dcterms:title>Eisenhower Principles</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT29"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD21">
+		<dcterms:title>managing time</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT37"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD22">
+		<dcterms:title>calendaring</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT1"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD23">
+		<dcterms:title>keeping records</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT2"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD24">
+		<dcterms:title>tracking</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT38"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD25">
+		<dcterms:title>seeking for help</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT36"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD26">
+		<dcterms:title>searching for resources</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT3"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD27">
+		<dcterms:title>information seeking</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT33"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD32">
+		<dcterms:title>elaborating</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningStrategyS9"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD33">
+		<dcterms:title>rehearsing</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningStrategyS10"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD34">
+		<dcterms:title>organising</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningStrategyS8"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD35">
+		<dcterms:title>outlining</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT10"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD36">
+		<dcterms:title>listing main ideas</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT4"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD37">
+		<dcterms:title>mind-mapping</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT9"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD38">
+		<dcterms:title>concept-mapping</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT5"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD39">
+		<dcterms:title>scout method</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD40">
+		<dcterms:title>summarizing</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT7"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD41">
+		<dcterms:title>highlighting</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT8"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD42">
+		<dcterms:title>wh-questions strategy</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningStrategyS1"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD43">
+		<dcterms:title>paraphrasing</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT12"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD44">
+		<dcterms:title>collaborating</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT13"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD45">
+		<dcterms:title>creating analogies</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT14"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD46">
+		<dcterms:title>producing questions/ responding to questions</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT15"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD47">
+		<dcterms:title>note-taking</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT16"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD48">
+		<dcterms:title>brainstorming</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT11"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD49">
+		<dcterms:title>index cards</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT17"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD50">
+		<dcterms:title>listening to records</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT18"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD51">
+		<dcterms:title>reorganizing list of notes and rehears</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT19"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD52">
+		<dcterms:title>mnemonic_technique</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT20"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD53">
+		<dcterms:title>monitoring</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningStrategyS6"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD56">
+		<dcterms:title>regulating</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningStrategyS11"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD57">
+		<dcterms:title>adapting</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT21"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD58">
+		<dcterms:title>reviewing </dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT22"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD59">
+		<dcterms:title>checking</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT23"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD60">
+		<dcterms:title>learning diary</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT24"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD61">
+		<dcterms:title>learning journal</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT25"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/DecisionActivityAD62">
+		<dcterms:title>avoiding disturbance</dcterms:title>
+		<rdf:type rdf:resource="http://purl.org/role/terms/DecisionActivity"/>
+		<role:strategicOption rdf:resources="http://purl.org/role/instances/LearningTechniqueT26"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningStrategyS1">
+		<dcterms:title>wh-questions strategy</dcterms:title>
+		<dcterms:description>"This strategy for presentation creation is based on the Wh-question strategy which also includes a H- question and therefore sometimes is referenced as Five Ws (and one H), or Six Ws. With good preparation and planning you will be totally confident and less nervous. And your audience will feel your confidence. Your audience, too, will be confident. They will be confident in you. And this will give you control. Control of your audience and of your presentation. With control, you will be &amp;rsquo;in charge&amp;rsquo; and your audience will listen positively to your message."</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningStrategy"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA54"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA55"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA56"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA57"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD1"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD2"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningStrategyS2">
+		<dcterms:title>find out what is the content of your presentation</dcterms:title>
+		<dcterms:description>What should I say? - Now you must decide exactly what you want to say.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningStrategy"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA58"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA59"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD3"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD4"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningStrategyS3">
+		<dcterms:title>think about how you want to make this presentation</dcterms:title>
+		<dcterms:description>When you give your presentation, you should be - or appear to be - as spontaneous as possible. You should not read your presentation!  You should be so familiar with your subject and with the information that you want to deliver that you do not need to read a text.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningStrategy"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA68"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA69"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA70"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA71"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA74"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA75"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD5"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD6"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningStrategyS4">
+		<dcterms:title>goal-setting</dcterms:title>
+		<dcterms:description>"Goal setting is a process of determining what your goals are, working towards them and assessing whether your goals are met.
+Goals can be long term, like life goals, or very short term, like what do for the class.
+When setting learning goals it is reasonable to follow the steps recommended below."</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningStrategy"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD17"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD18"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD19"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD20"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningStrategyS5">
+		<dcterms:title>time managing</dcterms:title>
+		<dcterms:description>Time management is a very important aspect for learning. Especially, when the time for accomplishment of your task is limited, you need to plan carefully.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningStrategy"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD21"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD22"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningStrategyS6">
+		<dcterms:title>monitoring</dcterms:title>
+		<dcterms:description>Supports the learner at focusing his or her attention on the task.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningStrategy"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD23"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD24"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningStrategyS7">
+		<dcterms:title>help-seeking</dcterms:title>
+		<dcterms:description>Identifying and calling upon outside resources.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningStrategy"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD25"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningStrategyS8">
+		<dcterms:title>organising</dcterms:title>
+		<dcterms:description>Refers to organizing the material. Organising improves learning and remembering.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningStrategy"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD35"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD36"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD37"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD38"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD39"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD40"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD41"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD42"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningStrategyS9">
+		<dcterms:title>elaborating</dcterms:title>
+		<dcterms:description>Incorporating new knowledge structures into existing structures.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningStrategy"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD43"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD44"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD45"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD46"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD47"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD48"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningStrategyS10">
+		<dcterms:title>rehearsing</dcterms:title>
+		<dcterms:description>Aids the learner in committing the information to memory.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningStrategy"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD49"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD50"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD51"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD52"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningStrategyS11">
+		<dcterms:title>regulating</dcterms:title>
+		<dcterms:description>Helps to regulate and control own learning process.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningStrategy"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD57"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD58"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD59"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD60"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD61"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD62"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningStrategyS12">
+		<dcterms:title>profile-setting</dcterms:title>
+		<dcterms:description>Supports to set a profile.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningStrategy"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD16"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningStrategyS13">
+		<dcterms:title>PPIM_strategy</dcterms:title>
+		<dcterms:description>Enables to perform SRL according to the learning phases.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningStrategy"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD10"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD7"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD8"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD9"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningStrategyS14">
+		<dcterms:title>PPIM_planning</dcterms:title>
+		<dcterms:description>Providing input regarding goals, preferences, etc.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningStrategy"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD11"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD12"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD13"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD15"/>
+		<rdfs:seeAlso>https://ilias.uni-koblenz.de/goto.php?target=git_70_948&amp;client_id=default</rdfs:seeAlso>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningStrategyS15">
+		<dcterms:title>PPIM_searching</dcterms:title>
+		<dcterms:description>Finding and selecing learning resources.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningStrategy"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD26"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD27"/>
+		<rdfs:seeAlso>https://ilias.uni-koblenz.de/goto.php?target=git_71_948&amp;client_id=default</rdfs:seeAlso>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningStrategyS16">
+		<dcterms:title>PPIM_learning</dcterms:title>
+		<dcterms:description>Working on selected learning resources, attaining knowledge, skills and competences using learning strategies.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningStrategy"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD32"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD33"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD34"/>
+		<rdfs:seeAlso>https://ilias.uni-koblenz.de/goto.php?target=git_72_948&amp;client_id=default</rdfs:seeAlso>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningStrategyS17">
+		<dcterms:title>PPIM_reflecting</dcterms:title>
+		<dcterms:description>Reflecting and reacting on strategies, achievements and usefulness, getting feedback and doing self-evaluation.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningStrategy"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD15"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD53"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/DecisionActivityAD56"/>
+		<rdfs:seeAlso>https://ilias.uni-koblenz.de/goto.php?target=git_73_948&amp;client_id=default</rdfs:seeAlso>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT1">
+		<dcterms:title>calendaring</dcterms:title>
+		<dcterms:description>Set up an calender and plan learning and free time activities.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF41"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF8"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA94"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT2">
+		<dcterms:title>keeping records</dcterms:title>
+		<dcterms:description>Helps you to see what has been and what was accomplished for deciding on next learning steps.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF108"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF33"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA95"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT3">
+		<dcterms:title>searching for resources</dcterms:title>
+		<dcterms:description>Allows to search for helpful resources.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF109"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF110"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF115"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF23"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF60"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF69"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA50"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT4">
+		<dcterms:title>listing main ideas</dcterms:title>
+		<dcterms:description>Recognising main facts.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF118"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF122"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA96"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT5">
+		<dcterms:title>concept-mapping</dcterms:title>
+		<dcterms:description>"Helps to organize  and represent knowledge as concept maps. They include concepts,  usually enclosed  in  circles  or  boxes  of  some  type,  and  relationships  between concepts indicated by a connecting  line linking two concepts."" The oragnaisation of bullet points follow a hierachical order."</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF119"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA97"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT7">
+		<dcterms:title>summarizing</dcterms:title>
+		<dcterms:description>To articulate the main ideas or concepts of a text, video (film) or story with own words in a short and structured way.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF104"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF122"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA99"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT8">
+		<dcterms:title>highlighting</dcterms:title>
+		<dcterms:description>to underline or colour text snippets to make them easly visible</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF124"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA100"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT9">
+		<dcterms:title>mind-mapping</dcterms:title>
+		<dcterms:description>Visualisation technique to draw a diagramm representing words (ideas, tasks) or other items related to a central (main) word.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF120"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA86"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA87"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA88"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA89"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA90"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT10">
+		<dcterms:title>outlining</dcterms:title>
+		<dcterms:description>Identifying the content and formal structure of a text by applying Headings and subheadings (if they are not given). </dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF117"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA81"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA82"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA83"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA84"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA85"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT11">
+		<dcterms:title>brainstorming</dcterms:title>
+		<dcterms:description>Individual or group activity to gather a list of ideas by spontaniously contributed by the group members or the individual .</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF122"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA65"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA66"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA67"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT12">
+		<dcterms:title>paraphrasing</dcterms:title>
+		<dcterms:description>Restate the passage of a text block or passage using other or own words. </dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF122"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA101"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT13">
+		<dcterms:title>collaborating</dcterms:title>
+		<dcterms:description>Working together to achieve a goal. </dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF10"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF15"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF3"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF6"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA102"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT14">
+		<dcterms:title>creating analogies</dcterms:title>
+		<dcterms:description>Analogy is de?ned here as a comparison between two phenomena in which relations in one are mapped to relations in the other.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF64"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA103"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT15">
+		<dcterms:title>producing questions/ responding to questions</dcterms:title>
+		<dcterms:description>"Asking questions; answering quesitons: epistemic questions: Questions have a function for gaining knowledge"</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF104"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF117"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF120"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF122"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF6"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA104"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT16">
+		<dcterms:title>note-taking</dcterms:title>
+		<dcterms:description>Listing words, ideas, thoughts etc.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF104"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF122"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF123"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF124"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA105"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT17">
+		<dcterms:title>index cards</dcterms:title>
+		<dcterms:description>Small cards to store a small amount of data. Can be written on both sides.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF7"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA106"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT18">
+		<dcterms:title>listening to records</dcterms:title>
+		<dcterms:description>Hear files that have been recorded to rehearsal.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF103"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA107"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT19">
+		<dcterms:title>reorganizing list of notes and rehears</dcterms:title>
+		<dcterms:description>Reorder notes and rehearse them in the new order.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF104"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF6"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA108"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT20">
+		<dcterms:title>mnemonic_technique</dcterms:title>
+		<dcterms:description>Can be used as an aid for memorizing information.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF125"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA109"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT21">
+		<dcterms:title>adapting</dcterms:title>
+		<dcterms:description>Regulation of learning behaviour in order to archieve a better result.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA110"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT22">
+		<dcterms:title>reviewing </dcterms:title>
+		<dcterms:description>Asking or request support by a system or person(s).</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF44"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF45"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA111"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT23">
+		<dcterms:title>checking</dcterms:title>
+		<dcterms:description>Comparing answer to correct answer, comparing current outcome to actual set goal, to expactations.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF35"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF43"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF45"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA112"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT24">
+		<dcterms:title>learning diary</dcterms:title>
+		<dcterms:description>A notebook for learning activities that includes at least date and learning activity (it might also include, goals, thoughts etc.)</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF104"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF122"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF40"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA113"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT25">
+		<dcterms:title>learning journal</dcterms:title>
+		<dcterms:description>A learning journal is a writing assignment, typically tobe  performed  as  a  follow-up  course-work  activity.  Afterattending a lecture or a course, students are asked to writedown their re?ections on the previously encountered materials.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF104"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF122"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF40"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA114"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT26">
+		<dcterms:title>avoiding disturbance</dcterms:title>
+		<dcterms:description>Not getting distracted form reaching the learning goal.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA115"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT27">
+		<dcterms:title>learning contract</dcterms:title>
+		<dcterms:description>A learning contract is supposed to be an agreement between a learner and another person (e.g. lecturer, maybe peer)  and consists of a number of stages (learning need identification, learning objectives, identification of learning resources and strategies etc.)</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF104"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF122"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF40"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA91"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT28">
+		<dcterms:title>todo list</dcterms:title>
+		<dcterms:description>List all point which have to be done in a list (order might not be of relevance).</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF113"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA92"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT29">
+		<dcterms:title>Eisenhower principles</dcterms:title>
+		<dcterms:description>Technique to catagorize todos. Tasks are assigned to the dimensions Importance (important/unimportant) and Urgency (urgent/not urgent) and put in according quadrants.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF40"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA93"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT30">
+		<dcterms:title>formulating questions</dcterms:title>
+		<dcterms:description>Helps to formulate questions.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF104"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF117"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF120"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF122"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF6"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA60"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA61"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA62"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA63"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA64"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT31">
+		<dcterms:title>create a computer presentation</dcterms:title>
+		<dcterms:description>Supports creating a presentation.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF7"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA76"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA77"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA78"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT32">
+		<dcterms:title>use notes on cards for presentation</dcterms:title>
+		<dcterms:description>Enables to create or hold a presentation.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF7"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA79"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA80"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT33">
+		<dcterms:title>information seeking</dcterms:title>
+		<dcterms:description>Supports seeking for information.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF47"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF60"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF69"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF73"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF77"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA38"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA39"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA41"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA43"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA44"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA46"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA47"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA48"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA49"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT34">
+		<dcterms:title>setting profile</dcterms:title>
+		<dcterms:description>Adjust personal settings.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF116"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA29"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA30"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA31"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA32"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA33"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA34"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA35"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA36"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT35">
+		<dcterms:title>setting goals</dcterms:title>
+		<dcterms:description>Supports to set goals.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF40"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA1"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA10"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA11"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA2"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA3"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA6"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA8"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA9"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT36">
+		<dcterms:title>seeking for help</dcterms:title>
+		<dcterms:description>Enables to seek for help.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF47"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF67"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA13"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA14"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA15"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA16"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA17"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA19"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT37">
+		<dcterms:title>managing time</dcterms:title>
+		<dcterms:description>Allows to manage time.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF41"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF8"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA23"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA25"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA26"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/LearningTechniqueT38">
+		<dcterms:title>tracking</dcterms:title>
+		<dcterms:description>Analysing used and produced learning artefacts for deciding next steps.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/LearningTechnique"/>
+		<role:supportedBy rdf:resources="http://purl.org/role/instances/FunctionalityTF35"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA4"/>
+		<role:activity rdf:resources="http://purl.org/role/instances/ConcreteActivityA5"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF1">
+		<dcterms:title>Chat</dcterms:title>
+		<dcterms:description>provides communication by exchanging of text messages at the real-time</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF2">
+		<dcterms:title>Audio and video (AV) conferencing</dcterms:title>
+		<dcterms:description>provides conferencing incl. video and/or audio broadcast</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF3">
+		<dcterms:title>Whiteboard</dcterms:title>
+		<dcterms:description>provides whiteboards</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF4">
+		<dcterms:title>Synchronous file transfer</dcterms:title>
+		<dcterms:description>allows the file transfer over the net</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF5">
+		<dcterms:title>Application sharing</dcterms:title>
+		<dcterms:description>supports the sharing of running applications</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF6">
+		<dcterms:title>Collaborative writing</dcterms:title>
+		<dcterms:description>allows creating written works by multiple people together</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF7">
+		<dcterms:title>Presenting</dcterms:title>
+		<dcterms:description>supports presentation of materials</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF8">
+		<dcterms:title>Calendaring</dcterms:title>
+		<dcterms:description>supports the sharing of calendars, such as personal calendars and course timetables</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF10">
+		<dcterms:title>Messaging</dcterms:title>
+		<dcterms:description>allows broadcast of asynchronous messages to users and groups using appropriate communication technology. Typically a Messaging service will deliver messages using Email or SMS (based on ).</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF11">
+		<dcterms:title>Person</dcterms:title>
+		<dcterms:description>provides a means to manage basic information about people, such as names, contact information, and perhaps some types of demographic and system management information, such as would typically be stored in a directory .</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF12">
+		<dcterms:title>Group</dcterms:title>
+		<dcterms:description>provides a means to manage basic information about groups of people</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF13">
+		<dcterms:title>Alert</dcterms:title>
+		<dcterms:description>allows access to news, updates, and announcements</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF14">
+		<dcterms:title>Annotation/rating</dcterms:title>
+		<dcterms:description>provides support for the creation, management and use of secondary metadata (user ratings and text annotations)</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF15">
+		<dcterms:title>Forum</dcterms:title>
+		<dcterms:description>supports the use of asynchronous collaborative messaging, as offered by fora and message boards</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF16">
+		<dcterms:title>Presence</dcterms:title>
+		<dcterms:description>provides information about a users online status, much like a chat application</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF17">
+		<dcterms:title>Quality assurance</dcterms:title>
+		<dcterms:description>supports the recording and retrieval of quality assurance statements, such as second-marking of assessments and approval of content for use in courses</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF18">
+		<dcterms:title>Resource sharing</dcterms:title>
+		<dcterms:description>supports the sharing, access and management of learning resources</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF19">
+		<dcterms:title>Blogging</dcterms:title>
+		<dcterms:description>supports the use of asynchronous messaging in reverse chronological order about a particular topic. Comprises single user, embedded in portals (e.g. in LMS or CMS systems) and collective blogs</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF20">
+		<dcterms:title>Microblogging</dcterms:title>
+		<dcterms:description>a blogging variant that limits the length of messages and automatically distributes the content to all subscribers</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF21">
+		<dcterms:title>Voting</dcterms:title>
+		<dcterms:description>supports the collection of votes</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF22">
+		<dcterms:title>Social networking</dcterms:title>
+		<dcterms:description>service that allow individuals to (1) construct a public  or semi-public profile within a bounded system, (2) articulate a list of other users with whom they share a connection, and (3) view and traverse their list of connections and those made by others</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF23">
+		<dcterms:title>Social bookmarking</dcterms:title>
+		<dcterms:description>service that helps users share, classify, and discover web resources</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF24">
+		<dcterms:title>Survey</dcterms:title>
+		<dcterms:description>supports the creation, management and use of online questionnaires</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF27">
+		<dcterms:title>Resource List</dcterms:title>
+		<dcterms:description>supports the creation, access and management of reading lists and other lists of resources</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF28">
+		<dcterms:title>Assessment</dcterms:title>
+		<dcterms:description>supports the use of automated assessments</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF29">
+		<dcterms:title>Grading</dcterms:title>
+		<dcterms:description>supports submitting grades against courses, modules, and other units of learning</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF30">
+		<dcterms:title>Competency</dcterms:title>
+		<dcterms:description>supports the management of competency frameworks, and the mapping of units of learning, assessments, and activities against specific competencies</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF31">
+		<dcterms:title>ePortfolios</dcterms:title>
+		<dcterms:description>supports the management of artefacts created by learners, such as essays and projects</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF32">
+		<dcterms:title>Learning Flow</dcterms:title>
+		<dcterms:description>supports the management and use of complex learning scenarios</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF33">
+		<dcterms:title>Reporting</dcterms:title>
+		<dcterms:description>provides standardised institutional (performance) data to outside agencies</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF34">
+		<dcterms:title>Activity management</dcterms:title>
+		<dcterms:description>supports the management of learning activities</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF35">
+		<dcterms:title>Tracking</dcterms:title>
+		<dcterms:description>supports recording and retrieval of performance information, typically as a result of undertaking learning activities or interacting with materials</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF36">
+		<dcterms:title>Marking</dcterms:title>
+		<dcterms:description>provides automated marking services. It could also support a dropbox method for traditional artifact-based assessment</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF37">
+		<dcterms:title>Sequencing</dcterms:title>
+		<dcterms:description>provides support for the use of sequenced learning objects, primarily of use within Virtual Learning Environments (VLEs) and similar environments for the delivery of complex learning packages</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF38">
+		<dcterms:title>Educational gaming</dcterms:title>
+		<dcterms:description>provides support for the integration of learning content into educational games</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF39">
+		<dcterms:title>Navigation</dcterms:title>
+		<dcterms:description>supports learning through displaying the current state within the learning cycle</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF40">
+		<dcterms:title>Goal-Setting</dcterms:title>
+		<dcterms:description>supports the setting of the goals and accessing to skills</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF41">
+		<dcterms:title>Scheduling</dcterms:title>
+		<dcterms:description>supports the management of allocation of resources against time</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF42">
+		<dcterms:title>Mirroring</dcterms:title>
+		<dcterms:description>reflect information on an interaction with no evaluation</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF43">
+		<dcterms:title>Evaluation</dcterms:title>
+		<dcterms:description>comparison of learners  performance outcome with his or her goals or with a standard</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF44">
+		<dcterms:title>Self-assessment</dcterms:title>
+		<dcterms:description>supports critically reviewing the quality of ones own performance and provision</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF45">
+		<dcterms:title>Feedback</dcterms:title>
+		<dcterms:description>system visualisations on learning state and progress and providing feedback about performance, emotional state, goal achievement by the learner</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF46">
+		<dcterms:title>Simulation</dcterms:title>
+		<dcterms:description>comprises microworlds, computer simulations and gaming (including role play simulation and computer supported simulation and gaming)</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF47">
+		<dcterms:title>Guiding</dcterms:title>
+		<dcterms:description>provides guideness of the learner through his learning process by giving of (internally generated)  recommendations</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF48">
+		<dcterms:title>Learning content authoring</dcterms:title>
+		<dcterms:description>supports the process of creating learning content, including learning assets, learning activities and curricula</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF49">
+		<dcterms:title>Metadata authoring</dcterms:title>
+		<dcterms:description>supports the process of creating metadata instances</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF50">
+		<dcterms:title>Knowledge domain authoring</dcterms:title>
+		<dcterms:description>supports the process of creating models and concepts</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF51">
+		<dcterms:title>Word processing</dcterms:title>
+		<dcterms:description>supports word processors, page layout and document format tools</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF52">
+		<dcterms:title>Media</dcterms:title>
+		<dcterms:description>supports media asset production (creation of graphics, audio, video and animation)</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF53">
+		<dcterms:title>Development</dcterms:title>
+		<dcterms:description>comprises tools for web site, e-learning, simulation, game and rapid application development</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF54">
+		<dcterms:title>Manipulating</dcterms:title>
+		<dcterms:description>provide a means of manipulating both textual and numerical data</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF55">
+		<dcterms:title>Authentication</dcterms:title>
+		<dcterms:description>allows the identity of users to be established</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF56">
+		<dcterms:title>Authorisation</dcterms:title>
+		<dcterms:description>supports the management of access to resources by agents, by providing access control decisions to applications based on information they provide about an agents requested behaviour</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF57">
+		<dcterms:title>Automatic metadata generation</dcterms:title>
+		<dcterms:description>supports the automatic generation and extraction of metadata values</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF58">
+		<dcterms:title>Managing</dcterms:title>
+		<dcterms:description>supports retrieval, description and organisation of information resources</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF59">
+		<dcterms:title>Digital rights management (DRM)</dcterms:title>
+		<dcterms:description>supports the allocation and application of rights policies against resources, consuming data in a digital rights expression language (DREL) to determine access. Typically works through authorisation services, and is generally intended to be called by auth</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF60">
+		<dcterms:title>Federated search</dcterms:title>
+		<dcterms:description>supports the processing of searches that target multiple types of repositories, such as a combined search using SRW, XQuery and Z39.50 protocols against repositories supporting a range of different metadata formats the results from which are then aggregat</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF61">
+		<dcterms:title>Format conversion</dcterms:title>
+		<dcterms:description>supports the transformation of information from one format to another for example, from IMS Content Packaging to METS</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF62">
+		<dcterms:title>Harvesting</dcterms:title>
+		<dcterms:description>allows application services to support resource discovery by harvesting copies of some or all metadata records</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF63">
+		<dcterms:title>Identifier</dcterms:title>
+		<dcterms:description>supports the creation, registration and deregistration of identifiers</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF64">
+		<dcterms:title>Mapping</dcterms:title>
+		<dcterms:description>supports cross-mapping of values in different namespaces, such as crosswalks between metadata schemata</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF65">
+		<dcterms:title>Mashup/integration</dcterms:title>
+		<dcterms:description>supports the aggregation of services and tools as well as content</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF66">
+		<dcterms:title>Metadata management</dcterms:title>
+		<dcterms:description>supports the management of metadata for objects, including creation, validation and retrieval</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF67">
+		<dcterms:title>Recommendation Generation</dcterms:title>
+		<dcterms:description>supports the generation of recommendations to the user through collaborative filtering, content-based approaches or a combination of both</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF68">
+		<dcterms:title>Resolver</dcterms:title>
+		<dcterms:description>provides services based on the use of OpenURL (or similar) metadata, including redirection to document delivery services, redirection to online bookshops, to local library services, and other discovery activities. Resolver services work with institutional</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF69">
+		<dcterms:title>Search</dcterms:title>
+		<dcterms:description>supports the finding of information resources including learning objects, assets, e-reserves, learning opportunities, funding sources and so on. Search will typically target a single search type (such as SRW for library resources) although a search servic</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF70">
+		<dcterms:title>Service registry</dcterms:title>
+		<dcterms:description>stores, manages and makes available descriptions of service instances</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF71">
+		<dcterms:title>Social network analysis</dcterms:title>
+		<dcterms:description>supports the identification and representation of social structures</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF72">
+		<dcterms:title>Visualisation</dcterms:title>
+		<dcterms:description>supports the use of interactive visual representations of data to amplify cognition</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF73">
+		<dcterms:title>Encyclopaedia</dcterms:title>
+		<dcterms:description>provides with encyclopedia</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF74">
+		<dcterms:title>Dictionary</dcterms:title>
+		<dcterms:description>provides with dictionary</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF75">
+		<dcterms:title>Validation</dcterms:title>
+		<dcterms:description>supports the process of checking whether data and/or services are compliant to pre-determined formats or other defined criteria</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF76">
+		<dcterms:title>Analyse</dcterms:title>
+		<dcterms:description>supports management and manipulation of complex data sets, allows classification and modelling of both numerical and textual data</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF77">
+		<dcterms:title>Support</dcterms:title>
+		<dcterms:description>provide support and guidance either through online tutorials or step by step instructions and semi-automated tasks</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF101">
+		<dcterms:title>Defining</dcterms:title>
+		<dcterms:description>define objects</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF102">
+		<dcterms:title>Arrange</dcterms:title>
+		<dcterms:description>arrange objects</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF103">
+		<dcterms:title>VideoViewer</dcterms:title>
+		<dcterms:description>view video</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF104">
+		<dcterms:title>TextEditing</dcterms:title>
+		<dcterms:description>allows text editing</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF105">
+		<dcterms:title>Translation</dcterms:title>
+		<dcterms:description>allows translating words and sentences</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF106">
+		<dcterms:title>Spell checking</dcterms:title>
+		<dcterms:description>allows check spell</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF107">
+		<dcterms:title>Speech synthesizing</dcterms:title>
+		<dcterms:description>products human speech </dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF108">
+		<dcterms:title>Recording</dcterms:title>
+		<dcterms:description>allows media record</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF109">
+		<dcterms:title>ArtefactSearching</dcterms:title>
+		<dcterms:description>provides means for searching artefacts/content</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF110">
+		<dcterms:title>ToolSearching</dcterms:title>
+		<dcterms:description>provides means for searching tools/widgets</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF112">
+		<dcterms:title>ActorSearching</dcterms:title>
+		<dcterms:description>provides means for searching peers/facilitators</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF113">
+		<dcterms:title>AddTask</dcterms:title>
+		<dcterms:description>add a task to the current goal</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF114">
+		<dcterms:title>RenderWidgets</dcterms:title>
+		<dcterms:description>render learning widgets</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF115">
+		<dcterms:title>VideoSearching</dcterms:title>
+		<dcterms:description>searching for videos</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF116">
+		<dcterms:title>Profiling</dcterms:title>
+		<dcterms:description>allows entering of personal profile data</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF117">
+		<dcterms:title>Outlining</dcterms:title>
+		<dcterms:description>allows text to be organized into discrete sections that are related in a tree structure or hierarchy. Text may be collapsed into a node, or expanded and edited.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF118">
+		<dcterms:title>Spreadsheet</dcterms:title>
+		<dcterms:description>simulates a paper, accounting worksheet. It displays multiple cells usually in a two-dimensional matrix or grid consisting of rows and columns. Each cell contains alphanumeric text, numeric values or formulas.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF119">
+		<dcterms:title>ConceptMapping</dcterms:title>
+		<dcterms:description>allow to represent relationships between concepts like ideas, images or words.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF120">
+		<dcterms:title>MindMapping</dcterms:title>
+		<dcterms:description>allow to represent  words, ideas, tasks, or other items linked to and arranged around a central key word or idea. Mind maps are used to generate, visualize, structure, and classify ideas, and as an aid to studying and organizing  information, solving problems, making decisions, and writing.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF121">
+		<dcterms:title>Charting</dcterms:title>
+		<dcterms:description>involves creating a graph with symbols to document a process or event, or a table with rows and columns to document facts and values.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF122">
+		<dcterms:title>Notetaking</dcterms:title>
+		<dcterms:description>allows recording information captured from a transient source, such as an oral discussion at a meeting, or a lecture often in the informal and/or unstructured format.</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF123">
+		<dcterms:title>Formatting </dcterms:title>
+		<dcterms:description>allows formatting of text </dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF124">
+		<dcterms:title>Highlighting</dcterms:title>
+		<dcterms:description>provides means for higlighting of text</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/instances/FunctionalityTF125">
+		<dcterms:title>Mnemonic</dcterms:title>
+		<dcterms:description>memorising learning content</dcterms:description>
+		<rdf:type rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+</rdf:RDF>

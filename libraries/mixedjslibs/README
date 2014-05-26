@@ -1,0 +1,7 @@
+A range of javascript libraries that should be available under the libs directory in a deployed webapp.
+For example: http://somehost/libs/less/less-min.js
+
+The output of this subproject is a war file that will need to be merged or overlayed when building the main webapp.
+
+NOTE that the mvn pom file will download and include more files in the jar file than what is in the SVN, 
+for example an requirejs adapted version jqueryui.

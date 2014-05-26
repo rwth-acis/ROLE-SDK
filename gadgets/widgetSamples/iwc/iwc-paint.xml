@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+	<ModulePrefs title="IWC Paint" description="A collaborative painting canvas realized with ROLE IWC." author="Dominik Renzel, Chair of Computer Science 5, RWTH Aachen University, Germany" author_email="renzel@dbis.rwth-aachen.de" width="530" height="320">
+		<Require feature="dynamic-height"/>
+	</ModulePrefs>
+	<Content>
+	<![CDATA[
+		<link rel='stylesheet' href='http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/cupertino/jquery-ui.css'>
+		<style type="text/css">
+		
+		* { 
+			color: black; 
+			font-family: Verdana;
+			sans-serif; 
+			font-size: 7pt;
+		}
+		
+		#sketch {
+			border: 1pt solid black;
+		}
+		
+		</style>
+		
+		<!-- 
+			The code realizing this gadget has been adapted from Jack Moffit's sample code available at:
+			https://github.com/metajack/profxmpp/tree/master/ch09
+		-->
+		
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.js"></script>
+		
+		<script src="http://open-app.googlecode.com/files/openapp.js"></script>
+		
+		<!-- if you consider to use a specific version of ROLE IWC, replace "trunk" with "tags/mX-gunpowder" (X in 1,2,3,4,5) in the URL below -->
+        <!-- if you consider to use the local version of ROLE IWC bundled with the ROLE SDK, use the URL http://127.0.0.1:8073/role/lib/iwc/iwc.js" -->
+		<script src="http://role-project.svn.sourceforge.net/svnroot/role-project/trunk/libraries/iwc/src/main/javascript/iwc.js"></script>
+		
+		<script src="http://nillenposse-gadgets.googlecode.com/svn/trunk/lib/base64.js"></script>
+		<script src="http://nillenposse-gadgets.googlecode.com/svn/trunk/lib/canvas2image/canvas2image.js"></script>
+		
+		<script type="application/javascript">
+			
+			var iwcClient;
+			
+			var pen_down = false;
+			var old_pos = null;
+			var color = '000';
+			var line_width = 2;
+			
+			/*
+			* In this gadget we demonstrate what can be done to optimize the throughput
+			* and real-time behaviour of ROLE interwidget communication involving the necessity 
+			* to broadcast multiple events in a very short time. In this example, we introduce 
+			* a buffer of painting actions. This buffer is flushed either, 
+			* 
+			*   - when buffer contents exceed a maximum buffer size or
+			*	- when a predefined delay after buffering the last action has passed
+			*
+			* In this example, we use a buffer length of 60 actions and a 500 ms delay.
+			* The example should later on be used to include this optimization into the library 
+			* itself, instead of leaving this task to developers. 
+			*/
+			
+			var actionbuffer = [];
+			var actionbufferlength = 60;
+			var actionbufferflushdelay = 500;
+			
+			var t = 0;
+			
+			var stats = {};
+			
+			function push_action(action){
+				actionbuffer.push(action);
+			}
+			
+			
+			function flush_actions(){
+				
+				// when we flush, we first clear the delay timer, if running.
+				clearTimeout(t);
+				t=0;
+				
+				// then, we package all buffered drawing actions into one intent.
+				// An automated implementation for any type of intents should rather
+				// compress multiple single events in one payload to be published.
+				if(actionbuffer.length > 0){
+					var from_coords = "";
+					var to_coords = "";
+					var line_widths = "";
+					var colors = "";
+					
+					for (var i=0;i<actionbuffer.length;i++){
+						var a = actionbuffer[i];
+						from_coords += a.from.x + "," + a.from.y;
+						to_coords += a.to.x + "," + a.to.y;
+						line_widths += a.line_width;
+						colors += a.color;
+						
+						if(i< actionbuffer.length -1){
+							from_coords += "#";
+							to_coords += "#";
+							line_widths += "#";
+							colors += "#";
+						}
+					}
+					
+					actionbuffer = [];
+				
+					var intent = {
+						"component":"",					
+						"action":"ACTION_DRAW",
+						"data":"",
+						"dataType":"text/plain",
+						"flags":["PUBLISH_GLOBAL"],
+						"extras": {
+							"color":colors,
+							"line_width": line_widths,
+							"from": from_coords,
+							"to": to_coords
+						}
+					};
+					sendIntent(intent);
+					
+				}
+			}
+			
+			function init(){
+				$(document).ready(function() {
+					iwcClient = new iwc.Client(["*"]);
+					iwcClient.connect(iwcCallback);
+					
+					$('#sketch').mousedown(function () {
+						pen_down = true;
+					});
+
+					$('#sketch').mouseup(function () {
+						pen_down = false;
+					});
+
+					$('#sketch').mousemove(function (ev) {
+						// get the position of the drawing area, our offset
+						var offset = $(this).offset();
+						// calculate our position within the drawing area
+						var pos = {x: ev.pageX - offset.left, 
+								   y: ev.pageY - offset.top};
+
+						if (pen_down) {
+							if (!old_pos) {
+								old_pos = pos;
+								return;
+							}
+
+							if (!$('#sketch').hasClass('disabled') &&
+								(Math.abs(pos.x - old_pos.x) > 2 ||
+								 Math.abs(pos.y - old_pos.y) > 2)) {
+								
+								var a = {
+									"color": color,
+									"line_width": line_width,
+									"from": old_pos,
+									"to": pos
+								};
+								
+								render_action(a);	
+								push_action(a);
+								
+								//if no delay timer has been set or the delay timer has been reset, set new delay timer.
+								if(t == 0){
+									t = setTimeout(flush_actions,actionbufferflushdelay);
+								}
+								
+								// if buffer length exceeds maximum, flush buffer.
+								if(actionbuffer.length >= actionbufferlength){
+									flush_actions();
+								}
+								
+								//publish_action(a);
+
+								old_pos = pos;
+							}
+						} else {
+							old_pos = null;
+						}
+					});
+
+					$('#color').keypress(inputColor);
+
+					$('.linew').click(function (ev) {
+						line_width = $(this).attr('id').split('-')[1];
+					});
+
+					$('#erase').click(function () {
+						eraseCanvas();
+						publish_erase();
+					});
+					
+					$('#save').click(function () {
+						var sc = document.getElementById("sketch");
+						Canvas2Image.saveAsPNG(sc);
+					});
+					
+					render_stats();
+				});
+			}
+			
+			function eraseCanvas(){
+				var ctx = $('#sketch').get(0).getContext('2d');
+				ctx.fillStyle = '#fff';
+				ctx.strokeStyle = '#fff';
+				ctx.clearRect(0, 0, 700, 408);
+				stats = {};
+			}
+			
+			function inputColor(e){
+				if(e.which == 13 || e.keyCode == 13){
+					if($("#color").val().length == 3){
+						color = $("#color").val();
+					}
+				}
+			}
+			
+			function iwcCallback(intent){
+				console.log("******** IWC Paint *************************");
+				console.log(intent);
+				console.log("********************************************");
+				
+				if(intent.action == "ACTION_DRAW" 
+					&& intent.extras.color 
+					&& intent.extras.line_width 
+					&& intent.extras.from
+					&& intent.extras.to 
+					){
+					
+					// if intent comes from somebody else, render it.
+					if(intent.sender.indexOf("@") > -1){
+						render_intent(intent);
+					}
+					
+					update_stats(intent);
+				}
+				if(intent.action == "ACTION_ERASE" && intent.sender.indexOf("@") > -1){
+					eraseCanvas();
+				}
+			}
+			
+			function sendIntent(intent) {
+				if(iwc.util.validateIntent(intent)) {
+					iwcClient.publish(intent);
+				}
+				else {
+					alert("Intent not valid!");
+				}
+			}
+			
+			// ==========================
+			function publish_action(action) {
+				
+				var intent = {
+					"component":"",					
+					"action":"ACTION_DRAW",
+					"data":"",
+					"dataType":"text/plain",
+					"flags":["PUBLISH_GLOBAL"],
+					"extras": {
+						"color":action.color,
+						"line_width": action.line_width,
+						"from": action.from.x + "," + action.from.y,
+						"to": action.to.x + "," + action.to.y
+					}
+				};
+				sendIntent(intent);
+			}
+			
+			function publish_erase(){
+				var intent = {
+					"component":"",					
+					"action":"ACTION_ERASE",
+					"data":"",
+					"dataType":"text/plain",
+					"flags":["PUBLISH_GLOBAL"]
+				};
+				sendIntent(intent);
+			}
+
+			function render_action(action) {
+				// render the line segment
+				var ctx = $('#sketch').get(0).getContext('2d');
+				ctx.strokeStyle = '#' + action.color;
+				ctx.lineWidth = action.line_width;
+				ctx.beginPath();
+				ctx.moveTo(action.from.x, action.from.y);
+				ctx.lineTo(action.to.x, action.to.y);
+				ctx.stroke();
+			}
+			
+			function render_intent(intent) {
+			
+				var from_coords = intent.extras.from.split("#");
+				var to_coords = intent.extras.to.split("#");
+				var line_widths = intent.extras.line_width.split("#");
+				var colors = intent.extras.color.split("#");
+				
+				for(var i=0;i<colors.length;i++){
+				
+					var from_pos = from_coords[i].split(",");
+					var to_pos = to_coords[i].split(",");
+					var color = colors[i];
+					var line_width = line_widths[i];
+					
+					var action = {
+						"color": color,
+						"line_width": line_width,
+						"from": {
+							"x": parseFloat(from_pos[0]),
+							"y": parseFloat(from_pos[1])
+						},
+						"to": {
+							"x": parseFloat(to_pos[0]),
+							"y": parseFloat(to_pos[1])
+						}
+					};
+					
+					render_action(action);
+				}	
+			}
+			
+			function setLineWidth(){
+			
+				var selectBox = document.getElementById("linewidth");
+				line_width = parseInt(selectBox.options[selectBox.selectedIndex].value);
+				//console.log("Line Width set to " + line_width);
+			}
+			// ==========================
+			
+			function update_stats(intent){
+				var sender;
+				
+				if(intent.sender.indexOf("@") > -1 ){
+					sender = intent.sender.split("/")[0];
+				}
+				else{
+					sender = "you";
+				}
+				
+				var linespainted = intent.extras.color.split("#").length;
+				
+				if(stats[sender]){
+					stats[sender] += linespainted;
+				}
+				else{
+					stats[sender] = linespainted;
+				}
+				
+				render_stats();
+			}
+			
+			function render_stats(){
+				console.log(stats);
+				var html = "<table cellspacing='0' cellpadding='5' width='235' border='0'><colgroup><col width='*'><col width='50'></colgroup><tr><th>painter</th><th>#lines</th></tr>";
+				
+				for (sender in stats){
+					html += "<tr><td>" + sender + "</td><td>" + stats[sender]+ "</td></tr>";
+				}
+				
+				html += "</table>";
+				
+				$('#stats').html(html);
+				gadgets.window.adjustHeight(); 
+			}
+			
+			gadgets.util.registerOnLoadHandler(init);
+			
+		</script>
+
+		<!-- The drawing tools.  The ids are the button values. -->
+		
+		<div>
+		<label>Color:<input id='color' type='text' size='3' maxlength='3' value='000' /> </label>
+		<label>Line:<select id="linewidth" onchange="setLineWidth()">
+			<option value="1" selected>thin</option>
+			<option value="2">clear</option>
+			<option value="4">medium</option>
+			<option value="8">thick</option>
+		</select> </label>
+		<input id='erase' type='button' value='Erase' />
+		<input id='save' type='button' value='Save PNG' />
+		<br>
+
+		<!-- The drawing area -->
+		<canvas id='sketch' width='288' height='280'>
+			
+		</canvas>
+		</div>
+		<div id='stats'></div>
+		
+
+	]]>
+	</Content>
+</Module>

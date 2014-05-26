@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<property name="jsdoctoolkit.version" value="2.4.0" />
+	<target name="jsdoctoolkit.check">
+		<condition property="jsdoctoolkit.present">
+			<and>
+				<available file="${project.build.directory}/jsdoc-toolkit" type="dir" />
+			</and>
+		</condition>
+	</target>
+	<target name="jsdoctoolkit.prepare" depends="jsdoctoolkit.check" unless="jsdoctoolkit.present">
+		<get src="http://jsdoc-toolkit.googlecode.com/files/jsdoc_toolkit-${jsdoctoolkit.version}.zip" dest="${project.build.directory}/jsdoc_toolkit-${jsdoctoolkit.version}.zip" />
+		<unzip src="${project.build.directory}/jsdoc_toolkit-${jsdoctoolkit.version}.zip" dest="${project.build.directory}">
+		</unzip>
+		<move file="${project.build.directory}/jsdoc_toolkit-${jsdoctoolkit.version}/jsdoc-toolkit" tofile="${project.build.directory}/jsdoc-toolkit" />
+	</target>
+</project>

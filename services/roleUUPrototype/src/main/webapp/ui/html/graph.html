@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- <title>Index</title> -->
+<script src="/d/openapp"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+<style>
+	body { font-family: sans; font-size: 80%; background: #fff; color: #000; margin: 0px }
+	ul { margin-bottom: 1em; }
+	li { margin-top: .5em; }
+	hr { background: #aaa; color: #aaa; height: 2px; border: 0px; margin: 0px; }
+	section { padding: 1em; border-top: 2px solid #aaa; }
+	.object { margin-left: 10em; display: block; }
+	.object:first-child, .short { margin-left: 1em; display: inline; }
+	#header { padding: 1em; color: #fff; background: rgb(155,31,31); /* Old browsers */
+background: -moz-linear-gradient(top, rgba(155,31,31,1) 0%, rgba(214,98,98,1) 50%, rgba(201,20,20,1) 51%, rgba(186,100,100,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(155,31,31,1)), color-stop(50%,rgba(214,98,98,1)), color-stop(51%,rgba(201,20,20,1)), color-stop(100%,rgba(186,100,100,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, rgba(155,31,31,1) 0%,rgba(214,98,98,1) 50%,rgba(201,20,20,1) 51%,rgba(186,100,100,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, rgba(155,31,31,1) 0%,rgba(214,98,98,1) 50%,rgba(201,20,20,1) 51%,rgba(186,100,100,1) 100%); /* Opera11.10+ */
+background: -ms-linear-gradient(top, rgba(155,31,31,1) 0%,rgba(214,98,98,1) 50%,rgba(201,20,20,1) 51%,rgba(186,100,100,1) 100%); /* IE10+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9b1f1f', endColorstr='#ba6464',GradientType=0 ); /* IE6-9 */
+background: linear-gradient(top, rgba(155,31,31,1) 0%,rgba(214,98,98,1) 50%,rgba(201,20,20,1) 51%,rgba(186,100,100,1) 100%); /* W3C */ }
+	.panel {  padding: .5em; }
+	iframe { border: 2px solid #aaa; }
+	a { color: darkblue; }
+	h1 { margin: 0em; padding: .5em; }
+	h2 { margin: 0em; }
+	h1 a { color: darkblue; }
+	h2, h2 a, #summary1 a {  }
+	.meta h2, .meta h2 a, #summary2 a {  }
+	.model, .system, .datameta { background-image: -webkit-gradient(
+    linear,
+    right top,
+    left top,
+    color-stop(0.46, rgb(255,255,255)),
+    color-stop(0.73, rgb(242,255,240))
+);
+background-image: -moz-linear-gradient(
+    center bottom,
+    rgb(242,255,240) 46%,
+    rgb(255,255,255) 73%
+); }
+	.data { background-image: -webkit-gradient(
+    linear,
+    right top,
+    left top,
+    color-stop(0.46, rgb(255,255,255)),
+    color-stop(0.73, rgb(255,240,255))
+);
+background-image: -moz-linear-gradient(
+    center bottom,
+    rgb(251,245,255) 46%,
+    rgb(255,255,255) 73%
+); }
+	.domain { background-image: -webkit-gradient(
+    linear,
+    right top,
+    left top,
+    color-stop(0.46, rgb(255,255,255)),
+    color-stop(0.73, rgb(240,240,255))
+);
+background-image: -moz-linear-gradient(
+    center bottom,
+    rgb(251,245,255) 46%,
+    rgb(255,255,255) 73%
+); }
+	.model, .datameta { /*display: none;*/ }
+	pre.prettyprint { border: 0px; }
+	code { font-size: 1.2em; }
+	li { margin: 1em 1em 1em 1em; }
+	li div { margin: .5em 1em .5em 2em; }
+	li div:first-child { margin: 0em 0em 0em 2em; text-indent: -2em;  }
+	li div:first-child a:first-child { font-weight: bold; }
+section:hover { background: #fff; }
+#header a { color: #fff; }
+</style>
+</head>
+<body>
+	<div id="header" style="overflow: auto;"></div>
+	<section id="document" class="data">
+		<div id="documentHeader"></div>
+	</section>
+    <hr/>
+    <div class="panel">Powered by <a href="http://code.google.com/p/open-app/">OpenApp</a></div>
+	
+	<script id="headerTemplate" type="text/x-jQuery-tmpl">
+		<div><strong>Concept: <a href="${defaultTopic(uri)}">${uri}</a></strong></div>
+		<div><em>Topic: <a href="${contentPredicate}">${contentPredicate}</a></em>
+		<div>Information resource:</div>
+        <h1 style="margin-top: 0em;"><a href="${contentUri}">${contentUri}</a></h1>
+    </script>
+	<script id="sectionTemplate" type="text/x-jQuery-tmpl">
+		<div><em>Topic: <a href="${contentPredicate}">${contentPredicate}</a></em></div>
+		<div>Named graph:</div>
+        <h2><a href="${contentUri}">${sectionTitle}</a></h2>
+    </script>
+    <script id="prettyPrintTemplate" type="text/x-jQuery-tmpl">
+		<pre class="prettyprint" style="overflow: auto;"><code class="language-xml">${$data}</code></pre>
+    </script>
+    <script id="turtleTemplate" type="text/x-jQuery-tmpl">
+		{{if typeof $data === "string"}}
+			<div style="border: 1px solid #aaa; padding: .5em; margin: 1em; ">This is an <a href="http://www.w3.org/TR/rdf-primer/">RDF</a> <a href="http://www2005.org/cdrom/docs/p613.pdf">named graph</a>. It is displayed here using <a href="http://www.w3.org/TeamSubmission/turtle/">Turtle</a> syntax (<a href="javascript:void()" class="viewRawData">view raw data<pre style="display: none;" class="rawData">${$data}</pre></a>).</div>
+			<ol>{{each $data.replace(newLineTab, tabChar).split(newLine)}}{{if $value.trim().length > 0}}
+    			<li>{{each $value.replace(bracketHref, bracketReplace).split(tabChar)}}<div>{{html $value}}</div>{{/each}}</li>
+			{{/if}}{{/each}}</ol>
+		{{else}}
+			<div style="border: 1px solid #aaa; padding: .5em; margin: 1em; ">This <a href="http://www.w3.org/TR/rdf-primer/">RDF</a> <a href="http://www2005.org/cdrom/docs/p613.pdf">named graph</a> is empty.</div>
+		{{/if}}
+    </script>
+	
+    
+	<script type="text/javascript">
+		var trailingSlash = /\/$/;
+		var leadingSlash = /^\//;
+		var newLineTab = /[\n\r\f]+\t+/gi;
+		var newLine = "\n";
+		var tabChar = "\t";
+		var bracketHref = /<([A-Za-z\x23-\x3B=\?_~@]+)>/gi;
+		var bracketReplace = "&lt;<a href=\"$1\">$1</a>&gt;";
+	    var defaultTopic = function(uri) {
+			//return !uri.match(/^https?\:/) || uri.match(/\/[\w\d]*\:[\w\d]+$/)
+			//	? uri : uri.replace(trailingSlash, "") + "/:index";
+			return uri.match(/(\/|^)[\w\d]*\:[\w\d]+$/)
+				? uri : uri.replace(trailingSlash, "") + "/:index";
+		};
+		var removeTopic = function(uri) {
+			var queryStart = uri.indexOf("?");
+			return uri.substring(0, uri.lastIndexOf("/", queryStart !== -1 ? queryStart : uri.length));
+		};
+		var parseTopicId = function(uri) {
+			return uri.match(/[\w\d\:]*$/)[0];
+		};
+		var resolveUri = function(contextUri, uri) {
+			return removeTopic(contextUri).replace(trailingSlash, "") + "/" + uri.replace(leadingSlash, "");
+		};
+		var viewRawData = function(evt) {
+			var popup = window.open(undefined, undefined, "width=800,height=300,resizable,scrollbars=yes,status=1");
+			$("<pre/>").html($(this).find(".rawData").html()).appendTo($(popup.document.body));
+		};
+		
+		var conceptUri = removeTopic(document.location.href);
+		$("<base/>").attr("href", conceptUri).appendTo($("head"));
+		// TODO: We need to get the actual value somehow:
+		var contentPredicate = "http://purl.org/openapp/" + parseTopicId(document.location.href).split(":")[1];
+		
+		openapp.resource.get(conceptUri, function(context) {
+			for (var link in context.link) {
+				if (context.link[link].href === context.contentUri) {
+					context.contentPredicate = link;
+				}
+			}
+			context.contentUri = resolveUri(context.uri, context.contentUri);
+			context.sectionTitle = context.contentUri.substring(context.uri.length).replace(/^\//, "");
+			context.contentPredicate = contentPredicate;
+			document.title = context.contentUri;
+			$("#headerTemplate").tmpl(context).appendTo("#header");
+			$("#sectionTemplate").tmpl(context).appendTo("#documentHeader");
+		}, { "http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate": contentPredicate });
+		
+		$.ajax({ uri: document.location, headers: { Accept: "text/x-turtle" },
+			dataType: "text", success: function(data) {
+			  $("#turtleTemplate").tmpl(data).appendTo("#document");
+			  $("#document").find(".viewRawData").click(viewRawData);
+		}});
+	</script>
+</body>
+</html>

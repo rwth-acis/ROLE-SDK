@@ -1,0 +1,262 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<title>Sample CKEditor Site</title>
+	<style>
+		.cke_skin_kama .cke_button .cke_button_insertAction .cke_icon {
+			background-image: url(/tests/uutestbed/icon_do.png);
+			background-position: 0px;
+		}
+		.responses {
+			margin-left: 1em;
+		}
+		
+		#thread .post {
+			margin-bottom: 0.5em;
+			border: 1px solid lightgrey;
+		}
+		#thread .post {
+			border: 1px solid lightgrey;
+		}
+		#thread .postFooter .info {
+			text-align:right;
+			margin-right: 0.3em;
+			font-style: italic;
+		}
+		#thread .postFooter {
+			background: whitesmoke;
+			border-top: 1px solid lightgrey;
+			font-size: small;
+		}
+		#thread .postFooter .buttons{
+			float: left;
+			margin-left: 0.3em;
+		}
+
+		#thread .postFooter .buttons .enabled:hover{
+			text-decoration: underline;
+		}
+
+		#thread .postFooter .buttons .enabled{
+			cursor: hand;
+			color: black;
+		}
+
+		#thread .postFooter .buttons>*{
+			margin-right: 0.5em;
+			color: grey;
+		}
+
+		#thread .postHeader {
+			background: whitesmoke;
+			border-bottom: 1px solid lightgrey;
+		}
+
+		#thread .postBody {
+			padding: 0.3em;
+		}
+		
+		#thread .postBody p {
+			margin: 0.3em 0px;
+		}
+	</style>
+</head>
+<body>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
+		<script type="text/javascript" src="ckeditor/ckeditor_source.js"></script>
+		<div id="thread">
+		<div/>
+		<script type="text/javascript">
+			// post = {title: "", text: "", author: "", created: ""} 
+			// thread = {topic: initial_post, responses: [subpost1,subpost2]} 
+			
+			var createNewPost = function(parentPost) {
+				if (parentPost.responses == null) {
+					parentPost.responses = [];
+				}
+				var replyPost = {text: "A new post.",
+								created: "2011-03-01", 
+								creator: "me"}
+				parentPost.responses.push(replyPost);
+				return replyPost;
+			};
+			var savePost = function(post) {
+			};
+			
+			var createEditor;
+			var globalCounter = 1;
+			function discussion_init(thread) {
+				var createPost = function(value, editMode) {
+					var containerEl =  $("<div/>");
+
+					var postEl = $("<div/>").addClass("post").appendTo(containerEl);
+					var responsesEl = $("<div/>").addClass("responses").appendTo(containerEl);
+
+					// Add the post
+					$("<div/>").addClass("postHeader").html(value.title || "").appendTo(postEl);
+					var postBody = $("<div/>").addClass("postBody").html(value.text || "").appendTo(postEl);
+					var footerEl = $("<div/>").addClass("postFooter").appendTo(postEl);
+					var buttonsEl = $("<div/>").addClass("buttons").appendTo(footerEl);
+					var editEl = $("<span/>").addClass("enabled").text("Edit").appendTo(buttonsEl);
+					var saveEl = $("<span/>").text("Save").appendTo(buttonsEl);
+					var replyEl = $("<span/>").addClass("enabled").text("Reply").appendTo(buttonsEl);
+					(function() {
+						var  editorId;
+						var edit = function() {
+							editorId = "postId_"+globalCounter;
+							globalCounter++;
+							postBody.attr("id", editorId);
+							editEl.removeClass("enabled");
+							replyEl.removeClass("enabled");
+							saveEl.addClass("enabled");
+							createEditor(postBody[0]);
+						}
+						editEl.click(edit);
+						saveEl.click(function() {
+							editEl.addClass("enabled");
+							replyEl.addClass("enabled");
+							saveEl.removeClass("enabled");
+							destroyEditor(editorId);
+						});
+						replyEl.click(function() {
+							var replyPost = createNewPost(value);
+							createPost(replyPost, true).appendTo(responsesEl);
+						});
+						if (editMode) {
+							setTimeout(function() {
+								edit();								
+							}, 1);
+						}
+					})();
+
+					$("<div/>").addClass("info").html(
+						"<div>"+
+							"<span>Posted by </span>"+
+							"<span>"+value.creator+"</span>"+
+							"<span> at </span>"+
+							"<span>"+value.created+"</span>"+
+						"</div>").appendTo(footerEl);
+
+					//Add the responses
+					if (value.responses != null && value.responses.length > 0) {
+						$.each(value.responses, function(index, v) {
+							createPost(v).appendTo(responsesEl);
+						});
+					}
+
+					return containerEl;
+				}
+				
+				var topicContainer = document.getElementById("thread");
+				topicContainer.innerHTML = "";
+				createPost(thread).appendTo(topicContainer);
+			}
+			discussion_init({
+				title: "Assignment 1", 
+				text: "Please look into the listed articles and discuss among yourself the following questions:<br>"+
+					  "1) Is there a commonly agreed definition of we2.0? <br>"+
+					  "2) Who are the advocates of web2.0?",
+				created: "2011-03-01", 
+				creator: "Anders Larsson",
+				responses: [{
+						text: "It has to do with a new kind of spiders for sure.", 
+						created: "2011-03-06", 
+						creator: "Student 1",
+						responses: [{
+							text: "Nah, with web Anders means World Wide Web, and web2.0 means the social and technological revolution starting in the beggining of the new century.",
+							created: "2011-03-07",
+							creator: "Student 2"
+						}]
+					}, {
+						text: "Hopp <b>jodå</b>, ett test.",
+						created: "2011-03-08", 
+						creator: "Student 3"
+					}
+				]});
+
+			function ckeditor_init() {
+				//Method to called when a link is clicked in a note that should trigger an event.
+				function sendOAEvent(url, text, dataStr) {
+					alert("clicked on "+ url + " labeled "+text+" with data "+ dataStr);
+				}
+
+				var currentEnvelope;
+				var currentMessage;
+				var insertActionCommand;
+				//Method to call when a openApp event is recieved.
+				function recieveOAEvent(envelope, message) {
+					currentEnvelope = envelope;
+					currentMessage = message;
+					if (insertActionCommand != null) {
+						insertActionCommand.enable();
+					}
+				}
+
+				//TODO fix so it uses the current* variables above
+				var insertActionCommandDefinition = { exec: function(editor) {
+					 var ranges = editor.getSelection().getRanges( true );
+					 if (ranges.length === 1) {
+					 	var range = ranges[0];
+						var docFrag = range.extractContents(false);
+						var content;
+						if (docFrag.getChildCount() === 0) {
+							content = CKEDITOR.dom.element.createFromHtml('<a>gurka</a>');
+						} else {
+							content = CKEDITOR.dom.element.createFromHtml('<a></a>');
+							content.append(docFrag);
+						}
+						content.setAttribute("href", "http://www.dn.se/");
+						content.setAttribute("data-openapp", "tomat");
+						range.insertNode(content);
+					 }
+				}};
+				
+				var pluginName = 'insertAction';
+				CKEDITOR.on('instanceReady', function( e ){
+					insertActionCommand = e.editor.getCommand(pluginName);
+					insertActionCommand.disable();
+				});
+				CKEDITOR.on('instanceDestroyed', function( e ){
+					insertActionCommand.disable();
+				});
+				CKEDITOR.on('instanceCreated', function( e ){
+					var editor = e.editor;
+					editor.on('doubleclick', function( evt ) {
+						var element = CKEDITOR.plugins.link.getSelectedLink( editor ) || evt.data.element;
+						var data = element.getAttribute("data-openapp");
+						if (data != null) {
+							sendOAEvent(element.getAttribute("href"), element.getAttribute("innerHTML"), data);
+						}
+						evt.stop();
+					});
+
+					editor.addCommand(pluginName, insertActionCommandDefinition);
+					editor.ui.add( pluginName, 1, { //Using 1 instead of CKEDITOR.UI_BUTTON since it is not defined until plugins have been loaded.
+						label : 'Link to recieved action',
+						command : pluginName});
+				});
+							
+				createEditor = function(nodeOrStr, callback) {
+					CKEDITOR.replace( nodeOrStr , {
+							height: 100,
+							resize_enabled: true,
+							resize_dir: "vertical",
+							toolbarCanCollapse: false,
+							toolbar: [
+									['Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink','-', 'Maximize', 'insertAction']
+							]
+					});
+				}
+				destroyEditor = function(editorId) {
+					CKEDITOR.instances[editorId].destroy(false);
+				}
+				//createEditor("editor1");
+				setTimeout(function() {
+					recieveOAEvent();
+				}, 4000);
+			}
+			ckeditor_init();
+			</script>
+</body>
+</html>

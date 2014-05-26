@@ -1,0 +1,308 @@
+@borderwidth: 2px;
+
+html, body { 
+	margin: 0px; 
+	padding: 0px; 
+	height:100%;
+	font-family: sans-serif;
+	font-size: 13px; 
+}
+
+#dialogNode {
+		label {
+			display: block;
+		}
+		input {
+			width: 90%;
+			margin-left: 10%;
+		}
+}
+
+#header {
+	height: 50px;
+	padding: 5px;
+	top:0px;
+	left:0px;
+	right:0px;
+	position: absolute;
+	background: url(/s/background.highlight);
+	.bar { 
+		margin-top: 15px;
+		padding: 1px;
+		padding-left: 10px;
+		.barTitle {
+			font-size: 20px;
+			font-weight: bold;
+			font-style: italic;
+			color: black;
+			text-decoration: none;
+		}
+	}
+	#logo {
+		float: right;
+		padding-right: 10px;
+	}
+	#layoutNode, #signInNode {
+		float: right;
+		padding-right: 15px;
+		padding-top: 15px;
+		font-style: italic;
+	}
+	#layoutNode img {
+		height: 20px;
+	}
+}
+
+#main {
+	top: 50px;
+	bottom:40px;
+	left: 0px;
+	right: 0px;
+	position: absolute;
+	border-top: @borderwidth solid #00cc55;
+	border-bottom: @borderwidth solid #00cc55;
+	background: white;
+
+	.sideSection {
+		position: absolute;
+		top: 0x;
+		left: 0px;
+		width: 150px;
+		height:100%;
+		overflow:auto;
+		>DIV {
+			overflow: auto;
+		}
+		.sideHeader {
+			padding: 10px 5px 4px 8px;
+			font-weight: bold;
+			border-bottom: 1px solid #ccc;
+			#addWidgetNode, #addParticipantNode, #addResourceNode, #addWebAppNode {
+				.addButton;
+			}
+		}
+		.sideEntry {
+			padding: 4px 10px 3px 10px;
+			cursor: pointer;
+			border-bottom: 1px solid #ccc;
+			background: url(/s/background.shade);
+			overflow: hidden;
+			white-space: nowrap;
+			& :hover, & .sideEntrySel {
+				background: url(/s/background.highlight);
+				padding: 2px 10px 2px 10px;
+				border-top: 2px solid #00cc55;
+				border-bottom: 2px solid #00cc55;
+			}
+			.removeWidget, .removeParticipant, .removeResource, .removeWebapp {
+				.removeButton
+			}
+		}
+	}
+	.widgetsBox {
+		overflow: auto;
+		margin-left: 150px;
+		border-left: @borderwidth solid #ccc;
+		height:100%;
+		.toolWrapper {width: 300px; float: left;}
+		& .threeColumns .toolWrapper {width: 33.33%;}
+		& .twoColumns .toolWrapper {width: 50%;}
+		& .oneColumn .toolWrapper {width: 100%;}
+		& .maximize {
+			.toolWrapper {
+				display: none;
+			}
+			.toolWrapper.maximized {
+				display: block;
+				width: 100%;
+				height: 100% !important;
+			}
+		}
+	}
+}
+
+#footer {
+	height: 40px;
+	bottom: 0px;
+	position: absolute;
+	#addDashboardWidgetNode{
+		.addButton;
+		display:none;
+		float:none;
+		margin-left: 0.5em;
+		float: right;
+	}
+	#dashboardWidgetsNode {
+		padding-left: 1.5em;
+	}
+	#dashboard {
+		display: table-row;
+		overflow: auto;
+	}
+	#dashboard>div>div {
+		display: table-cell;
+		vertical-align: middle;
+	}
+	.dashboardLabel {
+		font-style: italic;
+		font-weight: bold;
+		vertical-align: bottom;
+		padding-bottom: 10px;
+		padding-left: 20px;
+		display: table-cell;
+		width: 130px;
+		height: 20px;
+		padding: 10px;
+		border-right: 2px solid #ccc;
+	}
+	.section {
+		position: fixed;
+		left: 0px; 
+		bottom: 0px; 
+		width: 100%; 
+		z-index: 9999;
+	}
+	.section.background {
+		height: 40px;
+		width: 100%;
+		background: #fff url(/s/background.highlight);
+		border-top: 2px solid #00cc55;
+	}
+}
+
+.notParticipant {
+	.removeResource, .removeWebapp {
+		display: none;
+	}
+}
+
+.notOwner {
+	.removeWidget, .removeParticipant {
+		display: none;
+	}
+}
+
+
+//==========Tool stuff, both in main and dashboard=========
+.toolWrapper {
+	position: relative;
+	.padder {
+		position:absolute;
+		top: 5px;
+		left: 5px;
+		bottom: 5px;
+		right: 5px;
+	}
+}
+.tool {
+	position: relative;
+	height: 100%;
+	border: 1px solid #ccc;
+	background: #fff;
+	& :hover, & .toolFocus {
+		padding: 0px;
+		border: 1px solid #00cc55;
+		.title {
+			border-top: 1px solid #00cc55;
+			border-bottom: 2px solid #00cc55;
+			background: url(/s/background.highlight);
+		}
+	}
+	.title {
+		.tooltitle;
+		position: absolute;
+		right: 0px;
+		left: 0px;
+	}
+	.iframecontainer {
+		position: absolute;
+		top: 20px;
+		bottom: 0px;
+		right: 0px;
+		left: 0px;
+	}
+}
+//Dashboard tool has additional style
+.toolCell {
+	vertical-align: bottom;
+	bottom: 0px;
+	display:table-cell;
+	& :hover .tool {
+ 		border: 1px solid #00cc55; 
+		border-top-width: 0px;
+ 		padding: 0px;
+	}
+	.tool {
+		width: 300px; 
+ 		border-bottom: 1px solid white;
+		position: absolute;
+		bottom: 2.6em;
+	}
+	
+	> .title {
+		.tooltitle;
+		border-left: 1px solid #ccc;
+		border-right: 1px solid #ccc;
+		border-bottom: 2px solid #ccc;
+		margin-right: 0.5em;
+	}
+	#isNotLoggedInNode.dashboardLabel {
+		font-style: italic; 
+		vertical-align: bottom; 
+		padding-bottom: 10px;
+		padding-left: 20px;
+	}
+}
+
+
+//==========Mixins=================
+.addButton () {
+	cursor: pointer;
+	color: #00cc55;
+	font-weight: bold;
+	font-size: 16px;
+	float:right;
+}
+.removeButton () {
+	cursor: pointer;
+	color: red;
+	font-weight: bold;
+	font-size: 16px;
+	float:right;
+}
+
+.tooltitle () {
+	cursor: pointer;
+	height: 20px;
+	font-weight: bold;
+	text-align: center;
+	border-top: 1px solid #ccc;
+	border-bottom: @borderwidth solid #ccc;
+	background: url(/s/background.shade);
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-top: 2px;
+	padding-bottom: 0px;
+	margin-bottom: 1px;
+}
+
+
+//============Globals==============			
+.selectable {
+	list-style-type: none;
+	margin: 0; 
+	padding: 0; 
+	width: 60%;
+	.ui-selecting {
+		background: #FECA40;
+	}
+	.ui-selected { 
+		background: #F39814;
+		color: white;
+	}
+	li {
+		margin: 3px;
+		padding: 0.4em;
+		height: 18px;
+	}
+}

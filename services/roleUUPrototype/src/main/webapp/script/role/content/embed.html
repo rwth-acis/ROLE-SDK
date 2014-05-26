@@ -1,0 +1,44 @@
+<div class="role_content embed_info">
+	<div id="fb-root"></div>
+	<div class="role_content_close"><button></button></div>
+	<div class="embed_alts">
+		<div>
+			<label for="embed_link">Link to space:</label></br>
+			<input id="embed_link" type="text"></input>
+		</div>
+		<div>
+			<label for="iframe_embed">Iframe embed code:</label></br>
+			<textarea id="iframe_embed"></textarea>
+		</div>
+		<div>
+			<label for="script_embed">Script embed code:</label></br>
+			<textarea id="script_embed"></textarea>
+		</div>
+	</div>
+	<div class="embed_config">
+		<div class="social_sharing">
+			<div class="fb-like" data-href="{{spaceuri}}" data-send="false" data-width="450" data-show-faces="false" data-action="recommend" data-layout="button_count"></div><br/>
+			<a href="https://twitter.com/share" class="twitter-share-button" data-url="{{spaceuri}}" data-hashtags="ROLESpace">Tweet</a><br/>
+			<div class="g-plus" data-action="share" data-annotation="bubble" data-href="{{spaceuri}}"></div>
+		</div>
+		<div class="widgetstore_sharing">
+			<button id="createBundleFromSpace" type="button">Create bundle in WidgetStore with current widgets</button>
+		</div>
+		<label for="dashboard_check">Include dashboard:</label>
+		<input id="dashboard_check" type="checkbox" checked="checked"></input></br>
+		<div class="embed_config_restriction1">
+			<div class="embed_restriction_message">Applies to script or iframe embed code:</div>
+			<label for="space_width">Width:</label>
+			<input id="space_width" type="text" value="100%"></input></br>
+			<label for="space_height">Height:</label>
+			<input id="space_height" type="text" value="700px"></input></br>
+		</div>
+		<!--  div class="embed_config_restriction2">
+			<div class="embed_restriction_message">Only applies to script embed code:</div>
+			<label for="top_dashboard_check">Dashboard to be inserted on top level page:</label>
+			<input id="top_dashboard_check" type="checkbox" value="checked"></input></br>
+			<label for="allow_maximize">Allow space to be maximized:</label>
+			<input id="allow_maximize" type="checkbox" value="checked"></input></br>
+		</div-->
+	</div>
+</div>

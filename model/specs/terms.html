@@ -1,0 +1,769 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
+<html 
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:mvcb="http://webns.net/mvcb/"
+  xml:lang="en"
+> 
+
+  <head>
+    <title>ROLE Ontology Specification</title>
+    <meta http-equiv="content-type" content="text/xhtml+xml; charset=utf-8" />
+    <link rel="mvcb:generatorAgent" type="application/rdf+xml" title="DOAP" href="http://rdfohloh.wikier.org/project/specgen" />
+    <link href="xmlns-style.css" rel="stylesheet" type="text/css" />
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body>
+    <h1 id="title">ROLE Ontology Specification</h1>
+
+    <h2 id="subtitle">Specification of the ROLE (Responsive Open Learning Environment) Ontology</h2>
+
+    <h3 id="mymw-doctype">Working draft november 2012</h3>
+
+    <dl>
+      <dt>This version:</dt>
+      <dd><a href="http://role-project.sourceforge.net/model/specs/20121114/terms.html">http://role-project.sourceforge.net/model/specs/20121114/terms.html</a></dd>
+      <dt>Latest version:</dt>
+      <dd><a href="http://purl.org/role/specs/terms">http://purl.org/role/specs/terms</a></dd>
+
+      <dt>Last Update:</dt>
+      <dd>14:th of november, 2012 </dd>
+
+      <dt>Editors:</dt>
+      <dd>Freddy Limpens, EPFL, Switzerland; Matthias Palmer, University Uppsala, Sweden</dd>
+
+      <dt>Contributors:</dt>
+      <dd>Ingo Dahn, University of Koblenz, Germany; Andreas Kiefel, University Koblenz, Germany</dd>
+    </dl>
+
+    <p class="copyright">© ROLE Consortium 2009-2012. The Role project is supported by the European Commission, in the theme ICT-2007 Digital Libraries and technology-enhanced learning, as a Large-scale integrating project (IP), under the 7th Framework Programme, Grant agreement no.: 231396.</p>
+
+    <!-- ===================================================================== -->
+
+    <hr />
+
+
+    <h2 id="abstract">Abstract</h2>
+
+    <p>
+      The ROLE Responsive Open Learning Environments (ROLE) is a European collaborative
+      project with 16 internationally renowned research groups from 6 EU countries and China. 
+      ROLE´s main task is to deliver and test prototypes of highly responsive Personal Learning 
+      Environments (PLE), offering breakthrough levels of effectiveness, flexibility, user-control
+      and mass-individualisation. 
+      
+      This document is the specification of the ROLE ontology describing the classes and properties that compose it. 
+  
+    </p>
+
+
+
+    <h2 id="status">Status of this Document</h2>
+
+    <p>
+      <strong>This is a work in progress!</strong> This document is changing
+      on a daily if not hourly basis. Comments are very welcome, please send
+      them to the Technical Coordinator of the ROLE project <a href="klamma@informatik.rwth-aachen.de">klamma@informatik.rwth-aachen.de</a> 
+      indicating in the subject that your message is about ROLE ontology. Thank you.
+    </p>
+
+<!-- TOC -->
+
+    <h2 id="contents">Table of Contents</h2>
+    <ol id="toc">
+      <li><a href="#intro">Introduction</a></li>
+      <li><a href="#sec-glance">ROLE Ontology at a glance</a></li>
+      <li>
+        <a href="#overview">ROLE Ontology overview and examples</a>
+        <ol>
+          <li><a href="#s31">Overview</a></li>
+          <li><a href="#s32">Examples</a></li>
+        </ol>
+      </li>
+      <li><a href="#reference">Cross-reference for ROLE Ontology classes and properties</a></li>
+    </ol>
+
+
+
+    <h3>Appendixes</h3>
+
+    <ol id="appendix" style="list-style-type:upper-alpha;">
+      <li><a href="#references">Normative References</a></li>
+      <li><a href="#changes">Changes in this version</a> (Non-Normative)</li>
+      <li><a href="#acknowledgements">Acknowledgements</a> (Non-Normative)</li>
+    </ol>
+
+
+    <hr />
+
+    <!-- ===================================================================== -->
+
+
+    <h2 id="intro">1 Introduction</h2>
+
+    <p>The ROLE ontology is meant to serve as basis to perform reasonning on repositories of tools and learning 
+    resources used in the context of self-directed learning. It describe both tools and learning processes from a Technology-enhanced 
+    learning perspective. New classes and properties have therefore been introduced to precisely account for the specificity of this 
+    application domain, but we also took care to reuse and anchor our classes and properties to existing ontologies (such as DCTerms, FOAF, SIOC)
+    whenever this was possible. It has been designed to fulfill the need of the ROLE project in terms of meta-modelling and description of 
+    learning tools and processes.</p>
+    
+     <p>For example, the <a href="http://www.role-widgetstore.eu">ROLE Widget Store</a> is a repository for all ROLE widgets that can be selected and used within a personal 
+     learning environment or LMS. The ROLE widget store offers the filtering, recommendation and search of widgets that fit
+     to a specific need of a user. The widget store is also open to widgets from many providers; therefore, it offers functionalities 
+     to manage widgets from different vendors or partners of ROLE. The ROLE ontology provides the concepts and properties to
+     precisely describe each tool in relation to, e.g., the learning domain or the learning-wise functionalities. The goal in this 
+     respects is to expose the descriptions of the tools and allow third-party agents to exploit ROLE catalogue of widgets.</p>
+     
+     <p>Another innovation proposed by the ROLE framework is th ability to organize documents, tools, and other resources in 
+     context-relevant bundles of learning resources. These bundle can be shared to the communities in online catalog like the ROLE 
+     Widget Store. These bundle can then instantiated in web spaces within a space-enabled container (Moodle, Graaasp, etc.). A 
+     space consists in a bundle of resources, participants, and tools. For example, students can create a space dedicated to 
+     one course where they can invite classmates, the teacher, etc., and collect and organize relevant resources and applications 
+     by linking them to the space. Spaces, Resource bundles and their properties can be precisely described with ROLE ontology.</p>
+
+    <!-- ===================================================================== -->
+
+    <h2 id="sec-glance">2. ROLE Ontology at a glance</h2>
+
+    <p>
+      An alphabetical index of ROLE terms, by class (concepts) and by property 
+      (relationships, attributes), are given below. All the terms are hyperlinked 
+      to their detailed description for quick reference.
+    </p>
+
+    <!-- The list of classes and properties goes here -->
+    <div style="padding: 1em; border: dotted; background-color: #ddd;"><p>Classes:  <a href="#term_Bundle">Bundle</a>,  <a href="#term_Category">Category</a>,  <a href="#term_CognitiveStrategy">CognitiveStrategy</a>,  <a href="#term_Competence">Competence</a>,  <a href="#term_ConcreteActivity">ConcreteActivity</a>,  <a href="#term_Configuration">Configuration</a>,  <a href="#term_DecisionActivity">DecisionActivity</a>,  <a href="#term_DomainCompetence">DomainCompetence</a>,  <a href="#term_EQF">EQF</a>,  <a href="#term_Functionality">Functionality</a>,  <a href="#term_LearningActivity">LearningActivity</a>,  <a href="#term_LearningResource">LearningResource</a>,  <a href="#term_LearningStrategy">LearningStrategy</a>,  <a href="#term_LearningTechnique">LearningTechnique</a>,  <a href="#term_Level">Level</a>,  <a href="#term_MetacognitiveStrategy">MetacognitiveStrategy</a>,  <a href="#term_OpenSocialGadget">OpenSocialGadget</a>,  <a href="#term_PersonConfiguration">PersonConfiguration</a>,  <a href="#term_ResourceManagementStrategy">ResourceManagementStrategy</a>,  <a href="#term_SRLCompetence">SRLCompetence</a>,  <a href="#term_SRLStrategy">SRLStrategy</a>,  <a href="#term_Space">Space</a>,  <a href="#term_Tool">Tool</a>,  <a href="#term_ToolCompetence">ToolCompetence</a>,  <a href="#term_ToolConfiguration">ToolConfiguration</a>,  <a href="#term_W3CWidget">W3CWidget</a>,  <a href="#term_Widget">Widget</a>, 
+</p><p>Properties:  <a href="#term_activity">activity</a>,  <a href="#term_aquiredCompetence">aquiredCompetence</a>,  <a href="#term_category">category</a>,  <a href="#term_configures">configures</a>,  <a href="#term_data">data</a>,  <a href="#term_goalCompetence">goalCompetence</a>,  <a href="#term_icon">icon</a>,  <a href="#term_member">member</a>,  <a href="#term_option">option</a>,  <a href="#term_overlay">overlay</a>,  <a href="#term_owner">owner</a>,  <a href="#term_proficiencyLevel">proficiencyLevel</a>,  <a href="#term_providedBy">providedBy</a>,  <a href="#term_providedByCategory">providedByCategory</a>,  <a href="#term_provides">provides</a>,  <a href="#term_requiresCompletionOf">requiresCompletionOf</a>,  <a href="#term_supportedBy">supportedBy</a>,  <a href="#term_technique">technique</a>,  <a href="#term_tool">tool</a>,  <a href="#term_topic">topic</a>,  <a href="#term_userPreferences">userPreferences</a>, 
+</p>
+</div>
+    <!-- End of the terms list -->
+
+   <!-- <p>...</p> -->
+
+    <!-- ===================================================================== -->
+
+    <h2 id="overview">3. ROLE Ontology overview and examples</h2>
+    
+    
+    <h3 id="s31">3.1. Overview</h3>
+
+    <p>This following figure gives an overview of the classes and properties defined in the ROLE ontology. The model is divided into three colors:
+      <dl>
+	<dt>Core ontology - orange boxes</dt>
+	<dd>Used to define a context for learning in the form of <em>bundles</em> containing tools and learning resources. 
+	  A bundle is a recipe which can be instantiated at any time into a concrete <em>space</em> where also 
+	  <em>persons</em> are associated with the space as <em>owners</em> or <em>members</em>. </dd>
+	
+	<dt>Learning ontology - blue boxes</dt>
+	<dd>Centered on <em>Learning activities</em>, <em>Learning strategies</em>, and <em>Functionalities</em>.
+	  The Learning strategies organizes several learning activities and functionalities provides a bridge to the use of <em>tools</em>.</dd>
+	
+	<dt>Competence ontology - green boxes</dt>
+	<dd>Provides a way to describe comptencies, both those already aquired and those planned in the form of goals.</dd>
+      </dl>
+    	<img src="terms.png"></img>
+
+ 	<h3 id="s32">3.2. Example</h3>
+
+    <p>Here is example describing a Widget registered at the ROLE Widget Store:</p>
+
+    <div class="example">
+      <pre>&lt;role:Widget rdf:about="http://www.role-widgetstore.eu/content/xmpp-multiuser-chat"&gt;
+    &lt;dcterms:source rdf:resource="http://role-is.dbis.rwth-aachen.de/gadgets/chat/xmpp-muc-gadget.xml"/&gt;
+    &lt;dcterms:title xml:lang="en-US"&gt;XMPP Multiuser Chat &lt;/dcterms:title&gt;
+    &lt;dcterms:description xml:lang="en-US"&gt;An XMPP Multiuser Chat Gadget&lt;/dcterms:description&gt; 
+    &lt;foaf:maker&gt;
+        &lt;foaf:Person rdf:about="http://www.role-widgetstore.eu/semantices/person/daniel"&gt;
+            &lt;foaf:name&gt;daniel&lt;/foaf:name&gt;
+            &lt;foaf:mbox&gt;daniel@role-project.eu&lt;/foaf:mbox&gt;
+    	&lt;/foaf:Person&gt;
+    &lt;/foaf:maker&gt;  
+    &lt;foaf:img&gt;default screenshot of the Tool&lt;/foaf:img&gt;
+    &lt;foaf:depiction&gt;thumbnail of the Tool&lt;/foaf:depiction&gt; 
+    &lt;role:category rdf:resource="http://dbpedia.org/page/Category:Communication"/&gt;
+    &lt;role:toolFunctionality rdf:resource="http://purl.org/role/terms/FunctionalityTF1" /&gt;
+&lt;/role:Widget&gt;</pre>
+    </div>
+
+    <p></p>
+
+    <!-- ===================================================================== -->
+
+    <h2 id="reference">4. Cross-reference for ROLE Ontology classes and properties</h2>
+
+    <!-- The following is the script-generated list of classes and properties -->
+    <div class="specterm" id="term_Bundle">
+<h3>Class: role:Bundle</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/Bundle">http://purl.org/role/terms/Bundle</a></p><p><em>Bundle </em> - A bundle is a set of learning resources bundled to fit a particular purpose. 
+		Possible resources in a bundle can be documents, widgets, web tools, etc. </p>
+<dl><dt>in-domain-of:</dt><dd><a href="#term_data" style="font-family: monospace;">role:data</a></dd><dd><a href="#term_tool" style="font-family: monospace;">role:tool</a></dd><dt>see-also:</dt><dd><a style="font-family: monospace" href="https://ilias.uni-koblenz.de/goto.php?target=git_219_948&client_id=default">https://ilias.uni-koblenz.de/goto.php?target=git_219_948&client_id=default</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_Category">
+<h3>Class: role:Category</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/Category">http://purl.org/role/terms/Category</a></p><p><em>Category</em> - Class used to describe the category of a Tool. Used with the property role:category from Tool. 
+		Functionalities may reference categories directly but then via the role:providedByCategory property. </p>
+<dl><dt>in-range-of:</dt><dd><a href="#term_category" style="font-family: monospace;">role:category</a></dd><dd><a href="#term_providedByCategory" style="font-family: monospace;">role:providedByCategory</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_CognitiveStrategy">
+<h3>Class: role:CognitiveStrategy</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/CognitiveStrategy">http://purl.org/role/terms/CognitiveStrategy</a></p><p><em>Cognitive strategy</em> - Cognitive strategy is  </p>
+<dl><dt>sub-class-of:</dt><dd><a href="#term_SRLStrategy" style="font-family: monospace;">role:SRLStrategy</a></dd><dt>see-also:</dt><dd><a style="font-family: monospace" href="https://ilias.uni-koblenz.de/goto.php?target=git_237_948&client_id=default">https://ilias.uni-koblenz.de/goto.php?target=git_237_948&client_id=default</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_Competence">
+<h3>Class: role:Competence</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/Competence">http://purl.org/role/terms/Competence</a></p><p><em>Competence</em> - A generic competence </p>
+<dl><dt>sub-class-of:</dt><dt>in-domain-of:</dt><dd><a href="#term_topic" style="font-family: monospace;">role:topic</a></dd><dd><a href="#term_proficiencyLevel" style="font-family: monospace;">role:proficiencyLevel</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_ConcreteActivity">
+<h3>Class: role:ConcreteActivity</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/ConcreteActivity">http://purl.org/role/terms/ConcreteActivity</a></p><p><em>Concrete activity</em> - A concrete activity is a step in the learning process.  </p>
+<dl><dt>sub-class-of:</dt><dd><a href="#term_LearningActivity" style="font-family: monospace;">role:LearningActivity</a></dd><dt>see-also:</dt><dd><a style="font-family: monospace" href="https://ilias.uni-koblenz.de/goto.php?target=git_216_948&client_id=default">https://ilias.uni-koblenz.de/goto.php?target=git_216_948&client_id=default</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_Configuration">
+<h3>Class: role:Configuration</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/Configuration">http://purl.org/role/terms/Configuration</a></p><p><em>Configuration</em> - When a resource is to be added to a context, the resource often need to be contextualized or configured.
+		That means providing additional information on this resource that is specific to this context. Making statements
+		on the original resource would in the worst case affect other uses of the same resource.
+		To reach the resource that is being contextualized/configured use the role:configures property.
+		It is up to each subclass to specify if and how properties on the original resource should be 
+		copied, provided as a possible override, or always be looked up on the original resource. </p>
+<dl><dt>in-domain-of:</dt><dd><a href="#term_configures" style="font-family: monospace;">role:configures</a></dd><dd><a href="#term_overlay" style="font-family: monospace;">role:overlay</a></dd><dt>in-range-of:</dt><dd><a href="#term_overlay" style="font-family: monospace;">role:overlay</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_DecisionActivity">
+<h3>Class: role:DecisionActivity</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/DecisionActivity">http://purl.org/role/terms/DecisionActivity</a></p><p><em>Decision activity</em> - A decision activity is a selection of references to at least one learning strategy. </p>
+<dl><dt>sub-class-of:</dt><dd><a href="#term_LearningActivity" style="font-family: monospace;">role:LearningActivity</a></dd><dt>in-domain-of:</dt><dd><a href="#term_option" style="font-family: monospace;">role:option</a></dd><dt>see-also:</dt><dd><a style="font-family: monospace" href="https://ilias.uni-koblenz.de/goto.php?target=git_234_948&client_id=default">https://ilias.uni-koblenz.de/goto.php?target=git_234_948&client_id=default</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_DomainCompetence">
+<h3>Class: role:DomainCompetence</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/DomainCompetence">http://purl.org/role/terms/DomainCompetence</a></p><p><em>Domain competence</em> - Correspond to the competence within a specific domain. </p>
+<dl><dt>sub-class-of:</dt><dd><a href="#term_Competence" style="font-family: monospace;">role:Competence</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_EQF">
+<h3>Class: role:EQF</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/EQF">http://purl.org/role/terms/EQF</a></p><p><em>EQF level</em> - European Qualification Framework (EQF) provides seven levels ranging from beginner to expert. </p>
+<dl><dt>sub-class-of:</dt><dd><a href="#term_Level" style="font-family: monospace;">role:Level</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_Functionality">
+<h3>Class: role:Functionality</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/Functionality">http://purl.org/role/terms/Functionality</a></p><p><em>Functionality</em> - Functionality describes the purpose of a tool or service for which it is designed and its capability to fulfill specific functions. </p>
+<dl><dt>sub-class-of:</dt><dt>in-domain-of:</dt><dd><a href="#term_providedByCategory" style="font-family: monospace;">role:providedByCategory</a></dd><dd><a href="#term_providedBy" style="font-family: monospace;">role:providedBy</a></dd><dt>see-also:</dt><dd><a style="font-family: monospace" href="https://ilias.uni-koblenz.de/goto.php?target=git_214_948&client_id=default">https://ilias.uni-koblenz.de/goto.php?target=git_214_948&client_id=default</a></dd><dt>in-range-of:</dt><dd><a href="#term_provides" style="font-family: monospace;">role:provides</a></dd><dd><a href="#term_supportedBy" style="font-family: monospace;">role:supportedBy</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_LearningActivity">
+<h3>Class: role:LearningActivity</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/LearningActivity">http://purl.org/role/terms/LearningActivity</a></p><p><em>Learning activity</em> - A learning activity is a representation of a necessary operation to be performed to complete a learning task. It consists of decision activities (DA) or concrete activities (CA).  </p>
+<dl><dt>sub-class-of:</dt><dt>in-domain-of:</dt><dd><a href="#term_requiresCompletionOf" style="font-family: monospace;">role:requiresCompletionOf</a></dd><dd><a href="#term_supportedBy" style="font-family: monospace;">role:supportedBy</a></dd><dt>see-also:</dt><dd><a style="font-family: monospace" href="https://ilias.uni-koblenz.de/goto.php?target=git_139_948&client_id=default">https://ilias.uni-koblenz.de/goto.php?target=git_139_948&client_id=default</a></dd><dt>in-range-of:</dt><dd><a href="#term_requiresCompletionOf" style="font-family: monospace;">role:requiresCompletionOf</a></dd><dd><a href="#term_activity" style="font-family: monospace;">role:activity</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_LearningResource">
+<h3>Class: role:LearningResource</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/LearningResource">http://purl.org/role/terms/LearningResource</a></p><p><em>Learning Resource</em> - A learning resource is a resource used in a learning context </p>
+<dl><dt>sub-class-of:</dt><dt>see-also:</dt><dd><a style="font-family: monospace" href="https://ilias.uni-koblenz.de/goto.php?target=git_222_948&client_id=default">https://ilias.uni-koblenz.de/goto.php?target=git_222_948&client_id=default</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_LearningStrategy">
+<h3>Class: role:LearningStrategy</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/LearningStrategy">http://purl.org/role/terms/LearningStrategy</a></p><p><em>Learning strategy</em> - A learning strategy is a sequence of learning activities (concrete activities and decision activities). </p>
+<dl><dt>sub-class-of:</dt><dt>in-domain-of:</dt><dd><a href="#term_activity" style="font-family: monospace;">role:activity</a></dd><dt>see-also:</dt><dd><a style="font-family: monospace" href="https://ilias.uni-koblenz.de/goto.php?target=git_177_948&client_id=default">https://ilias.uni-koblenz.de/goto.php?target=git_177_948&client_id=default</a></dd><dt>in-range-of:</dt><dd><a href="#term_option" style="font-family: monospace;">role:option</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_LearningTechnique">
+<h3>Class: role:LearningTechnique</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/LearningTechnique">http://purl.org/role/terms/LearningTechnique</a></p><p><em>Learning technique</em> - A learning technique is a exceptional case of learning strategy consisting only of concrete activities. </p>
+<dl><dt>sub-class-of:</dt><dd><a href="#term_LearningStrategy" style="font-family: monospace;">role:LearningStrategy</a></dd><dt>in-domain-of:</dt><dd><a href="#term_supportedBy" style="font-family: monospace;">role:supportedBy</a></dd><dt>see-also:</dt><dd><a style="font-family: monospace" href="https://ilias.uni-koblenz.de/goto.php?target=git_178_948&client_id=default">https://ilias.uni-koblenz.de/goto.php?target=git_178_948&client_id=default</a></dd><dt>in-range-of:</dt><dd><a href="#term_technique" style="font-family: monospace;">role:technique</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_Level">
+<h3>Class: role:Level</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/Level">http://purl.org/role/terms/Level</a></p><p><em>Competence level</em> - Subclasses gives a more precise semantics of the kind of level. </p>
+<dl><dt>sub-class-of:</dt><dt>in-range-of:</dt><dd><a href="#term_proficiencyLevel" style="font-family: monospace;">role:proficiencyLevel</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_MetacognitiveStrategy">
+<h3>Class: role:MetacognitiveStrategy</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/MetacognitiveStrategy">http://purl.org/role/terms/MetacognitiveStrategy</a></p><p><em>Metacognitive strategy</em> - Metacognitive strategy is  </p>
+<dl><dt>sub-class-of:</dt><dd><a href="#term_SRLStrategy" style="font-family: monospace;">role:SRLStrategy</a></dd><dt>see-also:</dt><dd><a style="font-family: monospace" href="https://ilias.uni-koblenz.de/goto.php?target=git_238_948&client_id=default">https://ilias.uni-koblenz.de/goto.php?target=git_238_948&client_id=default</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_OpenSocialGadget">
+<h3>Class: role:OpenSocialGadget</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/OpenSocialGadget">http://purl.org/role/terms/OpenSocialGadget</a></p><p><em>Open Social Gadget</em> - OpenSocial standard provide a specification for widgets that are called "applications"
+		 or "gadgets". Tools following complient to this standard should be typed with role:OpenSocialGadget 
+		 a subclass of role:Widget  </p>
+<dl><dt>sub-class-of:</dt><dd><a href="#term_Widget" style="font-family: monospace;">role:Widget</a></dd><dt>see-also:</dt><dd><a style="font-family: monospace" href="https://ilias.uni-koblenz.de/goto.php?target=git_191_948&client_id=default">https://ilias.uni-koblenz.de/goto.php?target=git_191_948&client_id=default</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_PersonConfiguration">
+<h3>Class: role:PersonConfiguration</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/PersonConfiguration">http://purl.org/role/terms/PersonConfiguration</a></p><p><em>Person configuration</em> - Provides information on a person that may directly or at a later point be connected with a foaf:Person. </p>
+<dl><dt>sub-class-of:</dt><dd><a href="#term_Configuration" style="font-family: monospace;">role:Configuration</a></dd><dd><a href="http://xmlns.com/foaf/0.1/Person" style="font-family: monospace;">foaf:Person</a></dd><dt>see-also:</dt><dd><a style="font-family: monospace" href="https://ilias.uni-koblenz.de/goto.php?target=git_215_948&client_id=default">https://ilias.uni-koblenz.de/goto.php?target=git_215_948&client_id=default</a></dd><dt>in-range-of:</dt><dd><a href="#term_owner" style="font-family: monospace;">role:owner</a></dd><dd><a href="#term_member" style="font-family: monospace;">role:member</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_ResourceManagementStrategy">
+<h3>Class: role:ResourceManagementStrategy</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/ResourceManagementStrategy">http://purl.org/role/terms/ResourceManagementStrategy</a></p><p><em>ResourceManagementStrategy</em> - Resource management strategy is  </p>
+<dl><dt>sub-class-of:</dt><dd><a href="#term_SRLStrategy" style="font-family: monospace;">role:SRLStrategy</a></dd><dt>see-also:</dt><dd><a style="font-family: monospace" href="https://ilias.uni-koblenz.de/goto.php?target=git_239_948&client_id=default">https://ilias.uni-koblenz.de/goto.php?target=git_239_948&client_id=default</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_SRLCompetence">
+<h3>Class: role:SRLCompetence</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/SRLCompetence">http://purl.org/role/terms/SRLCompetence</a></p><p><em>SRL competence</em> - Correspond to the Self-Regulated Learning (SRL) competence, points to a SRLStrategy and possibly a EQFLevel. </p>
+<dl><dt>sub-class-of:</dt><dd><a href="#term_Competence" style="font-family: monospace;">role:Competence</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_SRLStrategy">
+<h3>Class: role:SRLStrategy</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/SRLStrategy">http://purl.org/role/terms/SRLStrategy</a></p><p><em>SRL strategy</em> - SRL strategy is  </p>
+<dl><dt>sub-class-of:</dt><dd><a href="#term_LearningStrategy" style="font-family: monospace;">role:LearningStrategy</a></dd><dt>see-also:</dt><dd><a style="font-family: monospace" href="https://ilias.uni-koblenz.de/goto.php?target=git_240_948&client_id=default">https://ilias.uni-koblenz.de/goto.php?target=git_240_948&client_id=default</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_Space">
+<h3>Class: role:Space</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/Space">http://purl.org/role/terms/Space</a></p><p><em>Space</em> - A space is a setting where a group of users can perform one or several activities. </p>
+<dl><dt>sub-class-of:</dt><dd><a href="#term_Bundle" style="font-family: monospace;">role:Bundle</a></dd><dd><a href="#term_Configuration" style="font-family: monospace;">role:Configuration</a></dd><dd><a href="http://rdfs.org/sioc/ns#Site" style="font-family: monospace;">sioc:Site</a></dd><dd><a href="http://xmlns.com/foaf/0.1/Group" style="font-family: monospace;">foaf:Group</a></dd><dt>in-domain-of:</dt><dd><a href="#term_owner" style="font-family: monospace;">role:owner</a></dd><dd><a href="#term_member" style="font-family: monospace;">role:member</a></dd><dt>see-also:</dt><dd><a style="font-family: monospace" href="https://ilias.uni-koblenz.de/goto.php?target=git_193_948&client_id=default">https://ilias.uni-koblenz.de/goto.php?target=git_193_948&client_id=default</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_Tool">
+<h3>Class: role:Tool</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/Tool">http://purl.org/role/terms/Tool</a></p><p><em>Tool</em> - Any software used as a means of accomplishing a learning task or goal. </p>
+<dl><dt>sub-class-of:</dt><dt>in-domain-of:</dt><dd><a href="#term_category" style="font-family: monospace;">role:category</a></dd><dd><a href="#term_provides" style="font-family: monospace;">role:provides</a></dd><dt>see-also:</dt><dd><a style="font-family: monospace" href="https://ilias.uni-koblenz.de/goto.php?target=git_189_948&client_id=default">https://ilias.uni-koblenz.de/goto.php?target=git_189_948&client_id=default</a></dd><dt>in-range-of:</dt><dd><a href="#term_providedBy" style="font-family: monospace;">role:providedBy</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_ToolCompetence">
+<h3>Class: role:ToolCompetence</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/ToolCompetence">http://purl.org/role/terms/ToolCompetence</a></p><p><em>Tool competence</em> - Correspond to the competence of using a certain kind of tool with a specific technique, i.e. points to one or several Functionalitites and a single Technique. </p>
+<dl><dt>sub-class-of:</dt><dd><a href="#term_Competence" style="font-family: monospace;">role:Competence</a></dd><dt>in-domain-of:</dt><dd><a href="#term_technique" style="font-family: monospace;">role:technique</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_ToolConfiguration">
+<h3>Class: role:ToolConfiguration</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/ToolConfiguration">http://purl.org/role/terms/ToolConfiguration</a></p><p><em>Tool configuration</em> - 
+		Specification how a tool can be used by providing guidance and a suggested starting configuration for the tool.
+		Specifies how a tool can be used by providing guidance and a suggested starting configuration for the tool.
+		 An instance of the class Configured Tool should be used to refer to a tool that comes with a set of 
+		 configuration information. It is used to describe what is contained in a Bundle in addition
+		 to other resources that can be documents, artifacts, or references to users.
+		 </p>
+<dl><dt>sub-class-of:</dt><dd><a href="#term_Configuration" style="font-family: monospace;">role:Configuration</a></dd><dd><a href="#term_Tool" style="font-family: monospace;">role:Tool</a></dd><dt>in-domain-of:</dt><dd><a href="#term_userPreferences" style="font-family: monospace;">role:userPreferences</a></dd><dt>see-also:</dt><dd><a style="font-family: monospace" href="https://ilias.uni-koblenz.de/goto.php?target=git_215_948&client_id=default">https://ilias.uni-koblenz.de/goto.php?target=git_215_948&client_id=default</a></dd><dt>in-range-of:</dt><dd><a href="#term_tool" style="font-family: monospace;">role:tool</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_W3CWidget">
+<h3>Class: role:W3CWidget</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/W3CWidget">http://purl.org/role/terms/W3CWidget</a></p><p><em>W3C Widget</em> - W3C Widgets are full-fledged client-side applications that are authored using Web standards 
+		such as HTML and packaged for distribution. They are typically downloaded and installed on a client machine 
+		or device where they run as stand-alone applications, but they can also be embedded into Web pages and run in 
+		a Web browser. Examples range from simple clocks, stock tickers, news casters, games and weather forecasters, 
+		to complex applications that pull data from multiple sources to be "mashed-up" and presented to a user in 
+		some interesting and useful way. </p>
+<dl><dt>sub-class-of:</dt><dd><a href="#term_Widget" style="font-family: monospace;">role:Widget</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_Widget">
+<h3>Class: role:Widget</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/Widget">http://purl.org/role/terms/Widget</a></p><p><em>Widget</em> - Widgets are small tools that provide functionality in a user interface.Widgets
+		 follow some standard that makes it possible to run it in different environments.A widget can
+		  refer to at least one functionality. Widgets are often Web-enabled.  </p>
+<dl><dt>sub-class-of:</dt><dd><a href="#term_Tool" style="font-family: monospace;">role:Tool</a></dd><dt>see-also:</dt><dd><a style="font-family: monospace" href="https://ilias.uni-koblenz.de/goto.php?target=git_191_948&client_id=default">https://ilias.uni-koblenz.de/goto.php?target=git_191_948&client_id=default</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_activity">
+<h3>Property: role:activity</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/activity">http://purl.org/role/terms/activity</a></p><p><em>activity</em> - A learning activity that is part of this learning strategy. </p>
+<dl><dt>OWL Type:</dt><dd>ObjectProperty</dd>
+<dt>Domain:</dt> <dd><a href="#term_LearningStrategy" style="font-family: monospace;">role:LearningStrategy</a></dd><dt>Range:</dt> <dd><a href="#term_LearningActivity" style="font-family: monospace;">role:LearningActivity</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_aquiredCompetence">
+<h3>Property: role:aquiredCompetence</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/aquiredCompetence">http://purl.org/role/terms/aquiredCompetence</a></p><p><em>Aquired competence</em> - Property used to link a user (foaf profile) with a competence he or she has AQUIRED.
+			In ROLE terminology, it can also be refered to as the competence profile of a learner. </p>
+<dl><dt>OWL Type:</dt><dd>ObjectProperty</dd>
+</dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_category">
+<h3>Property: role:category</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/category">http://purl.org/role/terms/category</a></p><p><em>category</em> - property used to describe the category of a Tool. Points to an instance of the class role:Category. </p>
+<dl><dt>OWL Type:</dt><dd>ObjectProperty</dd>
+<dt>Domain:</dt> <dd><a href="#term_Tool" style="font-family: monospace;">role:Tool</a></dd><dt>Range:</dt> <dd><a href="#term_Category" style="font-family: monospace;">role:Category</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_configures">
+<h3>Property: role:configures</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/configures">http://purl.org/role/terms/configures</a></p><p><em>configures</em> - Points to which resource the Configuration provides contextualized information for. </p>
+<dl><dt>OWL Type:</dt><dd>ObjectProperty</dd>
+<dt>Domain:</dt> <dd><a href="#term_Configuration" style="font-family: monospace;">role:Configuration</a></dd><dt>Range:</dt> <dd><a href="http://www.w3.org/2002/07/owl#Thing" style="font-family: monospace;">owl:Thing</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_data">
+<h3>Property: role:data</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/data">http://purl.org/role/terms/data</a></p><p><em>data</em> - Property linking a bundle to one or several resources containing data relevant for the bundle. </p>
+<dl><dt>OWL Type:</dt><dd>ObjectProperty</dd>
+<dt>Domain:</dt> <dd><a href="#term_Bundle" style="font-family: monospace;">role:Bundle</a></dd><dt>Range:</dt> <dd><a href="http://www.w3.org/2002/07/owl#Thing" style="font-family: monospace;">owl:Thing</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_goalCompetence">
+<h3>Property: role:goalCompetence</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/goalCompetence">http://purl.org/role/terms/goalCompetence</a></p><p><em>Goal competence</em> - Property used to link a user (foaf profile) with a GOAL competence, i.e. a competence
+		 he/she PLANS ON AQUIRING. </p>
+<dl><dt>OWL Type:</dt><dd>ObjectProperty</dd>
+<dt>sub-property-of:</dt> <dd><a href="http://purl.org/ontology/cco/core#habit" style="font-family: monospace;">http://purl.org/ontology/cco/core#habit</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_icon">
+<h3>Property: role:icon</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/icon">http://purl.org/role/terms/icon</a></p><p><em>icon</em> - Specifies an image that is to be used as icon for the resource. </p>
+<dl><dt>OWL Type:</dt><dd>ObjectProperty</dd>
+<dt>Domain:</dt> <dd><a href="http://www.w3.org/2000/01/rdf-schema#Resource" style="font-family: monospace;">rdfs:Resource</a></dd><dt>Range:</dt> <dd><a href="http://xmlns.com/foaf/0.1/Image" style="font-family: monospace;">foaf:Image</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_member">
+<h3>Property: role:member</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/member">http://purl.org/role/terms/member</a></p><p><em>member</em> - Indicates the members of a space. </p>
+<dl><dt>OWL Type:</dt><dd>ObjectProperty</dd>
+<dt>sub-property-of:</dt> <dd><a href="http://xmlns.com/foaf/0.1/member" style="font-family: monospace;">foaf:member</a></dd><dt>Domain:</dt> <dd><a href="#term_Space" style="font-family: monospace;">role:Space</a></dd><dt>Range:</dt> <dd><a href="#term_PersonConfiguration" style="font-family: monospace;">role:PersonConfiguration</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_option">
+<h3>Property: role:option</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/option">http://purl.org/role/terms/option</a></p><p><em>option</em> - Points to one or several learning strategies that the user should choose among. </p>
+<dl><dt>OWL Type:</dt><dd>ObjectProperty</dd>
+<dt>Domain:</dt> <dd><a href="#term_DecisionActivity" style="font-family: monospace;">role:DecisionActivity</a></dd><dt>Range:</dt> <dd><a href="#term_LearningStrategy" style="font-family: monospace;">role:LearningStrategy</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_overlay">
+<h3>Property: role:overlay</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/overlay">http://purl.org/role/terms/overlay</a></p><p><em>overlay</em> - Overlays a Configuration with another Configuration.
+		For example when the owner of a space has provided a ToolConfiguration with default settings for a tool,
+		one of the members can provide an additional Configuration that overrides those settings, 
+		these settings will only be visible for that member. </p>
+<dl><dt>OWL Type:</dt><dd>ObjectProperty</dd>
+<dt>Domain:</dt> <dd><a href="#term_Configuration" style="font-family: monospace;">role:Configuration</a></dd><dt>Range:</dt> <dd><a href="#term_Configuration" style="font-family: monospace;">role:Configuration</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_owner">
+<h3>Property: role:owner</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/owner">http://purl.org/role/terms/owner</a></p><p><em>owner</em> - The owner of the space, may be repeated to indicate multiple owners. </p>
+<dl><dt>OWL Type:</dt><dd>ObjectProperty</dd>
+<dt>Domain:</dt> <dd><a href="#term_Space" style="font-family: monospace;">role:Space</a></dd><dt>Range:</dt> <dd><a href="#term_PersonConfiguration" style="font-family: monospace;">role:PersonConfiguration</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_proficiencyLevel">
+<h3>Property: role:proficiencyLevel</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/proficiencyLevel">http://purl.org/role/terms/proficiencyLevel</a></p><p><em>Proficiency level</em> - Property should be used to indicate the proficiency level a user reached with respect to the topic of this competence. </p>
+<dl><dt>OWL Type:</dt><dd>ObjectProperty</dd>
+<dt>Domain:</dt> <dd><a href="#term_Competence" style="font-family: monospace;">role:Competence</a></dd><dt>Range:</dt> <dd><a href="#term_Level" style="font-family: monospace;">role:Level</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_providedBy">
+<h3>Property: role:providedBy</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/providedBy">http://purl.org/role/terms/providedBy</a></p><p><em>provided by</em> - Points from a Functionality to a Tool that provides this functionality. </p>
+<dl><dt>OWL Type:</dt><dd>ObjectProperty</dd>
+<dt>Domain:</dt> <dd><a href="#term_Functionality" style="font-family: monospace;">role:Functionality</a></dd><dt>Range:</dt> <dd><a href="#term_Tool" style="font-family: monospace;">role:Tool</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_providedByCategory">
+<h3>Property: role:providedByCategory</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/providedByCategory">http://purl.org/role/terms/providedByCategory</a></p><p><em>provided by category</em> - Property is used to describe that the functionality is often provided by tools found in the given category. </p>
+<dl><dt>OWL Type:</dt><dd>ObjectProperty</dd>
+<dt>Domain:</dt> <dd><a href="#term_Functionality" style="font-family: monospace;">role:Functionality</a></dd><dt>Range:</dt> <dd><a href="#term_Category" style="font-family: monospace;">role:Category</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_provides">
+<h3>Property: role:provides</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/provides">http://purl.org/role/terms/provides</a></p><p><em>provides</em> - Points from a Tool to a Functionality offered by this tool. </p>
+<dl><dt>Inverse:</dt><dd><a href="#term_providedBy" style="font-family: monospace;">role:providedBy</a></dd><dt>OWL Type:</dt><dd>ObjectProperty</dd>
+<dt>OWL Type:</dt><dd>InverseFunctionalProperty (uniquely identifying property)</dd>
+<dt>Domain:</dt> <dd><a href="#term_Tool" style="font-family: monospace;">role:Tool</a></dd><dt>Range:</dt> <dd><a href="#term_Functionality" style="font-family: monospace;">role:Functionality</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_requiresCompletionOf">
+<h3>Property: role:requiresCompletionOf</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/requiresCompletionOf">http://purl.org/role/terms/requiresCompletionOf</a></p><p><em>requires completion of</em> - Points to another learning activity that must have been completed before starting the current learning activity. </p>
+<dl><dt>OWL Type:</dt><dd>ObjectProperty</dd>
+<dt>Domain:</dt> <dd><a href="#term_LearningActivity" style="font-family: monospace;">role:LearningActivity</a></dd><dt>Range:</dt> <dd><a href="#term_LearningActivity" style="font-family: monospace;">role:LearningActivity</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_supportedBy">
+<h3>Property: role:supportedBy</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/supportedBy">http://purl.org/role/terms/supportedBy</a></p><p><em>supported by</em> - Points to a Functionality that the Learning activity/Learning technique is supported by. </p>
+<dl><dt>OWL Type:</dt><dd>ObjectProperty</dd>
+<dt>Domain:</dt> <dd><a href="#term_LearningActivity" style="font-family: monospace;">role:LearningActivity</a></dd><dd><a href="#term_LearningTechnique" style="font-family: monospace;">role:LearningTechnique</a></dd><dt>Range:</dt> <dd><a href="#term_Functionality" style="font-family: monospace;">role:Functionality</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_technique">
+<h3>Property: role:technique</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/technique">http://purl.org/role/terms/technique</a></p><p><em>Technique</em> - Property should be used to clarify the learning technique the ToolComptence referres to. </p>
+<dl><dt>OWL Type:</dt><dd>ObjectProperty</dd>
+<dt>Domain:</dt> <dd><a href="#term_ToolCompetence" style="font-family: monospace;">role:ToolCompetence</a></dd><dt>Range:</dt> <dd><a href="#term_LearningTechnique" style="font-family: monospace;">role:LearningTechnique</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_tool">
+<h3>Property: role:tool</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/tool">http://purl.org/role/terms/tool</a></p><p><em>tool</em> - Connects a ToolConfiguration to a Bundle. </p>
+<dl><dt>OWL Type:</dt><dd>ObjectProperty</dd>
+<dt>Domain:</dt> <dd><a href="#term_Bundle" style="font-family: monospace;">role:Bundle</a></dd><dt>Range:</dt> <dd><a href="#term_ToolConfiguration" style="font-family: monospace;">role:ToolConfiguration</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_topic">
+<h3>Property: role:topic</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/topic">http://purl.org/role/terms/topic</a></p><p><em>Topic</em> - Property should be used to clarify the topic of a comptence. </p>
+<dl><dt>OWL Type:</dt><dd>ObjectProperty</dd>
+<dt>Domain:</dt> <dd><a href="#term_Competence" style="font-family: monospace;">role:Competence</a></dd><dt>Range:</dt> <dd><a href="http://www.w3.org/2002/07/owl#Thing" style="font-family: monospace;">owl:Thing</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+<div class="specterm" id="term_userPreferences">
+<h3>Property: role:userPreferences</h3>
+<p style="font-family:monospace; font-size:0.em;">URI: <a href="http://purl.org/role/terms/userPreferences">http://purl.org/role/terms/userPreferences</a></p><p><em>user Preferences</em> - for a ConfiguredTool instance, gives the XML description of the user's preferences for the corresponding tool. </p>
+<dl><dt>OWL Type:</dt><dd>DatatypeProperty</dd>
+<dt>Domain:</dt> <dd><a href="#term_ToolConfiguration" style="font-family: monospace;">role:ToolConfiguration</a></dd><dt>Range:</dt> <dd><a href="http://www.w3.org/2001/XMLSchema#string" style="font-family: monospace;">xsd:string</a></dd></dl>
+<p class="backToTop" style="float: right; font-size: small;">[<a href="#sec-glance">back to top</a>]</p>
+
+
+
+</div>
+
+
+    <!-- End of the terms list -->
+
+    <!-- ===================================================================== -->
+
+    <h2 id="references">A References</h2>
+
+    <dl>
+      <dt class="label" id="ref-some">name</dt>
+      <dd><em><a href="http://.../">long name</a></em> description...</dd>
+    </dl>
+
+    <h3 id="references-other">A.2 Other references</h3>
+
+    <dl>
+      <dt class="label" id="ref-rfc2119">IETF RFC 2119</dt>
+      <dd>
+        <em><a href="http://www.ietf.org/rfc/rfc2119.txt">RFC 2119: Key words
+        for use in RFCs to Indicate Requirement Levels</a></em>. Internet
+        Engineering Task Force, 1997 (see http://www.ietf.org/rfc/rfc2119.txt).
+      </dd>
+
+    </dl>
+
+    <!-- ===================================================================== -->
+
+
+
+    <h2 id="changes">B Changes in this version (Non-Normative)</h2>
+
+
+    <ul>
+      <li><p>(1st version)</p></li> 
+    </ul>
+
+    <h2><a id="acknowledgements"></a>C Acknowledgements (Non-Normative)</h2>
+
+
+    <p></p>
+
+
+  </body>
+
+</html>
+<!-- specification regenerated by SpecGen5 at 17:49:07 11/14/12 CET -->

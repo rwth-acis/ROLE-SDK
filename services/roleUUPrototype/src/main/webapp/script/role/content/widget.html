@@ -1,0 +1,36 @@
+<div class="widget-wrapper" id="widget-{{regionWidgetId}}-wrapper"
+	style="visibility: hidden">
+	<div class="widget-title-bar" id="widget-{{regionWidgetId}}-title-bar">
+		<span id="widget-{{regionWidgetId}}-title">{{title}}</span>
+		<div class="widget-toolbar" id="widget-{{regionWidgetId}}-toolbar" title="{{widgetdescription}}">
+			<button id="widget-{{regionWidgetId}}-wish "
+				class="widget-toolbar-btn widget-toolbar-wish-btn ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" role="button" aria-disabled="false" title=""><span class="ui-button-icon-primary ui-icon ui-icon-lightbulb"></span><span class="ui-button-text"></span></button>
+			<button id="widget-{{regionWidgetId}}-info"
+				class="widget-toolbar-btn widget-toolbar-info-btn ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" role="button" aria-disabled="false" title=""><span class="ui-button-icon-primary ui-icon ui-icon-info"></span><span class="ui-button-text"></span></button>
+			<button id="widget-{{regionWidgetId}}-prefs"
+				class="widget-toolbar-btn widget-toolbar-btn-prefs"></button>
+			<button id="widget-{{regionWidgetId}}-max"
+				class="widget-toolbar-btn widget-toolbar-max-btn"></button>
+			<button id="widget-{{regionWidgetId}}-remove"
+				class="widget-toolbar-btn widget-toolbar-remove-btn"></button>
+		</div>
+	</div>
+	<div class="widget-prefs" id="widget-{{regionWidgetId}}-prefs-content"></div>
+	<div class="widgetinfo" style="display:none">
+		<div class="widgetinfo-group">
+	 		<div>
+	 			<span class="widgetinfo-label">Name:</span><br>
+	    		<input disabled="true" type="text" name="name" value="{{title}}" class="widgetinfo-title text ui-widget-content ui-corner-all" />
+			</div>
+			<div>
+				<span class="widgetinfo-label">Description:</span><br>
+	    		<textarea disabled="true" type="text" name="name" class="widgetinfo-description text ui-widget-content ui-corner-all">{{widgetdescription}}</textarea>
+	    	</div>
+	 	</div>
+	 	<div class="cannotEditWidgetinfo">You have to be an owner of this space to be allowed to edit widget information.</div>
+		<button class="widgetinfo-save-btn" style="display: none">save</button>
+		<button class="widgetinfo-cancel-btn" >cancel</button>		
+	</div>
+	<div class="widget" id="widget-{{regionWidgetId}}-body"></div>
+	<div class="integratedWishingElement"></div>
+</div>

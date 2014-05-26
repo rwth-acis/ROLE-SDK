@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet/less" type="text/css" href="/s/css/role.less">
+<script src="/s/script/vendor/less.js" type="text/javascript"></script>
+<script src="/d/openapp"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+<script src="/s/script/vendor/jquery.url.norequirejs.js" type="text/javascript"></script>
+</head>
+<body>
+	<script id="signInTemplate" type="text/x-jquery-tmpl">
+		<h1>Sign in</h1>
+		<p>You are signing in at <strong>${contextUri}</strong>.</p>
+		{{each($i, $realm) data[uri]["http://purl.org/openapp/realm"]}}<div class="realm">
+			<p style="clear: both; color: #666"></p>
+			<div class="authenticationBoxes">
+				{{each($i, $auth) $data.data[$realm.value]["http://purl.org/openapp/authentication"]}}<div class="authenticationBox">
+					{{tmpl($data.data[$auth.value], {realm: $realm.value}) "#authenticationTemplate_" +
+				  	$data.data[$auth.value]["http://www.w3.org/1999/02/22-rdf-syntax-ns#type"][0].value.match(/\w+$/)[0]}}
+				</div>{{/each}}
+			</div>
+			<p style="clear: both; color: #666; padding: 1em">Realm: ${$realm.value}. A cookie will be stored on your computer.</p>
+		{{/each}}</div>
+    </script>
+	<script id="signOutTemplate" type="text/x-jquery-tmpl">
+		<h1>Sign out</h1>
+		<p class="message">Signing out from <strong>${contextUri}</strong>&hellip;</p>
+    </script>
+	<script id="authenticationTemplate_Secret" type="text/x-jquery-tmpl">
+		<form class="signInForm" method="post" action="/o/session/login">
+			<h2>Sign in using password</h2>
+			<p class="message"></p>
+			<p>Email<br/><input class="usernameInput text" name="username" type="text"/></p>
+			<p>Password<br/><input class="passwordInput text" name="password" type="password"/></p>
+			<input class="realmInput" name="realm" type="hidden" value="${$item.realm}"/>
+			<input class="contextInput" name="context" type="hidden" value="${contextUri}"/>
+			<input class="returnInput" name="return" type="hidden" value="${returnUri}"/>
+			<p><input class="signinInput" name="signin" type="submit" value="Sign in" class="submit"/></p>
+		</form>
+    </script>
+	<script id="authenticationTemplate_OpenID" type="text/x-jquery-tmpl">
+		<h2>Sign in using&hellip;</h2>
+		{{each $data["http://www.w3.org/2002/07/owl#sameAs"]}}
+			{{if typeof openidProviders[$value.value] !== "undefined"}}
+				{{each($i, provider) [openidProviders[$value.value]]}}
+					<a href="/o/openid/request?openid=${encodeURIComponent($value.value)}&context=${contextUriEnc}&return=${returnUriEnc}"><h3>
+						<img src="${provider.image}" width="${provider.imageWidth}" height="${provider.imageHeight}">${provider.title}</h3></a>
+				{{/each}}
+			{{/if}}
+		{{/each}}
+    </script>
+
+	<div id="pageContent">
+	</div>
+	
+	<script>
+		var openidProviders = {
+			"https://www.google.com/accounts/o8/id": {
+				title: "Google",
+				image: "/s/images/googleicon.gif",
+				imageWidth: "15",
+				imageHeight: "15"
+			}
+		};
+		var contextUri, contextUriEnc;
+		var returnUri = decodeURIComponent($.url().param("return") || "");
+		var returnUriEnc = encodeURIComponent(returnUri);
+		var action = $.url().param("action") || "signin";
+		openapp.resource.get(document.location.href, function(context) {
+			contextUri = context.uri;
+			contextUriEnc = encodeURIComponent(context.uri);
+			if (action === "signin") {
+				$("#signInTemplate").tmpl(context).appendTo($("#pageContent"));
+				$(".signInForm").submit(function(){
+					var signInForm = this;
+					if ($(this).find(".usernameInput").val().length == 0) {
+						$(this).find(".message").html("Enter your email address.");
+						$(signInForm).find(".usernameInput").select();
+						return false;
+					}
+					if ($(this).find(".passwordInput").val().length == 0) {
+						$(this).find(".message").html("Enter your password.");
+						$(signInForm).find(".passwordInput").select();
+						return false;
+					}
+					$(this).find(".message").html("Signing in&hellip;");
+					$(this).find("input").attr("disabled", "disabled");
+					$.ajax( "/o/session/login", {
+						type: "POST",
+						data: JSON.stringify({
+							username: $(this).find(".usernameInput").val(),
+							password: $(this).find(".passwordInput").val(),
+							realm: $(this).find(".realmInput").val(),
+							context: $(this).find(".contextInput").val(),
+							"return": $(this).find(".returnInput").val()
+						}),
+						headers: { Accept: "application/json" },
+						dataType: "json", success: function(data) {
+							$(signInForm).find(".message").text("Signed in.");
+							if (returnUri != "") {
+								window.location = returnUri;
+							}
+						}, error: function(data) {
+							$(signInForm).find(".message").text("The user name or password you entered is incorrect.");
+							$(signInForm).find(".passwordInput").val("");
+							$(signInForm).find("input").attr("disabled", null);
+							$(signInForm).find(".usernameInput").select();
+						}});
+					return false;
+				});
+				$(".authenticationBox").mouseover(function(){
+					$(this).stop(true).animate({ backgroundColor: "#aaffaa", queue: false }, "fast");
+				});
+				$(".authenticationBox").mouseout(function(){
+					$(this).stop(true).animate({ backgroundColor: "#fff", queue: false }, "fast");
+				});
+			} else if (action === "signout") {
+				$("#signOutTemplate").tmpl(context).appendTo($("#pageContent"));
+				$.ajax( "/o/session/logout", {
+					type: "POST",
+					data: JSON.stringify({
+						context: contextUri,
+						"return": returnUri
+					}),
+					headers: { Accept: "application/json" },
+					dataType: "json", success: function(data) {
+						$("#pageContent").find(".message").html("You have been signed out from <strong class='contextUri'/>.");
+						$("#pageContent").find(".contextUri").text(contextUri);
+						if (returnUri != "") {
+							window.setTimeout(function(){
+								window.location = returnUri;
+							}, 1000);
+						}
+					}, error: function(data) {
+						$("#pageContent").find(".message").text(data.statusText);
+					}});
+			}
+			document.title = $("h1").text();
+		}, {});
+	</script>
+</body>
+</html>

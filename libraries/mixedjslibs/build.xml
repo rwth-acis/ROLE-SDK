@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<target name="mixedjslibs" depends="jqueryui.prepare,strophe.prepare"></target>
+	
+	<property name="jqueryui.version" value="amd-1.8.14"/>
+	<target name="jqueryui.check">
+		<condition property="jqueryui.present">
+			<and>
+				<available file="${project.build.directory}/libs/jqueryui/jqueryui.js" />
+			</and>
+		</condition>
+	</target>
+	<target name="jqueryui.prepare" depends="jqueryui.check" unless="jqueryui.present">
+		<get
+			src="http://requirejs.org/jqueryui-amd/jqueryui-${jqueryui.version}.zip"
+			dest="${project.build.directory}/libs/jqueryui-${jqueryui.version}.zip" />
+		<unzip
+			src="${project.build.directory}/libs/jqueryui-${jqueryui.version}.zip"
+			dest="${project.build.directory}/libs/">
+		</unzip>
+		<delete file="${project.build.directory}/libs/jqueryui-${jqueryui.version}.zip" />
+		<move file="${project.build.directory}/libs/jqueryui-${jqueryui.version}" tofile="${project.build.directory}/libs/jqueryui"/>
+	</target>
+
+	<property name="strophe.version" value="1.0.2"/>
+	<target name="strophe.check">
+		<condition property="strophe.present">
+			<and>
+				<available file="${project.build.directory}/libs/strophe/strophe.js" />
+			</and>
+		</condition>
+	</target>
+	<target name="strophe.prepare" depends="strophe.check" unless="strophe.present">
+		<get
+			src="http://cloud.github.com/downloads/metajack/strophejs/strophejs-${strophe.version}.zip"
+			dest="${project.build.directory}/libs/strophejs-${strophe.version}.zip" />
+		<unzip
+			src="${project.build.directory}/libs/strophejs-${strophe.version}.zip"
+			dest="${project.build.directory}/libs/">
+		</unzip>
+		<delete file="${project.build.directory}/libs/strophejs-${strophe.version}.zip" />
+		<move file="${project.build.directory}/libs/strophejs-${strophe.version}" tofile="${project.build.directory}/libs/strophe"/>
+	</target>
+</project>

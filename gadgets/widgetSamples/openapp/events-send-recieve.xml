@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+  <ModulePrefs title="Basics of events" author_email="mpalmer@gmail.com" height="320" description="The purpose of this widget is to show the basics of how to work with events, both sending and recieving.">
+    <Optional feature="openapp" />
+    <Optional feature="content-rewrite">
+	    <Param name="exclude-url">*</Param>
+	</Optional>
+  </ModulePrefs>
+  <Content type="html"><![CDATA[
+
+    <!-- ========= HTML section (inline content) ============ -->
+   	<h2>Sending events</h2>
+   	<button id="hello" type="button">Send hello world</button>
+   	<h2>Recieving events</h2>
+   	<p>Nothing recieved yet.</p>
+
+   <!--======   JavaScript section    ========->
+   <!-- For simplicity, lets rely on jquery for manipulating the DOM. -->
+   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" type="text/javascript"></script>
+   <script>
+   	 // When gadget is inited
+	 gadgets.util.registerOnLoadHandler(function() {
+		// Send event when button is clicked
+		$("#hello").click(function(e) {
+			gadgets.openapp.publish({}, {"http://purl.org/dc/terms/title": "Hello world!"});
+       });
+       
+       // Recieve events, but avoid own events by looking at the sentEventTime
+       gadgets.openapp.connect(function(envelope, message) {
+        //If there is a title, show it and inform the container that we reacted to the event by returning true.
+          if (message["http://purl.org/dc/terms/title"]) {
+	    	 $("p").html("Recieved: "+message["http://purl.org/dc/terms/title"]);
+	    	 return true;
+          }
+       });
+     });
+   </script>
+]]></Content>
+</Module>

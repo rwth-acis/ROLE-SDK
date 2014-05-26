@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+<ModulePrefs 
+	title="ROLE XMPP IM/MUC Teststub Gadget" 
+	description="A teststub for the interactive generation of Open Application events as sent by the JESS on  TEL 2011 Workshop scenario"
+	author="Dominik Renzel, Chair of Computer Science 5, RWTH Aachen University, Germany"
+	author_email="renzel@dbis.rwth-aachen.de"
+	width="450"
+	height="500">
+	<Require feature="pubsub" />
+	<Require feature="dynamic-height" />
+</ModulePrefs>
+
+<Content type="html">
+
+<![CDATA[
+
+<script src="http://open-app.googlecode.com/files/openapp.js"></script>
+
+<script type="text/javascript">
+	var evt_ctr = 0;
+	
+	function initGadget(){
+		gadgets.openapp.connect(openappEventCallback);
+		evt_ctr = 0;
+	}
+	
+	// callback triggered on arrival of Open Application events
+	function openappEventCallback(envelope, message) {
+		var event_log = document.getElementById("rcv_envelope");
+		event_log.innerHTML = "<h3>Event #" + (evt_ctr++) + "</h3>" + JSON.stringify(envelope) + event_log.innerHTML;
+	}
+	
+	function publishEnterRoom(){
+		var room = document.getElementById("room").value;
+		var jid = document.getElementById("jid").value;
+		
+		gadgets.openapp.publish({"type": "namespaced-properties", "event": "enter" }, 
+			{
+			"http://purl.org/dc/terms/type" : "xmpp.room",
+			"http://purl.org/dc/terms/URI" : room,
+			"http://purl.org/dc/terms/mediator" : jid
+			}
+		);
+	}
+	
+	function publishLogin(){
+		var jid = document.getElementById("jid").value;
+		var res = document.getElementById("res").value;
+		var pass = document.getElementById("pass").value;
+		
+		gadgets.openapp.publish({"type": "namespaced-properties", "event": "enter" }, 
+			{
+			"http://purl.org/dc/terms/type" : "xmpp.session",
+			"http://purl.org/dc/terms/mediator" : jid,
+			"http://purl.org/dc/terms/identifier" : res,
+			"http://purl.org/dc/terms/accessRights" : pass
+			}
+		);
+	}
+	
+	gadgets.util.registerOnLoadHandler(initGadget);
+</script>
+
+<div style="height:500px"> 
+	<table border="0">
+		<tr><td>JID</td><td><input id="jid" type="text" value="foo@role.dbis.rwth-aachen.de" size="40"/></td></tr>
+		<tr><td>Password</td><td><input id="pass" type="password" value="bar" size="40"/></td></tr>
+		<tr><td>Resource</td><td><input id="res" type="text" value="jess-tel-2011" size="40"/></td></tr>
+		<tr><td>Room</td><td><input id="room" type="text" value="all@muc.role.dbis.rwth-aachen.de" size="40"/></td></tr>
+		<tr><td></td><td><input type="button" value="Publish Login Event" onClick="publishLogin()"/><input type="button" value="Publish Enter Room Event" onClick="publishEnterRoom()"/></td>
+		</tr>
+	</table>
+	<div style="font:7pt Verdana">Received Events:</div>
+	<div style="height:300px;width:400px;font:7pt Verdana;overflow:auto" id="rcv_envelope">
+	</div>
+</div>
+
+]]>
+</Content>
+</Module>

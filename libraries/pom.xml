@@ -1,0 +1,19 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>eu.role-project</groupId>
+		<artifactId>role-project</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<artifactId>role-libraries</artifactId>
+	<name>ROLE-Libraries</name>
+	<description>The ROLE Libraries</description>
+	<packaging>pom</packaging>
+	<modules>
+		<module>openapp</module>
+		<module>mixedjslibs</module>
+		<module>iwc</module>
+	</modules>
+</project>

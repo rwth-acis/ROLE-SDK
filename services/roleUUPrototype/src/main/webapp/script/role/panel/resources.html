@@ -1,0 +1,23 @@
+<div id="activityEntries" class="sideBox"></div>
+<a class="sideItem when-owner when-authenticated not-in-user-profile"
+	style="cursor: pointer;" href="javascript:void(0)"
+	id="sideEntry-newActivity"
+	title="Create a new activity page, on which you can organize widgets">
+	<button class="sideEntrySelButton"
+		style="float: right; font-size: 10px;" title="Close">✖</button> <span
+	class="entry-plus-sign">+</span> <span class="sideItemHover">Activity</span>
+</a>
+<ul id="activityMenu" class="ROLEMenu">
+	<li><a>Rename</a></li>
+	<li><a>Delete</a></li>
+</ul>
+<div id="activity-remove-dialog-confirm" title="Remove activity?" style="display: none">
+    <div><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 40px 0;"></span>
+    <p>Removing the activity <span style="font-weight: bold" id="activity_name_remove"></span> will also remove all its contained widgets.</p>
+    <p>Are you sure you want to proceed?</p></div>
+</div>
+
+<div id="activity-rename-dialog" title="Rename activity" style="display: none">
+    <p class="validateTips">Provide a new name for the activity:</p>
+    <input type="text" name="name" id="activity-rename" class="text ui-widget-content ui-corner-all" /> 
+</div>

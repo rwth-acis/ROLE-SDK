@@ -1,0 +1,220 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+ <html>
+   <head>
+     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+	<script>
+      Timeline_urlPrefix='http://static.simile.mit.edu/timeline/api-2.3.0/';       
+      Timeline_parameters='bundle=true';
+    </script>
+     <script src="http://static.simile.mit.edu/timeline/api-2.3.0/timeline-api.js" type="text/javascript"></script>
+
+     <script>
+     	//Regexp to detects all mentions in a tweet (for instance @steve).
+     	var mentionRE = /@\w+/gi;
+		
+		//Detects all mentions in a tweet as well as the sender
+		//returns an object with the users as keys for easy lookup.
+		//The tweet object is according to the yourtwapperkeeper json format.
+		function usersInTweet(tweet) {
+		 	var arr = tweet.text.match(mentionRE);
+			var obj = {};
+			if (arr == null) {
+				obj[tweet.from_user.toLowerCase()] = true;
+			} else {
+				for (var i=0;i<arr.length;i++) {
+					obj[arr[i].substr(1).toLowerCase()] = true;
+				}
+				obj[tweet.from_user.toLowerCase()] = true;
+			}
+			return obj;
+		 };
+	 	
+		//Calculates the amount of overlapping keys in two objects.
+		//returns an integer.
+	 	function objectOverlap(obj1, obj2) {
+		 	var overlap = 0;
+			for (var key in obj1) {
+				if (obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key)) {
+					overlap++;
+				}
+			}
+			return overlap;
+		 };
+	 	
+		//Regexp to detect simple shortened urls in tweets, for instance  sevices such as bit.ly.
+		//Hence no advanced validation is needed.
+		var urlpatt = /\b(https?:\/\/[^\s]*)\b/;
+		//Maximal amount of hours between two tweets for them to be detected as part of the same conversation 
+		var maximumConversationGap = 4;
+		
+		//Detects all conversations in the array of tweets provided (according to the json format of yourtwapperkeeper.
+		//returns an array suitable for Simile timline input (the events parameter).
+		function discoverConversations(tweets) {
+		 	var result = [];
+			var ongoing = [];
+			for (var i=tweets.length-1;i>0;i--) {
+				var tweet = tweets[i];
+				var newConversation = true;
+				for (var j=0;j<ongoing.length;j++) {
+					var event = ongoing[j];
+					if (newConversation && objectOverlap(event.users, usersInTweet(tweet))>1) {
+						event.tweets.push(tweet);
+						event._latest = tweet.time;
+						event.end = new Date(tweet.time*1000);
+						newConversation = false;
+					} else if (tweet.time - event._latest > (3600*maximumConversationGap)) {
+						ongoing.splice(j, 1);
+						j--;
+					}
+				}
+				
+				if (newConversation) {
+					var nevent = {
+						start: new Date(tweet.time*1000),
+						title: tweet.from_user,
+						icon: tweet.profile_image_url,
+						users: usersInTweet(tweet),
+						tweets: [tweet],
+						_latest: tweet.time
+					};
+					result.push(nevent);
+					ongoing.push(nevent);
+				}
+			}
+			return result;
+		 }
+		
+		 //Timeline
+		 var tl;
+		
+		 //onLoad must be called first after Simile timeline classes have been loaded successfully and after the body is loaded.
+		 function onLoad() {
+	
+			//Overriding the 'bubble' in the Simile Timeline, i.e. the tooltipdialog launched on click on an event.
+			Timeline.OriginalEventPainter.prototype._showBubble = function(x, y, evt) {
+			   var div = document.createElement("div");
+			   div.className = "conversation";
+			    var themeBubble = this._params.theme.event.bubble;
+			
+				for (var i=0;i<evt._obj.tweets.length;i++) {
+					var tweet = evt._obj.tweets[i];
+			   		var child = document.createElement("div");
+					var text = tweet.text.replace(urlpatt, "<a href='$1' target='blank'>$1</a>")
+					child.innerHTML = "<img src='"+tweet.profile_image_url+"'></img><div class='name'>"+tweet.from_user+"</div>"+
+						"<div class='time'>"+tweet.created_at+"</div><div>"+text+"</div>";
+					div.appendChild(child);
+				}		    
+			    SimileAjax.WindowManager.cancelPopups();
+			    SimileAjax.Graphics.createBubbleForContentAndPoint(div, x, y,
+			        themeBubble.width, null, 400);
+			};
+	
+			
+			//Creating the timeline constituents, eventSource, theme and bandinfo
+			var eventSource = new Timeline.DefaultEventSource();
+			var theme = Timeline.ClassicTheme.create();
+			theme.event.instant.iconWidth = 25;  // These are for the default stand-alone icon
+			theme.event.track.height = 5;
+			theme.event.tape.height = 2;
+		
+			var bandInfos = [
+			 Timeline.createBandInfo({
+			     eventSource:    eventSource,
+			     date:           "Jan 10 2011 00:00:00 GMT",
+			     width:          "85%",
+			     theme: theme,
+			     multiple: 10,
+			     intervalUnit:   Timeline.DateTime.MINUTE,
+			     intervalPixels: 5
+			 }),
+			 Timeline.createBandInfo({
+			     overview:       true,
+			     date:           "Jan 10 2011 00:00:00 GMT",
+			     width:          "5%", 
+			     intervalUnit:   Timeline.DateTime.DAY, 
+			     intervalPixels: 40
+			 }),
+			 Timeline.createBandInfo({
+			     overview:       true,
+			     date:           "Jan 10 2011 00:00:00 GMT",
+			     eventSource:    eventSource,
+			     width:          "10%", 
+			     intervalUnit:   Timeline.DateTime.MONTH, 
+			     intervalPixels: 300
+			 })
+			];
+			bandInfos[1].syncWith = 0;
+			bandInfos[1].highlight = true;
+			bandInfos[2].syncWith = 0;
+			bandInfos[2].highlight = true;
+		
+			//The data to load:
+			var url = "data/tweets.json";
+			//Creating the actual timeline
+			tl = Timeline.create(document.getElementById("my-timeline"), bandInfos);
+			   Timeline.loadJSON(url, function(data, url) {
+				var events = discoverConversations(data.tweets);
+			    eventSource.loadJSON({events: events}, url);
+			});
+		}
+	
+		var resizeTimerID = null;
+		function onResize() {
+		     if (resizeTimerID == null) {
+		         resizeTimerID = window.setTimeout(function() {
+		             resizeTimerID = null;
+		             tl.layout();
+		         }, 500);
+		     }
+		 }
+     </script>
+    <style>
+		.timeline-default {
+        	font-family: Trebuchet MS, Helvetica, Arial, sans serif;
+        	font-size: 8pt;
+      	}
+      	div.timeline-event-icon img {
+	    	width: 20px;
+		}
+      	div.timeline-event-icon img:hover {
+	    	width: 40px;
+			z-index: 400;
+		}
+        div.timeline-event-icon {
+            border: 1px solid #aaa;
+            padding: 1px;
+            background: white;
+        }
+        div.timeline-event-icon-default {
+            border: none;
+            padding: 0px;
+        }
+		.conversation>div {
+			font-size: small;
+			margin-bottom: 5px;
+			padding-bottom: 5px;
+			border-bottom: 1px solid gray;
+		}
+		.conversation img {
+			float:left;
+			width: 30px;
+			margin-right: 5px;
+		}
+		.conversation .name {
+			font-weight: bold;
+		}
+		.conversation .time {
+			padding-bottom: 3px;
+			color: gray;
+			font-style: italic;
+		}
+    </style>
+
+   </head>
+   <body onload="onLoad();" onresize="onResize();">
+     <div id="my-timeline" class="timeline-default" style="height: 400px; border: 1px solid #aaa"></div>
+     <noscript>
+       This page uses Javascript to show you a Timeline. Please enable Javascript in your browser to see the full page. Thank you.
+     </noscript>
+   </body>
+ </html>

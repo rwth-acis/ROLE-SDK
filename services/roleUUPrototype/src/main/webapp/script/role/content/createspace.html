@@ -1,0 +1,24 @@
+<div style="margin: 10% 1em 1em 1em">
+	<h1 style="color: #00aa00; text-transform: none; font-size: 2em;">This
+		space does not yet exist</h1>
+	<form action="/spaces" method="post" class="when-authenticated">
+		<input type="hidden" name="openapp.ns.rdf"
+			value="http://www.w3.org/1999/02/22-rdf-syntax-ns#" /> <input
+			type="hidden" name="openapp.ns.rdfs"
+			value="http://www.w3.org/2000/01/rdf-schema#" /> <input
+			type="hidden" name="openapp.ns.dcterms"
+			value="http://purl.org/dc/terms/" /> <input type="hidden"
+			name="openapp.rdf.predicate" value="http://purl.org/role/terms/space" />
+		<input type="hidden" name="openapp.rdf.type"
+			value="http://purl.org/role/terms/Space" /> <input
+			name="openapp.rdfs.label" type="hidden" value="{{id}}" />
+		<p style="margin-left: 2em;">
+			<input type="submit" value="Create new space"
+				style="padding: 5px; font-size: 20px; font-weight: bold; border-radius: 5px; border: 2px solid #00cc55; background: url(/s/images/wavebg.png); cursor: pointer" />
+		</p>
+	</form>
+	<div class="when-not-authenticated">
+		To create a space, you first need to
+		<a href="/:authentication?return={{authReturnUri}}&action=signin" style="color: #00aa00;">sign in</a>.
+	</div>
+</div>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+  <ModulePrefs title="Displays events" author_email="mpalmer@gmail.com" description="Displays the envelope and message of an openapp event." height="500">
+	<Require feature="opensocial-0.9" />
+    <Optional feature="openapp" />
+  </ModulePrefs>
+  <Content type="html"><![CDATA[
+  	<style>
+  		table {width: 100%}
+  		.col1 {font-weight: bold;font-size: small; padding-right: 0.3em;color: blue;}
+  		#envelope .col1 {color: green;}
+  		.col2 {word-break: break-word;}
+  		#message>div {padding-bottom: 0.3em; padding-left: 0.2em;padding-right:0.2em;}
+  		h3 {width: 100%; border-bottom: 1px solid grey;margin-bottom: 0.2em;}
+  		button {margin-top:1em; float: right;}
+  		html, body {height: 100%; overflow: auto;}  	
+  	</style>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" type="text/javascript"></script>
+	<div>
+		<div id="openappDialog"></div>
+		<h3>Envelope</h3>
+		<table id="envelope">
+			<tr id="event"><td class="col1">Event</td><td class="col2"></td></tr>
+			<tr id="type"><td class="col1">Type</td><td class="col2"></td></tr>
+			<tr id="sharing"><td class="col1">Sharing</td><td class="col2"></td></tr>
+			<tr id="date"><td class="col1">Date</td><td class="col2"></td></tr>
+			<tr id="uri"><td class="col1">URI</td><td class="col2"></td></tr>
+		</table>
+		<h3>Message</h3>
+		<div id="message">
+		</div>
+		<button type="button" disabled="disabled">Show event source</button>
+		<br/>
+	</div>
+	<script>
+		var nss = {
+				ical: "http://www.w3.org/2002/12/cal/ical#",
+				role: "http://purl.org/role/terms/",
+				dcterms: "http://purl.org/dc/terms/",
+				rdfs: "http://www.w3.org/2000/01/rdf-schema#",
+				rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+				owl: "http://www.w3.org/2002/07/owl#", 
+				vs: "http://www.w3.org/2003/06/sw-vocab-status/ns#", 
+				foaf: "http://xmlns.com/foaf/0.1/", 
+				wot: "http://xmlns.com/wot/0.1/", 
+				dc: "http://purl.org/dc/elements/1.1/"
+		};
+		var nscounter = 0;
+		var nstohtml = function(ns, expanded, value) {
+			if (!nss[ns]) {
+				nss[ns] = expanded;
+			}
+			return "<span class=\"col1\" title=\""+expanded+value+"\">"+ns+":"+value+"</span>";
+		}
+		var nsify = function(prop) {
+			for (var ns in nss) {
+				if (prop.indexOf(nss[ns]) === 0) {
+					return nstohtml(ns, nss[ns], prop.substring(nss[ns].length));
+				}
+			}
+			var slash = prop.lastIndexOf("/");
+			var hash = prop.lastIndexOf("#");
+			if (hash> slash) {
+				slash = hash;
+			}
+			nscounter++;
+			return nstohtml("ns"+nscounter, prop.substring(0,slash+1),prop.substring(slash+1)); 
+		}
+		
+		gadgets.util.registerOnLoadHandler(function() {
+			var eventSource;
+			$("button").click(function() {
+				alert(eventSource);
+			});
+			gadgets.openapp.connect(function(envelope, message) {
+				$("#event .col2").html(envelope.event || "");
+				$("#type .col2").html(envelope.type || "");
+				$("#sharing .col2").html(envelope.sharing || "");
+				$("#date .col2").html(envelope.date || "");
+				$("#uri .col2").html(envelope.uri || "");
+				var t = $("#message").html("");
+				for (var key in message) {
+					t.append("<div>"+nsify(key)+"<span class=\"col2\">"+message[key]+"</span></div>");
+				}
+				eventSource = JSON.stringify(envelope, null, "  ");
+				$("button").removeAttr("disabled");
+				return true;
+			});
+		});
+	</script>
+  ]]></Content>
+</Module>

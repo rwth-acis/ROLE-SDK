@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<rdf:RDF 
+	 xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	 xmlns:foaf="http://xmlns.com/foaf/0.1/" 
+	 xmlns:dc="http://purl.org/dc/elements/1.1/" 
+	 xmlns:dcterms="http://purl.org/dc/terms/"
+	 xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" 
+	 xmlns:sioc="http://rdfs.org/sioc/ns#" 
+	 xmlns:scot="http://scot-project.org/scot/ns#" 
+	 xmlns:skos="http://www.w3.org/2004/02/skos/core#" 
+	 xmlns:xsd="http://www.w3.org/2001/XMLSchema#" 
+	 xmlns:rdfg="http://www.w3.org/2004/03/trix/rdfg-1/"
+	 xmlns:role="http://purl.org/role/terms/" 
+	>
+
+  <role:Widget rdf:about="http://www.role-widgetstore.eu/tool/xmpp-multiuser-chat">
+    <dcterms:source rdf:resource="http://role-is.dbis.rwth-aachen.de/gadgets/chat/xmpp-muc-gadget.xml"/>
+    <dcterms:title xml:lang="en-US">XMPP Multiuser Chat </dcterms:title>
+    <dcterms:description xml:lang="en-US">
+    	An XMPP Multiuser Chat Gadget
+    </dcterms:description> 
+    <foaf:maker>
+		<foaf:Person rdf:about="http://www.role-widgetstore.eu/semantices/person/daniel">
+	        <foaf:name>daniel</foaf:name>
+        	<foaf:mbox>daniel@role-project.eu</foaf:mbox>
+    	</foaf:Person>
+    </foaf:maker>  
+    <foaf:img>default screenshot of the Tool</foaf:img>
+    <foaf:depiction>thumbnail of the Tool</foaf:depiction> 
+    <dcterms:subject rdf:resource="http://dbpedia.org/page/Category:Communication"/>
+    <role:toolFunctionality rdf:resource="http://purl.org/role/terms/FunctionalityTF1" />
+    <role:category rdf:resource="http://purl.org/role/instances/CollaborateAndCommunicate"/>
+  </role:Widget>
+ 
+</rdf:RDF>

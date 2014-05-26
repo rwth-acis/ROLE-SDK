@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+	<ModulePrefs title="practicesharing ver. 1.0">
+		<Require feature="opensocial-0.9" />
+		<Require feature="pubsub" />
+		<Require feature="dynamic-height" />
+	</ModulePrefs>
+	<Content type="html">
+		<![CDATA[
+		<script type="text/javascript" src="http://d2hv4ldeur9lfv.cloudfront.net/opensocial-jquery-1.3.2.5.min.js"></script>
+		<script type="text/javascript" src="http://open-app.googlecode.com/files/openapp_postmessage.js"></script>
+		<script type="text/javascript" src="http://augur.wu.ac.at/activity/js/highcharts.js"></script>
+		<script type="text/javascript">
+			var initialize = function()
+			{
+				try
+				{
+					gadgets.window.adjustHeight(480);
+				}
+				catch(e)
+				{
+					alert(e);
+				}
+
+				// gadgets.openapp.connect(eventCallbackFunction);
+			}
+
+			gadgets.util.registerOnLoadHandler(initialize);
+		</script>
+		
+		<link type="text/css" href="http://augur.wu.ac.at/activity/css/custom-theme/jquery-ui-1.8.14.custom.css" rel="stylesheet" />
+		<link type="text/css" href="http://augur.wu.ac.at/activity/css/my.css" rel="stylesheet" />
+		<script type="text/javascript" src="http://augur.wu.ac.at/activity/js/jquery-1.5.1.min.js"></script>
+		<script type="text/javascript" src="http://augur.wu.ac.at/activity/js/jquery-ui-1.8.14.custom.min.js"></script>
+		<script type="text/javascript" src="http://augur.wu.ac.at/activity/js/myquery.js"></script>
+		
+			<!-- Design Tab BEGIN -->
+
+				<span id="login-button">
+					<button>login</button>				
+				</span>
+
+				<span id="share-button">
+					<button>share</button>				
+				</span>
+			
+				<span id="browse-button">
+					<button>browse</button>				
+				</span>
+
+				<span class="reload" id="reload-button">
+					<button><img src="http://augur.wu.ac.at/activity/images/refresh18.png" alt="help"/></button>				
+				</span>
+
+
+			<div class="login-toggle" id="login-panel">
+				<div class="spacer"></div>
+				<div id="username">
+					<div class="exp-desc">
+						Username
+					</div>
+					<div class="privacy-options">
+						<input type="text" id="login-username" name="" value="" />
+					</div>
+				</div>
+				
+				<div id="password">
+					<div class="exp-desc">
+						Password
+					</div>
+					<div class="privacy-options">
+						<input type="password" id="login-password" name="" value="" />
+					</div>
+				</div>
+
+				<div id="login">
+					<span id="dologin-button">
+						<button>login</button>	
+					</span>			
+					<span style="display:none" id="dontlogin-button">
+						<button>maybe later</button>	
+					</span>			
+				</div>
+				<div class="spacer"></div>			
+				<div class="info" id="login_content_panel_info">
+					<img style="vertical-align:top; float:left; margin-left:10px; margin-right:10px;" src="http://augur.wu.ac.at/patternshare/images/help.png" alt="help"/>If you want to have full access to all features and participate the sharing-competition, please log in. If you just want to share your activities, you don't have to log in. You can log in at any later point.
+				</div>
+			</div>
+
+			<div class="share-toggle" id="share-panel">
+				<div class="panel-background-big">
+					<div id="show_loginname" class="panel-content"></div>
+				</div>
+				<div class="info" id="help_content_panel_info"><img style="vertical-align:top; float:left; margin-left:10px; margin-right:10px;" src="http://augur.wu.ac.at/patternshare/images/help.png" alt="help"/>Please click blue bars to change settings.</div>
+
+<!-- ******************************************************************* 
+     *                                                                 * 
+     *                   [ general settings begin ]                    * 
+     *                                                                 * 
+     ******************************************************************* -->
+
+				<div class="panel-background-big">
+					<span id="show_general" class="myoutcomes-header"><img style="vertical-align:top; float:left; margin-left:10px; margin-right:10px;" src="http://augur.wu.ac.at/patternshare/images/gear2.png" alt="options"/>Title<img id="general_arrow" style="vertical-align:top; float:right; margin-right:10px;" src="http://augur.wu.ac.at/patternshare/images/arrow_down.png" alt="general"/><span style="float:right;" id="general_content_panel_status"><img style="vertical-align:top; margin-left:10px; margin-right:10px;" src="http://augur.wu.ac.at/patternshare/images/info.png" alt="info" style="vertical-align:top; float:right; margin-right:10px;"/></span></span>
+					
+					<div id="general_content_panel">
+						<div id="general_content_panel_toggle" class="panel-toggle">
+							<div class="exp-header">
+								Activity Title
+							</div>
+							<div class="exp-desc">
+								Type in the name of your activity.
+							</div>
+							<div class="privacy-options">
+								<input type="text" id="pattern-title" name="" value="" />
+							</div>
+							<div class="outcome-options">
+								<div id="general-button">
+									<button style="float: left;">ok</button>
+								</div>
+								<div style="clear: both;">
+								</div>
+							</div> 
+							<div class="info" id="general_content_panel_info">
+								<img style="vertical-align:top; float:left; margin-left:10px; margin-right:10px;" src="http://augur.wu.ac.at/patternshare/images/help.png" alt="help"/>Please enter a title for your activity. If you don't, a title will be automatically generated for you.
+							</div>
+						</div>
+					</div>
+				</div>
+
+<!-- ******************************************************************* 
+     *                                                                 * 
+     *                        [ widgets begin ]                        * 
+     *                                                                 * 
+     ******************************************************************* -->
+
+				<div class="panel-background-big">
+					<span id="show_widgets" class="myoutcomes-header"><img style="vertical-align:top; float:left; margin-left:10px; margin-right:10px;" src="http://augur.wu.ac.at/patternshare/images/widgets.png" alt="options"/>Widgets<img id="widgets_arrow" style="vertical-align:top; float:right; margin-right:10px;" src="http://augur.wu.ac.at/patternshare/images/arrow_down.png" alt="options"/><span style="float:right;" id="widgets_content_panel_status"><img style="vertical-align:top; margin-left:10px; margin-right:10px;" src="http://augur.wu.ac.at/patternshare/images/error.png" alt="info" style="vertical-align:top; float:right; margin-right:10px;"/></span></span>
+					<div id="widgets_content_panel">
+						<div id="widgets_content_panel_toggle" class="panel-toggle">
+							<div class="outcomes" id="widgets" style="display:none">
+								<div class="exp-header">
+									Widgets:
+								</div>
+								<div style="margin-top:5px;"></div>
+								<div id="mywidgets-menu" class="panel-background-outcomes"></div>
+								
+								<div class="outcome-options">
+									<div id="widgets-button" style="display:none;">
+										<button style="float: left;">add</button>
+									</div>
+									<div style="clear: both;"></div>
+								</div> 
+								
+							</div>
+							<div class="info" id="widgets_content_panel_info">
+								<img style="vertical-align:top; float:left; margin-left:10px; margin-right:10px;" src="http://augur.wu.ac.at/patternshare/images/help.png" alt="help"/>To add more widgets to this activity, please add them to your Personal Learning Environment and press the reload-button in the upper right corner.  To delete a widget, hover over its name and click the red cross.
+							</div>
+
+						</div>
+					</div>
+				</div>
+			
+<!-- ******************************************************************* 
+     *                                                                 * 
+     *                       [ outcomes begin ]                        * 
+     *                                                                 * 
+     ******************************************************************* -->
+			
+				<div class="panel-background-big">
+
+					<span id="show_outcomes" class="myoutcomes-header"><img style="vertical-align:top; float:left; margin-left:10px; margin-right:10px;" src="http://augur.wu.ac.at/patternshare/images/mypics.png" alt="options"/>Outcomes<img id="outcomes_arrow" style="vertical-align:top; float:right; margin-right:10px;" src="http://augur.wu.ac.at/patternshare/images/arrow_down.png" alt="options"/><span style="float:right;" id="outcomes_content_panel_status"><img style="vertical-align:top; margin-left:10px; margin-right:10px;" src="http://augur.wu.ac.at/patternshare/images/error.png" alt="error" style="vertical-align:top; float:right; margin-right:10px;"/></span></span>
+
+					<div id="outcomes_content_panel">
+						<div id="outcomes_content_panel_toggle" class="panel-toggle">
+							<div class="exp-header">
+								Name of Goal/Document
+							</div>
+							<div class="exp-desc">
+								Type in the name of your outcome.
+							</div>
+							<div class="privacy-options">
+								<input type="text" id="outcome-title" name="" value="" />
+							</div>
+								
+							<!-- outcome title end-->
+			
+							<div class="borderline"></div>
+			
+							<!-- outcome type begin-->
+				
+							<div class="exp-header">
+								Outcome Type
+							</div>
+			
+							<div class="exp-desc">
+								Select the type of your outcome.
+							</div>
+			
+							<div class="privacy-options">
+								<form>
+									<div id="radio">
+										<input type="radio" id="radio1" name="radio" /><label for="radio1">Document</label>
+										<input type="radio" id="radio2" name="radio" checked="checked"/><label for="radio2">Goal</label>
+									</div>
+									<div style="clear: both;"></div> 
+								</form>
+							</div>
+
+							<!-- outcome type end -->
+
+							<div class="borderline"></div>
+
+							<!-- outcome add begin-->
+	
+							<div class="outcome-options">
+								<div id="outcome-button">
+									<button style="float: left;">add</button>
+									<div style="float:left; display:none; margin-top:6px; font-weight: bold; margin-left: 10px;" id="successfully_added">Successful</div>
+								</div>
+								<div style="clear: both;"></div>
+							</div> 
+							
+							<div class="outcomes" id="outcomes" style="display:none">
+								<div class="exp-header">
+									Outcomes:
+								</div>
+								<div style="margin-top:5px;"></div>
+								<div id="myoutcomes-menu" class="panel-background-outcomes"></div>
+							</div>
+							<div class="info" id="outcomes_content_panel_info">
+								<img style="vertical-align:top; float:left; margin-left:10px; margin-right:10px;" src="http://augur.wu.ac.at/patternshare/images/help.png" alt="help"/>Please enter at least one goal, your activity is aiming at.
+							</div>
+						</div>
+					</div>
+				</div>
+			
+<!-- ******************************************************************* 
+     *                                                                 * 
+     *                         [ peers begin ]                         * 
+     *                                                                 * 
+     ******************************************************************* -->
+
+				<div class="panel-background-big">
+					<span id="show_peers" class="myoutcomes-header"><img style="vertical-align:top; float:left; margin-left:10px; margin-right:10px;" src="http://augur.wu.ac.at/patternshare/images/peers.png" alt="options"/>Peers<img style="vertical-align:top; float:right; margin-right:10px;" src="http://augur.wu.ac.at/patternshare/images/arrow_down.png" alt="options"/><span style="float:right;" id="peers_content_panel_status"><img style="vertical-align:top; margin-left:10px; margin-right:10px;" src="http://augur.wu.ac.at/patternshare/images/info.png" alt="info" style="vertical-align:top; float:right; margin-right:10px;"/></span></span>
+					<div id="peers_content_panel">
+						<div id="peers_content_panel_toggle" class="panel-toggle">
+							<div class="outcomes" id="peers" style="display:none">
+								<div class="exp-header">
+									Peers:
+								</div>
+								<div style="margin-top:5px;">
+								</div>
+								<div id="mypeers-menu" class="panel-background-outcomes">
+								</div>
+								
+								<div class="outcome-options">
+									<div id="peers-button" style="display:none;">
+										<button style="float: left;">add</button>
+									</div>
+									<div style="clear: both;"></div>
+								</div> 
+								
+							</div>
+							<div class="info" id="peers_content_panel_info">
+								<img style="vertical-align:top; float:left; margin-left:10px; margin-right:10px;" src="http://augur.wu.ac.at/patternshare/images/help.png" alt="help"/>To add more peers to this activity, please add them to your Personal Learning Environment and press the reload-button in the upper right corner. To delete a peer, hover over its name and click the red cross.
+							</div>
+						</div>
+					</div>
+				</div>
+				
+<!-- ******************************************************************* 
+     *                                                                 * 
+     *                       [ privacy begin ]                         * 
+     *                                                                 * 
+     ******************************************************************* -->
+
+				<div class="panel-background-big">
+					<span id="show_privacy" class="myoutcomes-header"><img style="vertical-align:top; float:left; margin-left:10px; margin-right:10px;" src="http://augur.wu.ac.at/patternshare/images/privacy.png" alt="options"/>Privacy<img style="vertical-align:top; float:right; margin-right:10px;" src="http://augur.wu.ac.at/patternshare/images/arrow_down.png" alt="options"/><span style="float:right;" id="privacy_content_panel_status"><img style="vertical-align:top; margin-left:10px; margin-right:10px;" src="http://augur.wu.ac.at/patternshare/images/check.png" alt="ok" style="vertical-align:top; float:right; margin-right:10px;"/></span></span>
+
+					<div id="privacy_content_panel">
+							<div id="privacy_content_panel_toggle" class="panel-toggle">
+								<div class="outcomes" id="privacy">
+								<div style="margin-top:5px;">
+								</div>
+								<div id="mypeers-menu">
+									<div class="outcome-options">
+										<button id="privacy-button">everyone</button>
+										<div id="dropdown-menu">
+											<div id="dropdown-menu-item1">everyone</div>
+											<div id="dropdown-menu-item2">my friends</div>
+											<div id="dropdown-menu-item3">only me</div>
+										</div>
+									</div>
+									<div class="info" id="privacy_content_panel_info">
+								<img style="vertical-align:top; float:left; margin-left:10px; margin-right:10px;" src="http://augur.wu.ac.at/patternshare/images/help.png" alt="help"/>To change the privacy of your activity, please click the button above.
+							</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>		
+				<div id="shareit-button" class="shareit-options">
+					<button>Share</button>
+				</div>
+			</div> <!-- closing <div id="share_panel"> -->
+			<!-- browse panel BEGIN -->
+			<div class="browse-toggle" id="browse-panel" style="overflow:auto;">
+				<div class="panel-background-big">
+					<div id="show_loginname" class="panel-content"></div>
+				</div>
+
+				<!-- ******************************************************************* 
+				     *                                                                 * 
+				     *                   [ my practices settings begin ]               * 
+				     *                                                                 * 
+				     ******************************************************************* -->
+
+				<div class="panel-background-big">
+				<div style="display:none" id="json"></div>
+					<span id="show_my_practices" class="myoutcomes-header"><img style="vertical-align:top; float:left; margin-left:10px; margin-right:10px;" src="http://augur.wu.ac.at/patternshare/images/shared.png" alt="options"/>My shared practices<img id="my_practices_arrow" style="vertical-align:top; float:right; margin-right:10px;" src="http://augur.wu.ac.at/patternshare/images/arrow_down.png" alt="general"/></span>
+					
+					<div id="my_practices_content_panel">
+						<div id="my_practices_content_panel_status" class="panel-content"></div>
+						<div id="my_practices_content_panel_toggle" class="panel-toggle"><div style="background-color:#FFFFFF; height:1px;"></div><div id="my_practices_content_panel_toggle1" class="result"></div>
+						</div>
+					</div>
+				</div>
+				
+				<div style="display:none;" class="panel-background-big">
+					<span id="show_network_practices" class="myoutcomes-header"><img style="vertical-align:top; float:left; margin-left:10px; margin-right:10px;" src="http://augur.wu.ac.at/patternshare/images/gear2.png" alt="options"/>Practices of my network<img id="network_practices_arrow" style="vertical-align:top; float:right; margin-right:10px;" src="http://augur.wu.ac.at/patternshare/images/arrow_down.png" alt="general"/></span>
+					
+					<div id="network_practices_content_panel">
+						<div id="network_practices_content_panel_status" class="panel-content"></div>
+						<div id="network_practices_content_panel_toggle" class="panel-toggle">
+						</div>
+					</div>
+				</div>
+
+				<div class="panel-background-big">
+					<span id="show_topic_retrieval" class="myoutcomes-header"><img style="vertical-align:top; float:left; margin-left:10px; margin-right:10px;" src="http://augur.wu.ac.at/patternshare/images/search.png" alt="options"/>Topic retrieval<img id="topic_retrieval_arrow" style="vertical-align:top; float:right; margin-right:10px;" src="http://augur.wu.ac.at/patternshare/images/arrow_down.png" alt="general"/></span>
+					
+					<div id="topic_retrieval_content_panel">
+						<div id="topic_retrieval_content_panel_status" class="panel-content">
+							<input type="text" name="searchterm" id="searchterm" /><br />
+							<span id="search-button">
+								<button>search</button>				
+							</span>
+						</div>
+						<div id="topic_retrieval_content_panel_toggle" class="panel-toggle">
+						</div>
+					</div>
+				</div>
+				<div id="stats" style="display:none;">Loading statistics...
+				</div>
+				<div style="clear: both;"></div>
+				<div id="container" style="width: 100%; height: 280px; margin: 0 auto"></div>
+			</div> <!-- browse panel END-->
+		]]>
+	</Content>
+</Module>
+
+

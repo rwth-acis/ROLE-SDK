@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+    <ModulePrefs title="CAM Create And Store" width="250" height="500">
+	<Require feature="opensocial-0.9" />
+    	<Require feature="pubsub"/>
+    	<Require feature="dynamic-height"/>
+    	<Require feature="osapi"/>
+    </ModulePrefs>
+    
+    <Content type="html">
+    	<![CDATA[
+    		<script src="http://role-project.svn.sourceforge.net/viewvc/role-project/tags/m2-gunpowder/libraries/cam/src/main/javascript/CamLib.js"></script>
+    		<script src="http://role-project.svn.sourceforge.net/viewvc/role-project/tags/m2-gunpowder/libraries/cam/src/main/javascript/CamInstance.js"></script>
+    		
+    		<div style="background-color:#F2F2F2;overflow:auto;">
+	            <input type="button" id="push" onclick='storeCam()' value="push">
+	            <br>
+	            <span style="font-variant:normal; font-size:70%"> <div> <b> Produced CAM: </b> </div> </span>
+	            <span style="font-variant:normal; font-size:70%"> <div id="jsonCam"> </div> </span>
+	            <br>
+	            <span style="font-variant:normal; font-size:70%"> <div> <b> Result of Persistance Process (number of entries per tables): </b> </div> </span>
+	            <span style="font-variant:normal; font-size:70%"> <div id="resultArea"> </div> </span>
+	            <br>
+			</div>
+    	
+			<script type="text/javascript">
+			
+				function storeCam() {
+					var event = new Event();
+					event.name = "select";
+					event.datetime = CamLib.formatDate(new Date());
+					
+					var widget = new Relatedentity();
+					widget.name = "CAM Create And Store";
+					event.addRelatedentity("widget", widget);
+					
+					var viewer = new Relatedentity();
+					viewer.entityId = CamLib.getViewer(); 
+					event.addRelatedentity("viewer", viewer);
+										
+					var ci = new CamInstance(event);
+					
+					var ws_url = "http://giotto.informatik.rwth-aachen.de/role-live/CamWebServiceDefault/";
+					var persist_token = "SecretDefaultToken";
+					var json_cam = JSON.stringify(ci);
+					var live_db = "true";
+					
+					document.getElementById("jsonCam").innerHTML = json_cam;
+					
+					CamLib.persistCam(ws_url, persist_token, json_cam, live_db, storeCamCallback);
+				}
+				
+				function storeCamCallback(result) {
+					document.getElementById("resultArea").innerHTML = result.text;
+				}
+			</script>
+		]]>
+    </Content>
+</Module>

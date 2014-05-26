@@ -1,0 +1,11 @@
+TODO
+
+- work around for importing properties from FOAF or DublinCore : 
+	- see owl:imports prop. http://www.w3.org/TR/owl-ref/#imports-def
+	- DONE: marked deprecated properties and suggested replacements with owl:versionInfo elements
+
+DONE - change Resource to LearningResource
+DONE - remove WidgetSpecification class and make hasWidgetType points from Widget instances directly
+DONE - add labels and definitions to classes and properties
+DONE - fix namespaces with final ROLE one
+DONE - find a work-around for having each module independent : with namespaces

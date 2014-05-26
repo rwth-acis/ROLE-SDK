@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="Your Widget Title"
+		description="Your Widget Description"
+		author="Your Name"
+		author_email="Your Email"
+		height="300">
+  	<Require feature="opensocial-0.8" />
+    <Require feature="openapp" />
+    <OAuth>
+		<Service name="openapp" xmlns:openapp="http://www.role-project.eu/xml/openapp/opensocialext/" 
+			openapp:service="http://purl.org/role/terms/spaceService"
+			openapp:permitReadAppend="http://purl.org/role/terms/data">
+			<Request method="" url=""/>
+			<Authorization url=""/>
+			<Access method="" url=""/>
+		</Service>
+    </OAuth>
+  </ModulePrefs>
+  <Content type="html">
+    <![CDATA[
+		
+		<script src="http://dbis.rwth-aachen.de/gadgets/iwc/lib/iwc.js"></script>
+		
+		<!-- JavaScript Block -->
+		<script>
+			
+			var space;
+			var user;
+			var iwcClient;
+			
+			gadgets.util.registerOnLoadHandler(init);
+			
+			function init(){
+				console.log("Widget loaded");
+				
+				space = new openapp.oo.Resource(openapp.param.space());
+				user = new openapp.oo.Resource(openapp.param.user());
+				
+				space.getInfo(function(info) {
+					var spacename = info[openapp.ns.dcterms + "title"];
+					document.getElementById("sname").innerHTML = spacename;
+				});
+				
+				user.getInfo(function(info) {
+					var username = info[openapp.ns.dcterms + "title"];
+					document.getElementById("uname").innerHTML = username;
+				});
+				
+				iwcClient = new iwc.Client()
+				iwcClient.connect(iwcCallback);
+			}
+			
+			function iwcCallback(intent){
+				console.log("Template: Received intent");
+				console.log(intent);
+			}
+			
+		</script>
+		
+		<!-- HTML Block -->
+		<div>Hello <span id="uname"></span>, welcome to space <span id="sname"></span>.</div>
+	]]>
+  </Content>
+</Module>

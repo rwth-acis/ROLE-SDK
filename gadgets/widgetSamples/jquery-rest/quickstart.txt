@@ -1,0 +1,54 @@
+==================================================================
+Short instructions on how to use the PLEShare2 REST-API and jquery
+==================================================================
+
+To deliver all necessary information, the present practicesharing-widget is 
+making heavy use of PLEShare2 - a very stable and simple to use REST-based 
+service. If you too want to interact with PLEShare2 (e.g. publish and/or 
+retrieve activities/bundles), please have a look at the file 'myquery.js' in the 
+'/js' directory. In this file, all the necessary methods can be found. To 
+simplify matters, let me describe the first steps to facilitate your start in 
+developing widgets using PLEShare2. Before we start, please visit the following 
+web-resource where all available REST-calls are listed: http://augur.wu-
+wien.ac.at/pleshare2/api-test.html. Be aware of that PLEShare2 can deliver all
+information either in XML or in JSON-objects.
+
+***************************** Step 1: Login to PLEShare (via PUT request)
+
+function login(usr, pwd)
+
+Parameters: usr - Username pwd - Password
+
+Hence we are using asynchronous requests, the method "loginFinished" is taking
+care  of storing the resultset of our request (username, sessionId and
+sessionName) in  global variables for later use.
+
+***************************** Step 2: Open an activity (Retrieve an activity
+through PLEShare2; GET request)
+
+function openActivity(nodeId)
+
+Parameters: nodeId - the unique identifier of the node/activity
+
+Please note, that you will have to send a cooky containing the sessionName as 
+well as the sessionId in the header of your request.
+
+***************************** Step 3: Publish an activity (Store an activity
+in PLEShare2)
+
+function publish(patternTitle, patternContent)
+
+Parameters: patternTitle - the title of your activity patternContent - a
+JSON-structure containing all data (tools, peers and outcomes) the activity
+is consisting of.
+
+*****************************
+
+If you want to search for an activity, use the 'searchPatterns(searchterm)'-
+method. If you want to get all activities created by a special user, use the 
+'retrieveMyPatterns()'-method.
+
+*****************************
+
+The practicesharing-widget is using JQuery UI, please take a look at the 
+JQuery UI-documentation for further instructions: http://jqueryui.com/demos/

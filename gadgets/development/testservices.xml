@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+  <ModulePrefs title="Test SDK services" author_email="mpalmer@gmail.com" description="Tests the openapp communication and the space and user service." height="500">
+	<Require feature="opensocial-0.9" />
+    <Optional feature="openapp"/>
+	<OAuth>
+    	<Service name="openapp" xmlns:openapp="http://www.role-project.eu/xml/openapp/opensocialext/"
+              openapp:service="http://purl.org/role/terms/spaceService"
+              openapp:permitReadAppend="http://purl.org/role/terms/data">
+        	<Request method="" url=""/>
+        	<Authorization url=""/>
+        	<Access method="" url=""/>
+      	</Service>
+    </OAuth>
+  </ModulePrefs>
+  <Content type="html"><![CDATA[
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" type="text/javascript"></script>
+	<div>
+		<div id="openappDialog"></div>
+		<h3>Openapp event communication</h3>
+		<div id="openappChannel"></div>
+		<h3>Space service</h3>
+		<div id="spaceService"></div>
+		<h3>User service</h3>
+		<div id="userService"></div>
+		<h3>CAM service</h3>
+		<div id="camService"></div>
+	</div>
+	<style>
+		h3 {
+			margin-bottom: 0.2em;
+		}
+		.success, .failure {
+			margin-left: 0.5em;
+			margin-right: 0.5em;
+			padding-left: 0.3em;
+			padding-right: 0.3em;
+		}
+		.success {
+			background: lightgreen;
+			border: 1px solid green;
+		}
+		.failure {
+			background: lightred;
+			border: 1px solid red;
+		}
+	</style>
+	
+	<script>
+		
+		var addSuccess = function(toNode, message) {
+			$(toNode).append("<div class='success'>"+message+"</div>");
+		}
+		var addFailure = function(toNode, message) {
+			$(toNode).append("<div class='failure'>"+message+"</div>");
+		}
+
+		//Openapp local IWC check
+		var openappChannelCheck = (function() {
+			return function() {
+				var openappChannel = $("#openappChannel").html("");
+				if (gadgets.openapp && gadgets.openapp.connect && gadgets.openapp.publish) {
+					var t = setTimeout(function() {
+						addFailure(openappChannel, "No event has been recieved and more than a second has passed since the event was sent.");
+					}, 1000);
+					gadgets.openapp.connect(function(envelope, message) {
+						if (envelope.uri === "http://example.com") {
+							clearTimeout(t);
+							addSuccess(openappChannel, "Sent and recieved an event.");
+						}
+					});
+					//Sending the event.
+					setTimeout(function() {
+						var md = {};
+						md[openapp.ns.dcterms+"title"] = "Test";
+						gadgets.openapp.publish({uri:"http://example.com"}, md);
+					}, 1);
+				} else {
+					addFailure(openappChannel, "API not in place");
+				}
+			};
+		})();
+
+		var resourceServiceCheck = function(node, parent) {
+			if (openapp && openapp.oo && openapp.oo.Resource) {
+				parent.getMetadata(null, function(md) {
+					addSuccess(node, "Loaded metadata");
+				}, function() {
+					addFailure(node, "Failed to load metada");
+				});
+				parent.create({
+					type: "http://example.com/Car",
+					relation: openapp.ns.role+"data",
+					callback: function(res) {
+						addSuccess(node, "Created a subresource");
+						res.setMetadata(null, {"http://purl.org/dcterms/title": "Test resource"}, function() {
+							addSuccess(node, "Metadata saved");
+							res.setRepresentation("<h1>Test resource representation</h1>", "text/html", function() {
+								addSuccess(node, "Representation saved");
+								res.del(function() {
+									addSuccess(node, "Subresource deleted again.");
+								})
+							});
+						});
+					}
+				});
+			} else {
+				addFailure(node, "API not in place");
+			}
+		};
+
+		//Checking that the space service works.
+		var spaceServiceCheck = function() {
+			var node = $("#spaceService").html("");
+			var spaceResource = new openapp.oo.Resource(openapp.param.space());
+			resourceServiceCheck(node, spaceResource);
+		};
+
+		//Checking that the user service works.
+		var userServiceCheck = function() {
+			var node = $("#userService").html("");
+			var userResource = new openapp.oo.Resource(openapp.param.user());
+			resourceServiceCheck(node, userResource);
+		};
+		
+		var camServiceCheck = function() {
+			var params = {};
+			params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.DOM;
+			gadgets.io.makeRequest("http://127.0.0.1:8073/cam/CamService/status", camServiceCheckCallback, params);
+		};
+			
+		var camServiceCheckCallback = function(obj) {
+			var responseString = obj.text;
+			var node = $("#camService").html("");
+			if (responseString.indexOf("TEST DATABASE\nALL TABLES ARE EXISTING") > -1) {
+				addSuccess(node, "CAM service and database running.");
+			}
+			else {
+				addFailure(node, "CAM service error.");
+			}
+		};
+	
+		gadgets.util.registerOnLoadHandler(function() {
+			//Check widget communication
+			openappChannelCheck();
+			
+			//Make a dummy call to the space service to force the oauth question.
+			if (openapp && openapp.oo && openapp.oo.Resource) {
+				var spaceResource = new openapp.oo.Resource(openapp.param.space());
+				spaceResource.getMetadata(null, function(md) {
+					
+					//Then check each service
+					spaceServiceCheck();
+					userServiceCheck();
+				});
+			}
+			camServiceCheck();
+		});
+	</script>
+  ]]></Content>
+</Module>

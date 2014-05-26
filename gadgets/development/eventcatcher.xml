@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+  <ModulePrefs title="Event catcher" author_email="mpalmer@gmail.com" description="Catches and resends events when user clicks icon. Icons found at http://findicons.com/pack/1003/poisson, slightly modified." height="250" width="200">
+    <Optional feature="openapp" />
+  </ModulePrefs>
+  <Content type="html"><![CDATA[
+  	<style>
+  		img {
+  			margin-left: 20px;
+  		}
+  		body {
+  			margin: 5px;
+  		}
+  	</style>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" type="text/javascript"></script>
+	<div>
+		<p style="font-size: small;">Click to resend event.</p>
+		<img src="http://role-project.svn.sourceforge.net/viewvc/role-project/trunk/gadgets/development/emptybox.png" id="emptyBox"></img>
+		<img src="http://role-project.svn.sourceforge.net/viewvc/role-project/trunk/gadgets/development/fullbox.png" style="display:none" id="fullBox"></img>
+		<p><span style="font-size: small">Recieved event:</span><br><span id="message"></span></p>
+	</div>
+	<script>
+		gadgets.util.registerOnLoadHandler(function() {
+			var loc_envelope, loc_message, sentEventTime;
+			$("#fullBox").click(function() {
+				sentEventTime = new Date();
+				gadgets.openapp.publish(loc_envelope, loc_message);
+				$("#fullBox").hide();
+				$("#emptyBox").show();
+				$("#message").html("");
+			});
+			gadgets.openapp.connect(function(envelope, message) {
+				if (sentEventTime == null || (new Date().getTime() - sentEventTime.getTime()) >= 500) {
+					loc_envelope = envelope;
+					loc_message = message;
+					$("#fullBox").show();
+					$("#emptyBox").hide();
+					$("#message").html(""+message[openapp.ns.dcterms+"title"] || message[openapp.ns.rdfs+"label"] || message[openapp.ns.foaf+"name"] || "No label");
+					return true;
+				}
+			});
+		});
+	</script>
+  ]]></Content>
+</Module>

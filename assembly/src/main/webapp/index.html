@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<title>ROLE SDK</title>
+	</head>
+	<body style="font-family: sans-serif; margin: 0px;">
+		<img src="doc/api/javascript/images/spidericon100x40.png" width="100" height="40" alt="ROLE" style="float: right; padding: 5px; background: #fff;"/>
+		<h1 style="background: #35A035; color: #fff; font-size: 1.4em; margin: 0px; padding: .4em .2em .1em .2em; border-bottom: 3px solid #35a035;">
+			Responsive Open Learning Environments (ROLE) SDK
+		</h1>
+		<div style="margin: 1em 150px 1em 1em;">
+			<p>Version: ${project.version}</p>
+			
+			<p>
+			The <i>ROLE Software Development Kit (SDK)</i> was designed as a set of tools to support developers in their implementation of software 
+			components for the establishment of <i>Responsive Open Learning Environments (ROLEs)</i>. The SDK is mainly powered by a development server 
+			already equipped with a set of services, libraries and gadgets developed in the context of the EU FP7 IP <a href="http://role-project.eu">ROLE</a> 
+			as well as hosting documentation to get you kick-started for your own developments. 
+			</p>
+			
+			<h2>Contents</h2>
+			Once the SDK Development Server was started successfully (see instructions below), the SDK and all of its contents (including the ones you add by yourself, which is useful during development) 
+			become available at <a href="../role/">http://127.0.0.1:8073/role/</a>. A list of reachable code and documentation components is given below.
+			
+			<h3 style="margin-top: 1em;">Code</h3>
+			<ul>
+				<li><a style="font-weight: bold;" href="webapps/">ROLE Java Web Application Archives</a> - the set of ROLE Web services &amp; applications powering the SDK Development Server.</li>
+				<li><a style="font-weight: bold;" href="lib/">ROLE JavaScript libraries</a> - a set of JavaScript libraries to support the development of new widgets or complete ROLEs.</li>
+				<li><a style="font-weight: bold;" href="src/gadget/samples/">ROLE Sample Widgets</a> - a set of sample widgets demonstrating the use of ROLE Web services &amp; libraries.</li>
+				<li><a style="font-weight: bold;" href="src/gadget/development/">ROLE Development Widgets</a> - a set of widgets supporting development of new widgets.</li>
+			</ul>
+			<h3 style="margin-top: 1em;">Documentation</h2>
+			<ul>
+				<li><a style="font-weight: bold;" href="doc/api/javascript/index.html">ROLE Library API Documentation</a> - API documentation for ROLE JavaScript libraries.</li>
+			</ul>
+			
+			<h2>SDK Development Server</h2>
+			The <i>ROLE SDK Development Server</i> provides a basic infrastructure including ROLE software for your development purposes. 
+			The foundation for this infrastructure is a <a href="http://jetty.codehaus.org/jetty/">Jetty<a> server hosting an <a href="http://shindig.apache.org/">Apache Shindig</a> 
+			OpenSocial container. The server hosts a list of ROLE software components in terms of Web services, libraries, and gadgets supporting your own development.
+			Furthermore, it includes an interactive testing environment, in which you can combine your own widget developments with already existing other widgets in
+			so called widget spaces.
+			
+			<h3>How to run the Development Server</h3>
+			<ol>
+				<li>Start the server using <em>${SDK_HOME}/bin/start.sh</em> (Linux, MacOS) resp. <em>${SDK_HOME}/bin/start.cmd (Windows)</em>.</li>
+				<li>Point your browser to <a href="../">http://127.0.0.1:8073/</a> to access the ROLE SDK interactive testing environment.
+					<ol>
+						<li>Log on with username <em>testuser</em> and password <em>roleabdc</em> OR authenticate via Google.</li>
+						<li>Create your own ROLE Spaces.</li>
+						<li>Try out your own ROLE widgets and combine them with already existing ones.</li>
+					</ol>
+				</li>
+			</ol>
+			<h4><a name="xmpp-server-conf" id="xmpp-server-conf">Development Server XMPP Configuration</a></h4>
+			Some real-time communication and collaboration features such as Chat or the <a href="src/gadget/samples/iwc">ROLE Interwidget Communication Framework</a> available with our development server require the connection to a pre-configured XMPP server. To configure your installation of the ROLE SDK Development Server for use with such a pre-configured XMPP server, the following fields should be added to the startup configuration in <em>${SDK_HOME}/bin/start.sh</em> (Linux, MacOS) resp. <em>${SDK_HOME}/bin/start.cmd (Windows)</em> as additional parameters given with <code>-D&lt;PARAM_NAME&gt;=&lt;PARAM_VALUE&gt;</code>. Notice that if no hostname to a pre-configured XMPP server is specified, the development server will still function, but not support chat and remote interwidget communication. A list of XMPP startup parameters is given below. Parameters only need to be specified, if different from default. A <a href="http://role-project.sourceforge.net/wiki/index.php/ROLE_SDK_XMPP_Server">tutorial</a> on how to pre-configure an XMPP server suitable for usage with the ROLE SDK Development Server is available from the ROLE Developer Wiki on Sourceforge.
+			Additional parameters for client-side XMPP connection techniques are configurable in <a href="webapps/role-uu-prototype/script/config.js">webapps/role-uu-prototype/script/config.js<a/>.
+			<ul>
+				<li><code style="font-weight: bold;">xmpp.host</code> - Hostname of the XMPP server to connect</li>
+				<li><code style="font-weight: bold;">xmpp.port</code> - Native port of the XMPP server to connect (default: 5222)</li>
+				<li><code style="font-weight: bold;">xmpp.user</code> - Username of the ROLE Realtime Service (default: role-realtime-service)</li>
+				<li><code style="font-weight: bold;">xmpp.pass</code> - Password of the ROLE Realtime Service (default: 807343V3R)</li>
+				<li><code style="font-weight: bold;">xmpp.mucs</code> - Subdomain prefix of XMPP Multi-User Chat service to be used (default: conference)</li>
+				<li><code style="font-weight: bold;">xmpp.pubs</code> - Subdomain prefix of XMPP Publish-Subscribe service to be used (default: pubsub)</li>
+			</ul>
+			
+			<h2>Further Information</h2>
+			<p>Further information is available from various sources: 
+				<ul>
+					<li><a style="font-weight: bold;" href="http://sourceforge.net/apps/mediawiki/role-project/">ROLE Developer Wiki</a> - find general information, tutorials, etc.</li>
+					<li><a style="font-weight: bold;" href="http://groups.google.com/group/role-dev">ROLE Developer Mailing List</a> - discuss your issues with our developers.</li>
+					<li><a style="font-weight: bold;" href="http://role-is.dbis.rwth-aachen.de:9085">ROLE JIRA Issue Tracker</a> - report your problems, requirements, etc.</li>
+					<li><a style="font-weight: bold;" href="http://www.role-widgetstore.eu/">ROLE Widget Store</a> - share your own widget developments with the public.</li>
+				</ul>
+				
+			</p>
+		</div>
+	</body>
+</html>

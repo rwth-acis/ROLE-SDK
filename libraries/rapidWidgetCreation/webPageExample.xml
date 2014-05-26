@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+	<ModulePrefs title="__UP_titleUserPref__" height="610" width="960"
+	 description="This gadget trains The present tense of haben. Source: wps.prenhall.com"
+	 author="Carsten Ullrich" 
+	 author_email="ullrich_c@sjtu.edu.cn"
+	 title_url="http://wps.prenhall.com/hss_widmaier_treffpunkt_4/0,7317,471894-,00.utf8.html">
+	  <Require feature="opensocial-0.9"/>
+	  <Require feature="dynamic-height"/>
+	</ModulePrefs>
+	<UserPref name="titleUserPref" display_name="Title" default_value="The present tense of haben" datatype="string"/>
+	
+	<Content type="html"><![CDATA[
+	<script src="http://widgets.onlinesjtu.com/gadgets/libs/jquery-1.4.3.min.js"></script>
+	<script src="http://widgets.onlinesjtu.com/gadgets/libs/openapp.js"></script>
+	<script type="text/javascript" src="https://role-project.svn.sourceforge.net/svnroot/role-project/trunk/libraries/rapidWidgetCreation/rapidWidgetCreationInit.js"></script>
+	<div id="importedGadget">
+	   <iframe height="600" id="foo" src="http://wps.prenhall.com/hss_widmaier_treffpunkt_4/0,7317,471894-,00.utf8.html" width="950"></iframe>
+	</div>
+	]]></Content>
+</Module>

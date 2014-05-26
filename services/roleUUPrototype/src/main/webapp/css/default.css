@@ -1,0 +1,585 @@
+/*
+* Licensed to the Apache Software Foundation (ASF) under one or more
+* contributor license agreements.  See the NOTICE file distributed with
+* this work for additional information regarding copyright ownership.
+* The ASF licenses this file to You under the Apache License, Version 2.0
+* (the "License"); you may not use this file except in compliance with
+* the License.  You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+
+/**
+* This is the same as rave.css used for the website.
+* FIXME: where is rave.css?
+*/
+html {
+    background-color: #EBEBEB;
+}
+
+body {
+    color: #000000;
+    font-size: 62.5%;
+    font-family: Arial, Helvetica, sans-serif;   
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#D7D7D3", endColorstr="#EBEBEB");
+    background: -moz-linear-gradient(center top , #D7D7D3 0%, #EBEBEB 50%) repeat scroll 0 0 transparent;
+    background: -webkit-gradient(linear, left top, left bottom, from(#D7D7D3), to(#EBEBEB));
+    margin:0;
+}
+
+#banner {
+    padding: 0 0 10px 10px;
+}
+
+a {
+    color: #107EC0;
+}
+
+a:visited {
+    color: #107EC0;
+}
+
+a:hover {
+    color: #107EC0;
+    background-color: #e6ebed;
+}
+
+#header a {
+    color: #F2F2F2;
+    text-decoration: none;
+}
+
+#header a:visited {
+    color: #F2F2F2;
+    text-decoration: none;
+}
+
+#header a:hover {
+    color: #F2F2F2;
+    background-color: #666666;
+    text-decoration: none;
+}
+
+
+a img {
+    border: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #193240;
+    text-transform: uppercase;
+}
+
+#header {
+    background-color: #222222;
+    height:50px;
+}
+#header img {
+    max-width: 150px;
+}
+.header-a {
+    float: right;
+    margin-right: 2%;
+}
+#header h1 {
+    text-align: center;
+    text-transform: lowercase;
+    font-size: 1.5em;
+    margin: auto;
+    width: 80%;
+    color: #F2F2F2;
+}
+
+#content {
+    background-color: transparent;
+    padding: 0;
+    width: 90%;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top: 10px;
+    min-height: 800px;
+}
+
+#content h1, h2, h3, h4, h5, h6 {
+    font-weight: normal;
+    margin: 10px 0 15px;
+    padding: 5px 0;
+}
+#content h1 {
+    font-size: 1.4em;
+    padding: 15px;
+}
+
+#content h2 {
+    font-size: 1.2em;
+    margin-top: 2em;
+    border-bottom: 1px solid #a3afb6;
+}
+
+#content h3, h4, h5, h6 {
+    border-bottom: none;
+    font-size: 1em;
+    margin-bottom: 0;
+}
+.widget-a {
+    color: white;
+    width: 100px;
+    text-align: center;
+    float: right;
+    margin-right: 2%;
+}
+
+.clear-float {
+    clear: both;
+}
+
+.codehilite {
+    background-color: #F00;
+    padding: 0.01em 1em;
+    border-radius: 10px;
+}
+
+.widget-wrapper {
+    vertical-align: top;
+    margin-bottom: 20px;
+}
+
+.widget-title-bar {
+    color: #FFFFFF;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#999999", endColorstr="#666666");
+    background: -moz-linear-gradient(center top , #999 0%, #666 25%) repeat scroll 0 0 transparent;
+    background: -webkit-gradient(linear, left top, left bottom, from(#999), to(#666));
+    border-radius: 5px 5px 0px 0px;
+    padding: 2px;
+    border-bottom: solid 1px #CCCCCC;
+    box-shadow: 2px 2px 4px #666666;
+}
+
+.widget-title-bar:hover {
+    cursor: move;
+}
+
+/*** various widget preference related classes ***/
+.widget-prefs {
+    border: 1px solid #D3D3D3;
+    background-color: white;
+    display: none;
+}
+
+.widget-prefs-required-text {
+    font-size: 0.8em;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.widget-prefs-label {
+    vertical-align: top;    
+    font-size: 0.8em;
+    text-align: right;
+}
+
+.widget-prefs-label-required {
+
+}
+
+.widget-prefs-input {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.8em;
+}
+
+.widget-prefs-input-required {
+
+}
+
+.widget-prefs-input-failed-validation {
+    background-color: yellow;
+}
+
+.widget {
+    padding: 5px;
+    background-color: white;
+    box-shadow: 2px 2px 4px #666666;
+    border-radius: 0px 0px 5px 5px;
+    height: 100%;
+}
+
+.widget-wrapper-transitional {
+    position: absolute;
+    z-index: 1000;
+    left:0.25%;
+    top: 51px;
+}
+
+.widget-wrapper-canvas {
+    position: absolute;
+    z-index: 1000;
+    left:0.25%;
+    top: 51px;
+    width: 99.5%;
+    height: 100%;
+    opacity: 1;
+    vertical-align: top;
+}
+.region {
+    float: left;
+    display: block;
+    padding: 5px 5px 100px 5px; /*** bottom padding is needed for dnd when region is empty ***/
+    margin-right: 20px;
+    width:300px;
+    height: 100%;
+}
+
+.region-dragging {
+    height: 200%;
+    min-width: 250px;
+    border: 1px solid black;
+}
+
+.storeSearch, .storeBox {
+    margin: 5px auto;
+    width: 60%
+}
+.storeSearch form {
+    margin: 0;
+    float: right;
+}
+.storeSearch form p {
+    margin: 0;
+}
+
+#storeWidgetDetail {
+    width: 100%;
+}
+
+.storeItem {
+    border: 1px solid #B3C4CF;
+    margin: 5px auto 5px auto;
+    padding: 10px;
+    background-color: #F2F2F2;
+    color: black;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px black;
+    width: 60%;
+}
+
+#widget-content {
+    color: #222222;
+    background-color: #F2F2F2;
+    box-shadow: 5px 5px 5px black;
+    border-radius: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
+    width: 1024px;
+}
+
+.widgetDetailLeft {
+   padding-left: 10px;
+   padding-right: 10px;
+   vertical-align: top;
+   width: 150px;
+   float: left;
+}
+
+.widgetDetailCenter {
+    padding-left: 10px;
+    padding-right: 10px;
+    vertical-align: top;
+    float: left;
+    width: 50%;
+}
+
+.widgetDetailRight {
+  padding: 0 10px;
+  width: 300px;
+  vertical-align: top;
+  float: left;
+}
+
+.widgetScreenshot img {
+  max-width: 280px;
+}
+ul.storeItems {
+    padding: 0;
+}
+
+ul.storeItems li{
+    list-style: none;
+}
+
+.storeItemLeft {
+   padding-left: 10px;
+   padding-right: 10px;
+   vertical-align: top;
+   width: 150px;
+   float: left;
+
+}
+
+.storeItemCenter {
+    padding-left: 10px;
+    padding-right: 10px;
+    vertical-align: top;
+    float: left;
+    width: 50%;
+}
+
+.storeButton {
+    float: right;
+}
+
+.ui-sortable-placeholder {
+    border: 1px dotted black;
+    visibility: visible !important;
+    background-color: #DDD;
+}
+
+.ui-sortable-placeholder * {
+    visibility: hidden;
+}
+
+ul.paging {
+    list-style: none;
+    padding: 0;
+}
+
+ul.paging li {
+    display: inline;
+}
+
+
+#navigation {
+    border: 1px solid #e6ebed;
+    border-left: none;
+    -moz-border-radius: 0 10px 10px 0;
+    border-radius: 0 10px 10px 0;
+    font-size: 0.9em;
+    color: #003;
+    float: left;
+    padding: 15px 15px 5px 25px;
+    width: 180px;
+    background: none repeat scroll 0 0 #f5f8fa;
+    margin: 20px 0 20px 0;
+}
+
+#storeTop
+
+#navigation img {
+    padding-bottom: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+#navigation h1 {
+    color: #000;
+    font-size: 1em;
+    padding: 0;
+    margin-top: 0.8em;
+    margin-bottom: 0;
+    border-bottom: 1px solid #a3afb6;
+}
+
+#navigation ul {
+    margin: 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+#navigation li {
+    border-bottom: 1px solid #e6ebed;
+    margin: 0.2em 0;
+    padding: 0;
+}
+
+#navigation li a {
+    margin: 0;
+    text-decoration: none;
+}
+
+#navigation li a:hover {
+    color: #193240;
+    background: none;
+}
+
+#footer {
+    margin: 20px 150px 20px 250px;
+    border-top: 1px solid #ccc;
+    color: #666;
+    font-size: 0.8em;
+    padding: 0 8px;
+    text-align: center;
+}
+
+#asf-logo {
+    width: 180px;
+    padding-top: 20px;
+}
+
+/* definition lists */
+dd {
+}
+
+dl {
+}
+
+dt {
+    display: inline;
+    float: left;
+}
+
+button.widget-toolbar-btn {
+	width: 1em;
+}
+
+button.widget-toolbar-btn-prefs {
+    display: none;
+}
+
+/* Form fields */
+
+fieldset{
+    margin: 0;
+    border:none
+}
+p label {
+    width: 120px;
+    float: left;
+    display: block;
+    position: relative;
+}
+
+label.formradio {
+    float: none;
+    left: 0;
+    margin-left: 120px;
+    margin-bottom: 0.4em;
+    margin-right: 0;
+    position: static;
+    top: auto;
+    width: auto;
+}
+
+input.long {
+    width:400px;
+}
+
+
+/* Associated with JQuery validation CSS */
+.error {
+    color: #ff0000;
+}
+
+span.error, label.error {
+    font-size: 10px;
+    display: block;
+    float: none;
+    margin: 0.5em 0 auto 120px;
+}
+
+.warn {
+  font-weight: bold;
+}
+
+/* End of form fields */
+
+#tabsHeader {
+    background-color: #FFFFFF;
+}
+
+#tabs {    
+    border-bottom: 1px solid #B4C4CF;
+    padding: 10px 15px 0 13px;
+    white-space: nowrap;
+}
+
+.rave-ui-tab {
+    background-color: #FFFFFF;
+    border: 1px solid #B4C4CF;
+    color: #767676;
+    display: inline-block;
+    font-style: italic;
+    font-weight: normal;
+    height: 25px; 
+    position: relative;
+    top: 1px;    
+}
+
+.rave-ui-tab-selected {
+    background-color: #D7D7D3;
+    border-bottom: 1px solid #D7D7D3;
+    color: #000000;
+    font-style: normal;
+    font-weight: bold;
+}
+
+#dialog {
+    width:400px;
+    display: none;
+}
+#dialog label { display:block; }
+#dialog input { display:block; }
+#dialog label { margin-top: 0.5em; }
+#dialog input { width: 95%; }
+#dialog textarea { width: 95%; }
+#add_page { 
+    cursor: pointer; 
+    width: 18px; 
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+    padding-bottom: 4px;
+    padding-top: 3px;
+}
+
+#pageContent {
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#D7D7D3", endColorstr="#EBEBEB");
+    background: -moz-linear-gradient(center top , #D7D7D3 0%, #EBEBEB 50%) repeat scroll 0 0 transparent;
+    background: -webkit-gradient(linear, left top, left bottom, from(#D7D7D3), to(#EBEBEB));
+}
+
+.page-title {
+    display: inline-block;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    cursor: pointer;
+}
+
+/* page menu related styles */
+#pageMenuWrapper {
+    position: relative;   
+    display: inline-block;
+    vertical-align: middle;
+}
+.page-menu {
+    border: 1px solid black; 
+    position: absolute; 
+    display: none; 
+    left: 18px; 
+    top: 0px;
+    width: 80px;   
+    background-color: #FFFFFF;
+    z-index: 1000;
+    cursor: pointer;
+}
+.page-menu-item {
+    padding: 3px;
+}
+.page-menu-item:hover {
+    background-color: #B4C4CF;
+}
+.page-menu-item-disabled {
+    color: #D3D3D3;
+}
+#pageMenuButton {
+    cursor: pointer; 
+    margin-right: 10px;
+}

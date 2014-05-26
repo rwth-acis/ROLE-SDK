@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<title>ROLE SDK - ROLE Interwidget Communication</title>
+	</head>
+	<body style="font-family: sans-serif; margin: 0px;">
+		<img src="../../../../doc/api/javascript/images/spidericon100x40.png" width="100" height="40" alt="ROLE" style="float: right; padding: 5px; background: #fff;"/>
+		
+		<h1 style="background: #35A035; color: #fff; font-size: 1.4em; margin: 0px; padding: .4em .2em .1em .2em; border-bottom: 3px solid #35a035;">
+			ROLE SDK - ROLE Interwidget Communication
+		</h1>
+		
+		<div id="tutorial" style="margin: 1em 150px 1em 1em;">
+
+			<h2>ROLE Interwidget Communication Development Guide</h2>
+
+			<h3>Introduction</h3>
+			In this guide you will learn how to develop widgets enabled with ROLE Interwidget Communication (IWC). Before we guide you through the widget development process, you should first understand what interwidget communication is and what you can use it for.
+
+			<h4>What is Interwidget Communication?</h4>
+			
+			<p>In ROLE we put a focus on real-time collaboration and communication among learners in the context of widget-based learning environments. In such environments, learners combine multiple widgets to support them in certain learning situations. For example for foreign language learning, learners would combine a widget for reading texts in the foreign language, a translator widget, and a vocabulary trainer where the learner can enter new terms and their translations. </p>
+			
+			<p>As such, each of these widgets realizes a dedicated functionality, and the learner has to manually combine these functionalities for himself. In our example, if the learner wants to add a new item to his vocabulary trainer, he would have to mark the foreign term in the text reading widget, copy the term, paste it in the translator widget, and finally copy and paste both foreign term and translation in the vocabulary trainer widget. It would be more desirable to directly have the three widgets integrated with each other to take away the burden of manual interaction. Such an integration becomes realizable with communication between the widgets within the learner's local environment <i>(single-user-single-browser interwidget communication)</i>.</p>  
+			
+			<p>Furthermore, multiple learners should be enabled to communicate and collaborate with each other. Therefore consider the extended scenario of multiple learners discussing a set of foreign language videos. Each of them has a video player widget in his learning environment. Now one of the learners proposes to watch a specific scene in one of the videos. In order to watch this scene, he has to open the video and navigate his video player to that scene, and all other learners have to do the same. In order to watch the scene together, they will all have to synchronize to press the play button at the same time. It would be more desirable, if only one of them could do the navigation in his video player widget, such that it is reflected in the video player widgets of all others in real-time, just as if they were in the same classroom sharing one TV set to watch the scene together. Such a form of collaboration becomes realizable with communication between widgets across multiple remotely connected environments <i>(multi-user-multi-browser interwidget communication)</i>.</p> 
+
+			<h4>What can I do with the ROLE Interwidget Communication Framework?</h4>
+			In general, the ROLE Interwidget Communication Framework enables developers to create arbitrary widgets supporting both forms of single-user-single-browser and multi-user-multi-browser interwidget communication. 
+			
+			<h4>How does ROLE Interwidget Communication work?</h4>
+			In general, ROLE Interwidget Communication works on a publish-subscribe basis. Any IWC-enabled widget first subscribes to a specific <i>channel</i>. Once subscribed to the channel, the widget can 
+			<ul>
+				<li>publish messages to the channel to be forwarded to all subscribers.</li>
+				<li>process messages received from the channel.</li>
+			</ul>
+			With the help of the ROLE Interwidget Communication Framework, developers only need to focus on these two tasks. The framework transparently realizes the management of local and remote channels and message transport between widgets and remotely connected widget environments. Technically, local IWC is realized with <a href="http://www.w3.org/TR/webmessaging/">HTML5 Web Messaging</a> included in <a href="http://code.google.com/p/open-app/">OpenApp</a>, remote IWC with the XMPP <a href="http://xmpp.org/extensions/xep-0060.html">Publish-Subscribe</a> extension protocol. Within the ROLE SDK Reference Implementation, each ROLE Space maintains such a channel accessible to all space members and widgets. Messages sent across widgets are called <i>intents</i>. Their format is inspired by <a href="http://developer.android.com/reference/android/content/Intent.html">Google Android intents</a>.
+			
+			<h4>What is the context for ROLE Interwidget Communication?</h4>
+			The ROLE SDK development server provides ROLE Interwidget Communication in the context of ROLE Spaces. Technically, each space maintains its own XMPP pubsub channel for remote IWC. A connection to this channel is established automatically by the ROLE IWC Framework. Developers only need to focus on publishing outgoing and processing incoming events (see tutorial below).
+			
+			<h4>Which prerequisites must be met for ROLE Interwidget Communication?</h4>
+			A set of real-time communication and collaboration features in the ROLE SDK development server (including remote IWC) are only possible in combination with a preconfigured XMPP server. The remote form of ROLE IWC and the multiuser chat in ROLE spaces require a connection to a preconfigured XMPP server. Follow these <a href="../../../../index.html#xmpp-server-conf" >instructions</a> on how to configure and operate a combination of ROLE SDK development server and XMPP server. 
+			
+			<h3>Getting Started</h3>
+			In this section we demonstrate how to develop your own ROLE IWC-enabled widgets with the help of the ROLE Interwidget Communication framework. The complete result of this tutorial is available as the ROLE <a style="font-weight: bold;" href="iwc-minimal.xml">IWC Minimal Widget</a>.
+
+			<h4>Creating Widget XML</h4>
+			First create a new file (e.g. <code>widget.xml</code>) and fill in the code template below. 
+
+			<p style="border:1pt solid black;background-color:#eee; padding: 1em;">
+			<code>
+			&lt;?xml version="1.0" encoding="UTF-8" ?&gt;<br/>
+			&lt;Module&gt;<br/>
+			&nbsp;&nbsp;&lt;ModulePrefs<br/> 
+			&nbsp;&nbsp;&nbsp;&nbsp;title="Your widget title"<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;description="Your widget description"<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;author="Your name"<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;author_email="your@email"<br/>
+			&nbsp;&nbsp;&lt;/ModulePrefs&gt;<br/>
+			&nbsp;&nbsp;&lt;Content type="html"&gt;<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;&lt;![CDATA[<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;script src="http://open-app.googlecode.com/files/openapp.js"&gt;&lt;/script&gt;<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;script src="http://role-project.svn.sourceforge.net/svnroot/role-project/trunk/libraries/iwc/src/main/javascript/iwc.js"&gt;&lt;/script&gt;<br/><br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//add your code<br/><br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;]]&gt;<br/>
+			&nbsp;&nbsp;&lt;/Content&gt;<br/>
+			&lt;/Module&gt;<br/>
+			</code>
+			</p>
+
+			<h4>Connecting to IWC Channel</h4>
+			Now connect your widget to the current IWC channel. Add the following code snippet within the <i>CDATA</i> block. 
+			<p style="border:1pt solid black;background-color:#eee; padding: 1em;">
+			<code>
+			&lt;script type="text/javascript"&gt;<br/>
+			&nbsp;&nbsp;var iwcClient = new iwc.Client();</br>
+				<br/>
+			&nbsp;&nbsp;var iwcCallback = function(intent) {<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:grey">//process intent</span><br/>
+			&nbsp;&nbsp;}<br/>
+				<br/>
+			&nbsp;&nbsp;iwcClient.connect(iwcCallback);<br/>
+			&lt;/script&gt;
+			</code>
+			</p>
+			<ol>
+				<li>Create a new instance of an IWC client as variable available in the scope of your widget.</li>
+				<li>Define a callback function (<code>iwcCallback</code>) with one parameter (<code>intent</code>) to be invoked whenever an intent is received. For more information on intents see section <a href="#intents"><i>The ROLE IWC Intent Format</i></a>.</li>
+				<li>Call the client's <code>connect</code> function passing the callback you just defined to connect the widget to the current IWC channel.</li>
+			</ol>
+
+			<a name="intents"/>
+			<h4>The ROLE IWC Intent Format</h4>
+			Intents represent the messages sent between widgets locally and remotely. They are encoded in JSON and structured like the following. Mandatory fields are marked with an asterisk (*).
+			<p style="border:1pt solid black;background-color:#eee; padding: 1em;">
+			<code>
+			var intent = {<br/>
+			&nbsp;&nbsp;"component": "",<br/>
+			&nbsp;&nbsp;"sender":"http://widget.org/sender.xml",<br/>
+			&nbsp;&nbsp;"data":"http://data.org/some/data", <br/>
+			&nbsp;&nbsp;"dataType":"text/xml",<br/>
+			&nbsp;&nbsp;"action":"ACTION_UPDATE",<br/>
+			&nbsp;&nbsp;"categories":["category1","category2"],<br/>
+			&nbsp;&nbsp;"flags"	:["PUBLISH_GLOBAL"],<br/>
+			&nbsp;&nbsp;"extras":{"key1":"val1", "key2":2}<br/>
+			}
+			</code>
+			</p>
+			<ul>
+				<li><code style="font-weight: bold;">component(*)</code> (String) - the component name of a specific recipient widget <i>(explicit intent)</i> or the empty string to indicate broadcasting <i>(implicit intent)</i></li>
+				<li><code style="font-weight: bold;">sender</code> (String) - the component name of the sender widget. A value of the form <code>user@domain.tld/resource?sender=&lt;component name&gt;</code> indicates that the intent has been received from a remote environment operated by a user with the XMPP JID <code>user@domain.tld/resource</code>.</li>
+				<li><code style="font-weight: bold;">action</code> (String) - the action to be performed by receivers (e.g. <code>ACTION_UPDATE</code>)</li>
+				<li><code style="font-weight: bold;">data(*)</code> (String) - data in form of a URI (e.g. <code>http://example.org</code>)</li>
+				<li><code style="font-weight: bold;">dataType(*)</code> (String) - the data type in MIME notation (e.g. <code>text/html</code>)</li>
+				<li><code style="font-weight: bold;">categories</code> (Array) - categories of widgets that shall process the intent (e.g. <code>["editor","proxy"]</code>)</li>
+				<li><code style="font-weight: bold;">flags</code> (Array) - flags that control how the intent is processed (e.g. <code>["PUBLISH_GLOBAL"]</code>) </li>
+				<li><code style="font-weight: bold;">extras</code> (Object) - auxiliary data that need not to be specified (e.g. <code>{"examplekey":"examplevalue"}</code>)</li>
+			</ul>
+
+			<h4>Publishing Intents</h4>
+			To publish an intent, simply create an intent object as described in section <a href="#intents"><i>The ROLE IWC Intent Format</i></a>, leaving the sender field empty.
+			<p style="border:1pt solid black;background-color:#eee; padding: 1em;">
+			<code>
+			if (iwc.util.validateIntent(intent)) {<br/>
+			&nbsp;&nbsp;iwcClient.publish(intent);<br/>
+			}<br/>
+			</code>
+			</p>
+		</div>
+		
+		<div style="margin: 1em 150px 1em 1em;">
+			<h2>Interwidget Communication Sample Widgets</h2>
+			<p>
+			This directory features a set of widgets demonstrating the use of the ROLE Interwidget Communication framework. 
+			</p>
+			
+			<ul>
+				<li>Demo Widgets:
+					<ul>
+						<li><a style="font-weight: bold;" href="http://dbis.rwth-aachen.de/gadgets/iwc/iwc-minimal.xml">IWC Minimal Widget</a> - demonstrates how to publish &amp; process IWC events.</li> 
+						<li><a style="font-weight: bold;" href="http://dbis.rwth-aachen.de/gadgets/iwc/iwc-youtube.xml">IWC YouTube Widget</a> - collaboratively watch and seek videos together in real-time 
+						<li><a style="font-weight: bold;" href="http://dbis.rwth-aachen.de/gadgets/iwc/iwc-googlemaps.xml">IWC Google Maps Widget</a> - collaboratively navigate maps together in real-time
+						<li><a style="font-weight: bold;" href="http://dbis.rwth-aachen.de/gadgets/iwc/iwc-paint.xml">IWC Paint Widget</a> - collaboratively paint together in real-time
+					</ul>
+				</li>
+				<li>Developer Widgets:
+					<ul>
+						<li><a style="font-weight: bold;" href="http://dbis.rwth-aachen.de/gadgets/iwc/iwc-teststub.xml">ROLE IWC Test Stub Widget</a> - during the process of developing widgets using ROLE Interwidget Communication, a developer should be equipped with tools to a) keep track of occurred intents enabling him to identify who operated which widget to perform which action with which parameters, etc. and to b) actively send intents enabling him to emulate intents his widget should react to without the need to include other widgets with possible unwanted side effects. The ROLE IWC Test Stub Widget is such a tool. When added to any ROLE IWC-enabled environment, this widget displays a volatile list of all intents reversely ordered by occurrence and a simple interface for sending arbitrary intents. Any intent to be sent is validated for compliance with the specification for the ROLE IWC Intent payload format.
+						</li>
+						<li><a style="font-weight: bold;" href="../../development/testservices.xml">Test SDK Services Widget</a> - gives a quick overview of the availability of the different ROLE services. Only checks availability when loaded.
+						
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</body>
+</html>

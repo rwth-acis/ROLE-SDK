@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+  <ModulePrefs title="Chat" 
+                author_email="evgeny.bogdanov@epfl.ch" 
+                author="Dominik Renzel,Evgeny Bogdanov" 
+                description="This is a chat widget. When it is added to a space, it displays people in the space that can collaborate over chat. At the moment, it works only in spaces extended widget container."
+                width="500"
+                height="500">
+    <Require feature="osapi" />
+    <Require feature="dynamic-height" />
+  </ModulePrefs>
+  <Content view="preview" type="url" href="http://graaasp.epfl.ch/gadget/previews/chat.png"/>
+  <Content type="html" view="default,canvas,home,profile"><![CDATA[
+
+<style type="text/css">
+  .gadgets-gadget{width: 100%;}
+  .item{padding: 5px;margin: 5px; border-radius:5px; -moz-border-radius:5px;
+    cursor:pointer; margin-left: 15px; font-size: 12px;
+    width: 84px;
+    height: 52px;
+    display:inline-block;
+    }
+  .item div{
+    text-align: center;
+  }
+  .title{border-top: 1px solid #aaa; font-size: 14px; text-indent: 5px; background-color: #ddd;
+    margin-bottom: 5px; padding: 3px}
+    
+  .people {
+    border: solid 1px rgba(102,153,255,0.7);}
+
+  .item {
+    background: -moz-linear-gradient(top, #fefefe, #eeeeee);
+    background: -webkit-gradient(linear, left top, left bottom, from(#fefefe), to(#eeeeee)); }
+  .item:hover {
+    background: -moz-linear-gradient(top, #eeeeee, #fefefe);
+    background: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(#fefefe)); }
+  
+  .name{
+      height: 14px;
+      width: 80px;
+      overflow:hidden;
+  } 
+  .thumb{
+    margin-bottom:5px;
+  }
+</style>
+  
+<div id="container">
+<div id="people"></canvas>
+</div>
+
+<script type="text/javascript" src="http://d2hv4ldeur9lfv.cloudfront.net/opensocial-jquery-1.3.2.5.min.js"></script>
+<script src="http://open-app.googlecode.com/files/openapp.js"></script>
+
+<script type="text/javascript">
+var isOwner = false;
+var context = null;
+
+
+var openappEventCallback = function(envelope,message){
+	// dummy event sent by XMPP IM/MUC gadget as soon as initialized
+	if(envelope.event == "dummy"){
+		// get the gadget viewer to derive user JID
+		
+		osapi.people.getViewer().execute(function(result){
+			
+			if (!result.error) {
+				viewer = result;
+				console.log(viewer);
+				jid = viewer.id+"@role.dbis.rwth-aachen.de";
+				resource = "graaasp";
+				pass = "aaaaa";
+				xmppLogin(jid,resource,pass);
+			}
+		});
+	}
+	else if(envelope.event == "enter" && 
+		message["http://purl.org/dc/terms/type"] == "xmpp.session" &&
+		message["http://purl.org/dc/terms/creator"] != null){
+		
+		// get the space ID to derive the JID of the space's chatroom
+		osapi.context.get().execute(function(response){
+			context = response;
+			
+			osapi.people.get({userId: context.contextId, personId: context.contextType, groupId: "@self"}).execute(function(response){
+			var people = response.list;
+		  
+			build_item("people",people);
+			
+			var jid = message["http://purl.org/dc/terms/creator"];
+			var roomjid = "rolespace"+context.contextId+"@muc.role.dbis.rwth-aachen.de";
+			
+			// ideally taking the name of the space... @evgeny: can I get it from the API?
+			var name = "ROLE Space Chat " + context.contextId;
+			var descr = "ROLE Space Chat Room";
+			enterSpaceRoom(roomjid, jid, name, descr);
+		});});
+	}
+}
+
+// gets the data and calls build for container
+var initialize = function() {
+
+	// initialize IWC communication
+	gadgets.openapp.connect(openappEventCallback);
+	osapi.people.getViewer().execute(function(result){
+		console.log("Getting viewer ID: ");
+		console.log(result);
+	}
+	);
+	
+  
+	gadgets.window.adjustHeight();
+
+};
+
+/*
+* Triggers an IWC event, which causes the XMPP IM/MUC gadget to log in a user with the 
+* given JID, resource, and password.
+*
+*	jid - a string representing the JID of the entity to log in
+*	resource - a string representing the resource to be used by the logged in entity
+*	password - a string representing the password to be used for authentication of the entity  
+* .
+*/
+var xmppLogin = function(jid, resource, password){
+	if (jid != null && resource != null && password != null && jid != "" && resource != "" && password != ""){
+		gadgets.openapp.publish({"type": "namespaced-properties", "event": "enter" }, 
+		{
+			"http://purl.org/dc/terms/type" : "xmpp.session",
+			"http://purl.org/dc/terms/mediator" : jid,
+			"http://purl.org/dc/terms/identifier" : resource,
+			"http://purl.org/dc/terms/accessRights" : password
+		});
+	}
+}
+
+/*
+* Triggers an IWC event, which causes the XMPP IM/MUC gadget to enter a given chatroom. 
+* If the chatroom does not exist yet, it is created with the given name and description 
+* and a standard configuration. If name or description are not provided, standard values
+* are assigned (i.e. the node identifier for the room name and the empty string for the 
+* description. If the room already exists, name and description are ignored.
+*
+* 	roomjid - a string representing the chatroom's JID
+*	jid - a string representing the entering entity's JID
+*	name - a string representing the name of the chatroom (optional)
+*	descr - a string representing a description of the chatroom (optional)
+*	
+*/
+var enterSpaceRoom = function(roomjid, jid, name, descr){
+	
+	if(roomjid != null && jid != null && roomjid != "" && jid != ""){
+		
+		if(name == null || name == ""){
+			name = roomjid.split("@")[0];
+		}
+		
+		if(descr == null){
+			descr = "";
+		}
+		
+		gadgets.openapp.publish({"type": "namespaced-properties", "event": "enter" }, 
+			{
+			"http://purl.org/dc/terms/type" : "xmpp.room",
+			"http://purl.org/dc/terms/URI" : roomjid,
+			"http://purl.org/dc/terms/mediator" : jid,
+			"http://purl.org/dc/terms/title" : name,
+			"http://purl.org/dc/terms/subject" : descr
+			}
+		);
+	}
+}
+
+
+var build_item = function(type,data){
+  $('#'+type).html("");
+  for (var i = 0; i < data.length; i++) {
+    var item = data[i];
+    
+    var item_el = $('<div></div>').addClass('item '+type).attr('href',item.profileUrl)
+        .attr('target',"_blank").attr('title',item.displayName);
+    item_el.click(function() {
+      window.open(item.profileUrl);
+    })
+    item_el.appendTo(('#'+type));
+    
+    // thumbnail
+    var thumb = $('<div></div>').addClass('thumb');
+    item_el.html(thumb);
+    var img = $('<img></img>').attr('src',item.thumbnailUrl);
+    thumb.html(img);
+    
+    // name
+    var name = $('<div></div>').addClass('name');
+    name.appendTo(item_el);
+    name.text(item.displayName);
+  }
+  
+  // resize the gadget
+  gadgets.window.adjustHeight();
+
+};
+</script>
+
+<script type="text/javascript">
+gadgets.util.registerOnLoadHandler(initialize);
+</script>
+
+
+  ]]></Content>
+</Module>

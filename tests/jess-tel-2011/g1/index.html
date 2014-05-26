@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<html>
+	<head>
+	<title>Joint European Summerschool on Technology Enhanced Learning - Workshop "Usage and Development of Responsive Open (Personal) Learning Environments"</title>
+	
+	<!-- default container look and feel -->
+	<link rel="stylesheet" href="/lib/container/gadgets.css">
+	<style type="text/css">
+		.gadgets-gadget { width: 100%; }
+	</style>
+	<!-- Makes this html file into a Shindig supported container,
+		Provides the gadgets, shindig, and osapi javascript APIs.-->
+	<script type="text/javascript" src="/gadgets/js/shindig-container:rpc:pubsub?c=1&debug=1&nocache=1"></script>	
+	<!-- Loads container level OpenApp support. -->
+	<script type="text/javascript" src="/lib/openapp/openapp.js"></script>
+	<!-- Test container bootstrap stuff, to make this html file easier to read.-->
+	<script type="text/javascript" src="/tests/container-bootstrap.js"></script>
+	<!-- Add support for jQuery framework -->
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+	
+	<script type="text/javascript">
+		
+		my = {};
+		var ps;
+		//----------Stuff to override in each test------------------//
+
+		//Overrride this array with uris to gadget specifications (xml files).
+		my.gadgetSpecUrls = [];
+
+		//Overrride this function to do get logging of openapp events.
+		my.log = function(message) {
+			  document.getElementById("output").innerHTML += gadgets.util.escapeString(message) + "<br/>";
+		}
+
+		//-----------End of stuff to override ----------------------//
+
+		my.baseUrl = "http://"+ window.location.host + "/";
+
+		my.init = function() {	
+			gadgets.pubsubrouter.init(
+				function(id) {
+					return my.gadgetSpecUrls[parseInt(id[id.length - 1])];
+				},
+				{
+					onSubscribe: function(sender, channel) {
+					  my.log(sender + " subscribes to channel '" + channel + "'");
+					  // return true to reject the request.
+					},
+					onUnsubscribe: function(sender, channel) {
+					  my.log(sender + " unsubscribes from channel '" + channel + "'");
+					  // return true to reject the request.
+					},
+					onPublish: function(sender, channel, message) {
+					  my.log(sender + " publishes '" + message + "' to channel '" + channel + "'");
+					  // return true to reject the request.
+					}
+				});
+		};
+
+		my.renderGadgets = function() {
+			var chromeNames = [];
+			var gadgets = [];
+			
+			my.getGadgetSpecs(function() {
+				for (var i = 0; i < my.gadgetSpecUrls.length; ++i) {
+					var gadget = shindig.container.createGadget({specUrl: my.gadgetSpecs[i].url});
+					if (my.gadgetSpecs[i].height != null) {
+						gadget.height = my.gadgetSpecs[i].height;
+					}
+					if (my.gadgetSpecs[i].title != null) {
+						gadget.title = my.gadgetSpecs[i].title;
+					}
+					gadgets.push(gadget);
+					shindig.container.addGadget(gadget);
+					chromeNames.push("gadget-chrome-"+i);
+				}
+				shindig.container.layoutManager.setGadgetChromeIds(chromeNames);
+				for (var j = 0; j < gadgets.length; ++j) {
+					shindig.container.renderGadget(gadgets[j]);
+				}		
+			});
+		};
+
+
+		my.getGadgetSpecs = function(callback) {
+			var _gadgets = [];
+			for (var i = 0; i < my.gadgetSpecUrls.length; ++i) {
+				//my.gadgetSpecUrls[i] = my.baseUrl+my.gadgetSpecUrls[i];
+				_gadgets.push({url: my.gadgetSpecUrls[i], moduleId: 1});
+			}
+			
+			var request = {
+				context: {
+					country: "default",
+					language: "default",
+					view: "default",
+					container: "default"
+				},
+				gadgets: _gadgets
+			};
+			
+			var makeRequestParams = {
+				"CONTENT_TYPE" : "JSON",
+				"METHOD" : "POST",
+				"POST_DATA" : gadgets.json.stringify(request)
+			};
+			
+			var secureToken = "john.doe:john.doe:appid:cont:url:0:default";
+			var serverBase = "/gadgets/";
+			var url = serverBase +"metadata?st=" + secureToken;
+			
+			gadgets.io.makeNonProxiedRequest(url,
+				handleJSONResponse,
+				makeRequestParams,
+				"application/javascript"
+			);
+			
+			function handleJSONResponse(obj) {
+				//Unfortunately the gadget specs sometimes come back in the wrong order, sort via my.gadgetSpecUrls.
+				my.gadgetSpecs = [];
+				var gSpecs = {};
+				var toSort = obj.data.gadgets;
+				for (var i=0;i<toSort.length;i++) {
+					gSpecs[toSort[i].url] = toSort[i];
+				}
+				for (var j = 0; j < my.gadgetSpecUrls.length;j++) {
+					my.gadgetSpecs[j] = gSpecs[my.gadgetSpecUrls[j]];
+				}
+				callback();
+			}
+		};
+		
+		my.gadgetSpecUrls = [
+			'https://role-project.svn.sourceforge.net/svnroot/role-project/trunk/tests/jess-tel-2011/g1/gadgets/xmpp-mucim.xml',
+			'https://role-project.svn.sourceforge.net/svnroot/role-project/trunk/tests/jess-tel-2011/g1/gadgets/teststub.xml'
+		];
+		
+	</script>	
+	</head>
+	
+	<body onLoad="my.init();my.renderGadgets();">
+		<div id="hdr" style="margin-left:auto">
+		<img src="http://www.role-project.eu/wp-content/uploads-role/2009/08/spidericon200x80.png" alt="ROLE Logo">
+		<h3>Joint European Summerschool on Technology Enhanced Learning 2011</h3><h4>Workshop "Usage and Development of Responsive Open (Personal) Learning Environments"</h4>
+		</div>
+		<div id="output-0" style="clear: left;">
+			<div id="gadget-chrome-0" class="gadgets-gadget-chrome" style="width:600px;"></div>
+			<div id="gadget-chrome-1" class="gadgets-gadget-chrome" style="width:420px;"></div>
+		</div>
+	</body>
+</html>

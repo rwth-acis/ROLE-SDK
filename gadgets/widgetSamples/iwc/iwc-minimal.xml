@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+	<ModulePrefs
+		title="Your IWC Widget Title"
+		description="Your IWC Widget Description"
+		author="Your Name"
+		author_email="Your Email"
+		height="300">
+		<Require feature="openapp"/> 
+	</ModulePrefs>
+	<Content>
+	<![CDATA[
+		<script src="http://open-app.googlecode.com/files/openapp.js"></script>
+		<script src="http://dbis.rwth-aachen.de/gadgets/iwc/lib/iwc.js"></script>
+
+		<script type="application/javascript">
+			
+			// declare global variable for ROLE IWC client
+			var iwcClient;
+
+			function init(){
+			
+				// instantiate new instance of ROLE IWC client and 
+				// bind to global variable
+				iwcClient = new iwc.Client();
+			
+				// define callback processing incoming ROLE IWC intents
+				var iwcCallback = function(intent){
+					// process received ROLE IWCintent
+					console.log("Your Widget: received ROLE IWC intent:");
+					console.log(intent);
+					document.getElementById("log").innerHTML = "Received <span style='color:red'>" + intent.action + "</span> from <span style='color:blue'>" + intent.sender + "</span><br/>" + document.getElementById("log").innerHTML;
+				};
+			
+				// connect callback to ROLE IWC client
+				iwcClient.connect(iwcCallback);
+			}
+			
+			function publishSampleIntent(){
+			
+				// formulate ROLE IWC intent as JSON object
+				var intent = {
+					"component":"",
+					"data":"http://example.org/some/data",
+					"dataType":"text/url-list",
+					"action":"ACTION_UPDATE",
+					"categories":["","cat2"],
+					"flags":["PUBLISH_GLOBAL"],
+					"extras":{
+						"mykey1":"myvalue1",
+						"mykey2": 20
+					}
+				}
+				// first validate formulated intent
+				console.log(iwc.util);
+				if(iwc.util.validateIntent(intent)){
+					// publish ROLE IWC intent, if valid.
+					iwcClient.publish(intent);
+				}
+			}
+			
+			gadgets.util.registerOnLoadHandler(init);
+			
+		</script>
+		
+		<button onclick="publishSampleIntent();">Publish Intent</button>
+		<div id="log" style="width: 300px; height:275px; overflow:auto; font-size:8pt;"></div>
+		
+	]]>
+	</Content>
+</Module>

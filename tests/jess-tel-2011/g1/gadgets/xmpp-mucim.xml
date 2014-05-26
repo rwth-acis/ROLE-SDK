@@ -1,0 +1,1064 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+<ModulePrefs 
+	title="ROLE XMPP IM/MUC Gadget" 
+	description="An XMPP-based combined IM/Multi-User chat gadget. The gadget's tabbed GUI inspired by Open Source XMPP clients such as Adium/Pidgin allows multiple conversations with individual persons or in chat rooms at the same time. Basic XMPP connection is established over HTML5 Web Sockets in contrast to previous COMET technologies such as XMPP over BOSH."
+	author="Dominik Renzel, Chair of Computer Science 5, RWTH Aachen University, Germany"
+	author_email="renzel@dbis.rwth-aachen.de"
+	height="350">
+	<Require feature="pubsub" />
+	<Require feature="dynamic-height" />
+</ModulePrefs>
+
+
+<Content type="html">
+<![CDATA[
+
+	<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+    
+	<style type="text/css">
+		* { color: black; font-family: sans-serif; font-size: 8pt;}
+	
+		#content {height:300px;overflow:auto;display:none;}
+		#maintab {width:100%;height:100%;}
+		#maintab tr td {vertical-align:top}
+		
+		#dialog label, #dialog input { display:block; }
+		#dialog label { margin-top: 0.5em; }
+		#dialog input, #dialog textarea { width: 95%; }
+		
+		#conversations li .ui-icon-close { float: left; margin: 0.4em 0.2em 0 0; cursor: pointer; }
+		#conversations .logdiv {height:200;overflow:auto}
+		#conversations .ptabdiv {height:200;width:100%;overflow:auto}
+
+		#add_tab { cursor: pointer; }
+		
+		#roster {height:250px; overflow:auto}
+		#friendlist {margin:0;padding:0 26}
+		
+		.me {color: blue;}
+		.them {color: red;}
+		.room {color: black; font-style: italics}
+		
+		.undefined {color:grey;list-style-image: url('http://role-project.svn.sourceforge.net/svnroot/role-project/trunk/gadgets/xmpp/resources/offline.png')}
+		.offline {color:grey;list-style-image: url('http://role-project.svn.sourceforge.net/svnroot/role-project/trunk/gadgets/xmpp/resources/offline.png')}
+		.dnd {color:red;list-style-image: url('http://role-project.svn.sourceforge.net/svnroot/role-project/trunk/gadgets/xmpp/resources/dnd.png')}
+		.away {color:orange;list-style-image: url('http://role-project.svn.sourceforge.net/svnroot/role-project/trunk/gadgets/xmpp/resources/away.png')}
+		.xa {color:orange;list-style-image: url('http://role-project.svn.sourceforge.net/svnroot/role-project/trunk/gadgets/xmpp/resources/xa.png')}
+		.chat {color:green;list-style-image: url('http://role-project.svn.sourceforge.net/svnroot/role-project/trunk/gadgets/xmpp/resources/chat.png')}
+		
+		.textarea {width:100%;}
+		.updated {font-weight: bold;}
+		
+	</style>
+	
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+	<script src="http://role-project.svn.sourceforge.net/svnroot/role-project/trunk/gadgets/xmpp/resources/jquery.cookie.js"></script>
+	<script src="http://role-project.svn.sourceforge.net/svnroot/role-project/trunk/libraries/xmpp/kaazing/WebSocket.js"></script>
+	<script src="http://role-project.svn.sourceforge.net/svnroot/role-project/trunk/libraries/xmpp/kaazing/XmppClient.js"></script>
+	<script src="http://role-project.svn.sourceforge.net/svnroot/role-project/trunk/gadgets/xmpp/resources/md5.js"></script>
+	
+	<script src="http://open-app.googlecode.com/files/openapp.js"></script>
+	
+	<script type="text/javascript">
+		
+		// hard-coded reference to the WebSocket server (for simplicity)
+		var url = "ws://role.dbis.rwth-aachen.de:7071/jabber";
+		var url = "ws://steen.informatik.rwth-aachen.de:9916";
+		
+		var client;
+		var contactList = [];
+		var conversations;
+		var ctabs = [];
+		var stab = 0;
+		var ctctr = 0;
+		
+		// Standard initial room configuration
+		var roomconf = { 
+			"muc#roomconfig_roomname" : "Room Name",
+			"muc#roomconfig_roomdesc" : "This is a room description",
+			"muc#roomconfig_maxusers" : "30",
+			"muc#roomconfig_publicroom" : "1", 
+			"muc#roomconfig_persistentroom": "1",
+			"muc#roomconfig_enablelogging": "1",
+			"muc#roomconfig_changesubject": "1"
+		}
+		
+		// Standard initial value of XMPP resource" 
+		var res = 'role-chat-gadget';
+		// name of the remote server, derived from the roster list
+		var chatserver;
+		
+		function log(jid, msg, uc){
+			var tabo = getTabByJid(jid);
+			if(tabo!=null){
+				var loge = $("#log-"+tabo.tabid);
+				if(tabo.type == "muc"){
+					if(msg.from == tabo.alias){
+						uc = "me";
+					}
+					if(msg.from == tabo.jid){
+						uc = "room";
+					}
+					loge.append(gui_format_msg(msg.from,msg.body,uc));
+				}
+				else{
+					loge.append(gui_format_msg(msg.from,msg.body,uc));
+				}
+				
+				if(tabo.tabid != stab){
+					$("#conversations ul li a:contains(" + getLabel(tabo.jid)+ ")").effect('pulsate',{},300);
+					$("#conversations ul li a:contains(" + getLabel(tabo.jid)+ ")").addClass("updated");
+				}
+				
+				var logdom = document.getElementById("log-"+tabo.tabid);
+				logdom.scrollTop = logdom.scrollHeight;
+			}
+		}
+		
+		function enterRoom(jid, handle, pass){
+			openTab(jid,"muc",handle);
+			var room = new XmppRoom(client,jid,handle, pass);
+			room.onmessage = function(msg){
+				log(jid,msg,"them");
+				
+				// #######################################################
+				// publish IWC event 
+				gadgets.openapp.publish({"type": "namespaced-properties", "event": "receive" }, 
+					{
+						"http://purl.org/dc/terms/type" : "xmpp.room.message",
+						"http://purl.org/dc/terms/publisher" : jid,
+						"http://purl.org/dc/terms/audience": this._jid
+					}
+				);
+			};
+			
+			room.onpresence = function(p){
+				//console.log("Room Presence " + room.jid);
+				console.log(p);
+			};
+			
+			room.onrosterchanged = function(msg, roster){
+				//console.log("Roster Changed!" + jid);
+				//console.log(roster);
+				log(jid,msg,"them");
+				console.log(roster);
+				var tabo = getTabByJid(jid);
+				if(tabo != null){
+					var liele = $("#mlist-" + tabo.tabid);
+					$("#mlist-" + tabo.tabid +" li").remove();
+					for(var i = 0; i< roster.length; i++){
+						liele.append("<li title='" + JSON.stringify(roster[i]) + "' class='"+roster[i].show + "'>"+ roster[i].from.split("/")[1] +"</li>");
+					}
+				}
+			}
+		}
+		
+		/*
+		* Enter a chatroom and create it before, if it does not yet exist.
+		* 
+		* Parameters: 
+		* 	jid - Jabber ID of the room to be (created and) entered (e.g. all@muc.role.dbis.rwth-aachen.de)
+		*   handle - A nickname to be used for room conversations (must be unique among all room participants) 
+		*   configuration - An object providing room configuration parameters compliant with XEP-45.
+		*/
+		function createAndEnterRoom(jid, handle, configuration){
+			
+			var service = jid.split("@")[1]; //service hosting the room (e.g. muc.role.dbis.rwth-aachen.de)
+			var password = configuration["muc#roomconfig_roomsecret"];
+			
+			client.discoverRooms(service,function(rooms){
+				for(var i = 0;i<rooms.length;i++){
+					if(rooms[i].jid == jid){
+						enterRoom(jid,handle,password);
+						return;
+					}
+				}
+				//console.log("Getting here... room " + jid + "for " + handle + "does not exist");
+				client.createRoom(jid,handle,function(f){
+					//console.log("Created room");
+					client.configureRoom(jid,configuration,function(e){
+						//console.log("Configured room");
+						enterRoom(jid,handle,password);
+					});
+				});
+			});
+		}
+		
+		function createAndLoginUser(fulljid,pass){
+			
+			client = new XmppClient();
+			
+			jid = fulljid.split("/")[0];
+			//res = fulljid.split("/")[1];
+			
+			client.onopen = function() {
+				client.requestUserRegistrationForm(function(form){
+					var fields = {"username": jid.split("@")[0],"password":pass}
+					client.submitUserRegistrationForm(fields, function(r){
+						/*
+						if(r.code == "409" && r.tagname == "conflict"){
+							//console.log("User already exists");
+						}*/
+						client.disconnect();
+						connect(jid,pass);
+					});
+				});
+			}
+			
+			client.connect(url, jid.split("@")[1]);
+		}
+		
+		
+		
+		function leaveRoom(jid){
+			var room = client._chatRooms[jid];
+			if(room != null){
+				room.leave();
+			}
+		}
+		
+		// Set the status and availability of this user
+		var gui_setPresence = function() {
+			var s = $("#status").val();
+			var a = $("#availability").val();
+			var n = $("#nick").val();
+			client.setStatus(s, a);
+			
+			var rms = client._chatRooms;
+			for (key in rms){
+				//console.log(rms[key]);
+				rms[key].setStatus(n,a,s);
+			}
+			
+			// #######################################################
+			// publish IWC event 
+			gadgets.openapp.publish({"type": "namespaced-properties", "event": "select" }, 
+				{
+					"http://purl.org/dc/terms/type" : "xmpp.presence",
+					"http://purl.org/dc/terms/publisher" : client._jid,
+					"http://purl.org/dc/terms/title" : a,
+					"http://purl.org/dc/terms/subject" : s 
+				}
+			);
+		}
+		
+		var gui_setNick = function(){
+			var nk = $("#nick").val();
+			$.cookie("xmpp:nick:"+getBareJid(client._jid),nk);
+			for(j in client._chatRooms){
+				var tabo = getTabByJid(client._chatRooms[j]._roomName).alias = nk;
+				client._chatRooms[j].setNick(nk);
+			}
+		}
+
+		// Utility method for escaping out XML characters
+		var gui_xescape = function(s) {
+			return s.replace("&", "&amp;", "g")
+			.replace("<", "&lt;", "g")
+			.replace(">", "&gt;", "g")
+		}
+
+		// Register a callback for receiving the roster, then fetch it
+		var gui_getRoster = function() {
+			var rosterCallback = function(roster) {
+				contactList = roster;
+				gui_updateRoster();
+			}
+			client.getRoster(rosterCallback);
+		}
+
+		// update the roster list with incoming contacts
+		
+		var gui_updateRoster = function() {
+			
+			var r = document.getElementById("friendlist");
+			var s = "";
+			var entity;
+			
+			for(jid in contactList){
+				entity = contactList[jid];
+				var shortName = entity.name || entity.jid.split('@')[0];
+				s += "<li class='" + entity.show + "' onclick='openTab(\"" + jid + "\",\"im\");'><span id='avatar-" + jid.split("@")[0] + "'></span> " + shortName +"</li>";
+			}
+
+			r.innerHTML = s;
+			
+			for(j in contactList){
+				//console.log(j);
+				client.retrieveVCard(j,function(v){
+					if(v.photo != null){
+						var avele = "#avatar-"+v.from.split("@")[0];
+						$(avele).html("<img src='" + v.photo + "' height='20' />");
+					}
+				});
+			}
+		}
+		
+		// format an incoming message for display in the UI
+		// c is the sender class
+		var gui_format_msg = function(sender, body, c) {
+			var name = getLabel(getBareJid(sender));
+			if(c == "room"){
+				return "<b class=" + c + ">" + gui_xescape(body) + "</b><br/>";
+			}
+			else{
+				return "<b class=" + c + ">" + name + ": </b>" + gui_xescape(body) + "<br/>";
+			}
+			
+		}
+
+		// Send a message to a chat user
+		var gui_send = function() {
+			var j = document.getElementById('recipient').value;
+			
+			// restore the full name of the recipient
+			j += '@' + chatserver + '/' + res;
+			
+			// send the message in the body element
+			var b = document.getElementById('body').value;
+			client.sendMessage(j, b);
+			
+			var u = document.getElementById('jid').value;
+			
+			//log(gui_format_msg(u, b, "me"));
+			log(u,b);
+		}
+
+		// Send in the authentication credentials
+		var auth = function(u,p) {
+			credentials = {};
+			credentials.password = p;
+			// add localhost to the jid to get the server
+			// identification correct
+			credentials.username = u;
+			chatserver = u.split("@")[1];
+			client.authenticate(credentials);
+		}
+		
+		var getBareJid = function(jid){
+			if(jid.indexOf("/") >= 0){
+				return jid.slice(0,jid.indexOf("/"));
+			}
+			else{
+				return jid;
+			}
+		}
+		
+		var gui_register = function() {
+			client = new XmppClient();
+
+			// Once connected, start authentication
+			client.onopen = function() {
+				client.requestUserRegistrationForm(gui_processUserRegistrationForm);
+			}
+			
+			client.connect(url, "role.dbis.rwth-aachen.de");
+		}
+		
+		var gui_processUserRegistrationForm = function(fields){
+			var d = $("#dialog_registeruser");
+			d.html("");
+			for(f in fields){
+				
+				d.append(f+":<input id='registeruser_" + f + "' type='text' value='' /><br/>");
+			}
+			$("#dialog_registeruser").dialog("open");
+			
+		}
+		
+		var gui_configureroom = function(form){
+			var d = $("#dialog_configureroom");
+			d.html("");
+			d.append("Configure room <span>" + form.room + "</span><br/>");
+			for(var i=0;i<form.fields.length;i++){
+				var ff = form.fields[i];
+				if(ff.var == "muc#roomconfig_roomname"
+					|| ff.var == "muc#roomconfig_roomdesc"
+					|| ff.var == "muc#roomconfig_maxusers"
+				){
+					d.append(ff.label + ":<input id='" + ff.var + "' type='text' value='" + ff.val + "' /><br/>");
+				}
+				else if(ff.var == "muc#roomconfig_publicroom"
+					|| ff.var == "muc#roomconfig_persistentroom"
+					|| ff.var == "muc#roomconfig_enablelogging"
+					|| ff.var == "muc#roomconfig_changesubject"){
+					d.append(ff.label + ":<select id='" + ff.var + "'><option value='0'>no</option><option value='1'>yes</option></select><br/>");
+				}
+			}
+			$("#dialog_configureroom").dialog("open");
+			
+		};
+		
+		var gui_createroom = function() {
+			$("#dialog_createroom").dialog("open");
+		}
+		
+		var gui_discoverNodes = function() {
+			client.discoverEntityItems("pubsub.role.dbis.rwth-aachen.de",function(c){
+				console.log("Discovered PubSub Service Items");
+				console.log(c);
+			});	
+		}
+		
+		var gui_connect = function(){
+			var jid = document.getElementById('jid').value;
+			var pass = document.getElementById('password').value;
+			createAndLoginUser(jid,pass);
+		}
+		
+		var gui_disconnect = function(){
+			client.disconnect();
+		}
+		
+		var connect = function(u,p) {
+			client = new XmppClient();
+
+			// Once connected, start authentication
+			client.onopen = function() {
+			  //log("<span style='font-style:italic'>Connected to  server.</span>");
+			  auth(u,p);
+			};
+
+			// Once authenticated, get the roster of buddies and set my status
+			client.onauthenticated = function() {
+		
+				client.bind(res);
+				
+				$("#content").css("display","inline");
+				
+				gui_getRoster();
+				gui_setPresence();
+				
+				$("#jid").val(u);
+				$("#password").val(p);
+				
+				$("#nick").val($.cookie("xmpp:nick:"+u) || u.split("@")[0] || res);
+				
+				$.cookie("xmpp:jid",u);
+				$.cookie("xmpp:pass",p);
+				
+				// #######################################################
+				// publish IWC event 
+				gadgets.openapp.publish({"type": "namespaced-properties", "event": "enter" }, 
+					{
+						"http://purl.org/dc/terms/type" : "xmpp.session",
+						"http://purl.org/dc/terms/creator" : this._jid
+					}
+				);
+			};
+			
+			client.onclose = function() {
+				var tl = $("#conversations").tabs("length");
+				for(var i=0;i<tl;i++){
+					$("#conversations").tabs("remove",0);
+				}
+				
+				$("#friendlist").html("");
+				$("#content").css("display","none");
+				// #######################################################
+				// publish IWC event 
+				gadgets.openapp.publish({"type": "namespaced-properties", "event": "exit" }, 
+					{
+						"http://purl.org/dc/terms/type" : "xmpp.session",
+						"http://purl.org/dc/terms/creator" : this._jid
+					}
+				);
+			};
+			
+			// Got a message from the server... display it
+			client.onmessage = function(msg) {
+				openTab(getBareJid(msg.from),"im","me");
+				log(getBareJid(msg.from), msg, "them");
+				
+				// #######################################################
+				// publish IWC event 
+				gadgets.openapp.publish({"type": "namespaced-properties", "event": "receive" }, 
+					{
+						"http://purl.org/dc/terms/type" : "xmpp.contact.message",
+						"http://purl.org/dc/terms/publisher" : msg.from,
+						"http://purl.org/dc/terms/audience": this._jid
+					}
+				);
+			}
+			
+			client.onerror = function(e) {
+				console.log(e);
+			}
+			
+			client.onpresence = function(p) {
+				var bareJid = getBareJid(p.from);
+				if(p.from && bareJid != client._jid){
+					if(p.type == "subscribe"){
+						gui_handleSubscription(p.from);
+					}
+					else if(p.type == "unavailable" || p.type == "unsubscribe" || p.type == "subscribed" || p.type == "subscribe"){
+						gui_getRoster();
+					}
+					else{
+						if(contactList != null && contactList[bareJid] != null){
+							if(p.status != null){
+								contactList[bareJid].status = p.status;
+							} else {
+								contactList[bareJid].status = "Not defined";
+							}
+							if(p.show != null){
+								contactList[bareJid].show = p.show;
+							} else {
+								contactList[bareJid].show = "dnd";
+							}
+						}
+						gui_updateRoster();
+					}
+				}
+				else if (p.from && bareJid == client._jid){
+					if(p.show){
+						$("availability").val(p.show);
+					}
+					if(p.status){
+						$("status").val(p.status);
+					}
+				}
+			}
+
+			// Now, connect to the chat server
+			client.connect(url, "localhost");
+		}
+		
+		var gui_subscribePresence = function() {
+			$("#dialog_addrosteritem").dialog("open");
+		}
+		
+		var gui_handleSubscription = function(ojid) {
+			$("#subscriber_jid").html(ojid);
+			$("#dialog_handlesubscription").dialog("open");
+		}
+		
+		function openTab(jid, type, alias) {
+			if(getTabByJid(jid) == null){
+				var tabid;
+				var tabo;
+				
+				if(type == "muc"){
+					tabid = "tab-muc-" + ctctr++; 
+					tabo = {"jid":jid,"tabid":tabid,"type":type,"alias":alias};
+				}
+				else{
+					tabid = "tab-im-" + ctctr++;
+					tabo = {"jid":jid,"tabid":tabid,"type":"im","alias":alias};
+				}
+				ctabs.push(tabo);
+				conversations.tabs( "add", "#"+tabid, getLabel(jid));
+				
+				return tabo;
+			}
+			else{
+				return getTabByJid(jid);
+			}
+		}
+		
+		function getLabel(jid){
+			
+			if(contactList[jid] != null){
+				return contactList[jid].name;
+			}
+			else if(jid.indexOf(chatserver) > 0){
+				return jid.substring(0,(jid.indexOf(chatserver)-1));
+			}
+			else{
+				return jid;
+			}
+		}
+		
+		function removeTabByJid(jid){
+			for(var i=0; i<ctabs.length;i++ ){ 
+				if(ctabs[i].jid==jid){
+					ctabs.splice(i,1); 
+				} 
+			}
+		}
+		
+		function removeTabById(tabid){
+			for(var i=0; i<ctabs.length;i++ ){ 
+				if(ctabs[i].tabid==tabid){
+					ctabs.splice(i,1); 
+				} 
+			}
+		}
+		
+		function getTabByJid(jid) {
+			for(var i=0; i<ctabs.length;i++ ){ 
+				if(ctabs[i].jid==jid){
+					return ctabs[i];
+				} 
+			}
+		}
+		
+		function getTabById(tabid){
+			for(var i=0; i<ctabs.length;i++ ){ 
+				if(ctabs[i].tabid==tabid){
+					return ctabs[i];
+				} 
+			}
+		}
+		
+		function inputNick(e){
+			if(e.which == 13){
+				gui_setNick();
+			}
+		}
+		
+		function inputMessage(e){
+			if(e.which == 13){
+				var msg = {"from":"me","body":e.target.value};
+				var tabid = e.target.getAttribute("id").substring(6);
+				var tabo = getTabById(tabid);
+				
+				if(tabo.type == "muc"){
+					client._chatRooms[tabo.jid].sendMessage(msg.body);
+					gadgets.openapp.publish({"type": "namespaced-properties", "event": "send" }, 
+						{
+							"http://purl.org/dc/terms/type" : "xmpp.room.message",
+							"http://purl.org/dc/terms/publisher" : client._jid,
+							"http://purl.org/dc/terms/audience" : tabo.jid,
+							"http://purl.org/dc/terms/extent" : msg.body.length
+						}
+					);
+				}
+				else{
+					client.sendMessage(tabo.jid,msg.body);
+					log(tabo.jid,msg,"me");
+					// #######################################################
+					// publish IWC event 
+					gadgets.openapp.publish({"type": "namespaced-properties", "event": "send" }, 
+						{
+							"http://purl.org/dc/terms/type" : "xmpp.contact.message",
+							"http://purl.org/dc/terms/publisher" : client._jid,
+							"http://purl.org/dc/terms/audience": tabo.jid,
+							"http://purl.org/dc/terms/extent" : msg.body.length
+						}
+					);
+				}
+				e.target.value="";
+			}
+		}
+		
+		var gui_selectmucservice = function(){
+			$("#dialog_selectmucservice").dialog("open");
+		}
+		
+		function iwcEventCallback(e){
+			
+			//console.log("################ Event ################");
+			//console.log(e);
+			//console.log("#######################################");
+			
+			if(e.event == "enter" &&
+				e.message["http://purl.org/dc/terms/type"] != null &&
+				e.message["http://purl.org/dc/terms/mediator"] != null &&
+				e.message["http://purl.org/dc/terms/accessRights"] != null &&
+				e.message["http://purl.org/dc/terms/identifier"] != null
+			){
+				var jid = e.message["http://purl.org/dc/terms/mediator"];
+				var pass = e.message["http://purl.org/dc/terms/accessRights"];
+				res = e.message["http://purl.org/dc/terms/identifier"];
+				
+				createAndLoginUser(jid,pass);
+			}
+			else if(e.event == "enter" &&
+				e.message["http://purl.org/dc/terms/type"] == "xmpp.room" &&
+				e.message["http://purl.org/dc/terms/mediator"] != null &&
+				e.message["http://purl.org/dc/terms/URI"] != null){
+			
+				var configuration = roomconf;
+				
+				if( e.message["http://purl.org/dc/terms/title"]!= null &&
+					e.message["http://purl.org/dc/terms/subject"] != null){
+					configuration["muc#roomconfig_roomname"] = e.message["http://purl.org/dc/terms/title"];
+					configuration["muc#roomconfig_roomdesc"] = e.message["http://purl.org/dc/terms/subject"];
+				}
+				else{
+					configuration["muc#roomconfig_roomname"] = e.message["http://purl.org/dc/terms/URI"];
+					configuration["muc#roomconfig_roomdesc"] = e.message["Description unknown"];
+				}
+				createAndEnterRoom(e.message["http://purl.org/dc/terms/URI"],$("#nick").val(),configuration);
+			}
+			else if(e.event == "exit" &&
+				e.message["http://purl.org/dc/terms/URI"] == "http://zlw-ima.rwth-aachen.de"
+			){
+				client.disconnect();
+			}
+			else if(client != null && 
+				e.event == "select" &&
+				e.message["http://purl.org/dc/terms/type"] == "object" &&
+				e.message["http://purl.org/dc/terms/title"] != null &&
+				e.message["http://purl.org/dc/terms/identifier"] != null &&
+				e.message["http://purl.org/dc/terms/URI"].indexOf("http://zlw-ima.rwth-aachen.de/wkm/index") > -1){
+				
+				var jid = e.message["http://purl.org/dc/terms/identifier"] + "@muc.role.dbis.rwth-aachen.de";
+				var name = e.message["http://purl.org/dc/terms/title"];
+				var desc = "Room around the topic '" + name + "'";
+				
+				var configuration = roomconf;
+				configuration["muc#roomconfig_roomname"] = name;
+				configuration["muc#roomconfig_roomdesc"] = desc;
+				
+				createAndEnterRoom(jid,$("#nick").val(),configuration);
+			}
+		}
+		
+		function init(){
+			
+			
+			$(document).ready(function() {
+				//$("#dialog_selectmucservice").dialog({ closeOnEscape: false , modal: true});
+				//$("#dialog_selectmucroom").dialog({ closeOnEscape: false , modal: true});
+				
+				$("#status").keypress(function(e){if(e.which == 13){gui_setPresence()}});
+				
+				conversations = $("#conversations").tabs({
+					tabTemplate: "<li><a href='#{href}'>#{label}</a><span class='ui-icon ui-icon-close'>Remove Tab</span></li>",
+					add: function( event, ui ) {
+						var tabid = ui.panel.id;
+						var tabo = getTabById(tabid);
+						
+						if(tabo.type == "muc"){
+							$(ui.panel).append("<table><colgroup><col width='*'><col width='100'></colgroup><tr><td><div class='logdiv' id='log-" + tabid + "'></div></td><td><div class='ptabdiv' id='ptab-'" + tabid + "'><ul id='mlist-" + tabid + "'></ul></div></td></tr></table><div class='inputdiv'><input class='textarea' id='input-" + tabid + "' type='text' value='' /></div>" );
+						}
+						//if(tabo.type == "muc"){
+						//	$(ui.panel).append("<div class='logdiv' id='log-" + tabid + "'></div><div><ul id='mlist-" + tabid + "'></ul></div><div class='inputdiv'><input class='textarea' id='input-" + tabid + "' type='text' value='' /></div>" );
+						//}
+						else{
+							$(ui.panel).append("<div class='logdiv' id='log-" + tabid + "'></div><div class='inputdiv'><input class='textarea' id='input-" + tabid + "' type='text' value='' /></div>" );
+						}
+						
+						$("#input-"+tabid).keypress(inputMessage); 
+						//conversations.tabs('select', '#' + ui.panel.id);
+					},
+					remove: function(event, ui){
+						var tabid = ui.panel.id;
+						var tabo = getTabById(tabid);
+						if(tabo.type == "muc"){
+							if(!client._hasDisconnected){
+								client._chatRooms[tabo.jid].leave();
+							}
+							// #######################################################
+							// publish IWC event 
+							gadgets.openapp.publish({"type": "namespaced-properties", "event": "exit" }, 
+								{
+								"http://purl.org/dc/terms/type" : "xmpp.room",
+								"http://purl.org/dc/terms/URI" : tabo.jid,
+								"http://purl.org/dc/terms/contributor" : tabo.jid + "/" + $("#nick").val(),
+								"http://purl.org/dc/terms/mediator" : client._jid
+								}
+							);
+						}
+						removeTabById(tabid);
+					},
+					select: function(event, ui){
+						stab = ui.panel.id;
+						var tabo = getTabById(stab);
+						
+						if(tabo.type == "muc"){
+							// #######################################################
+							// publish IWC event 
+							gadgets.openapp.publish({"type": "namespaced-properties", "event": "focus" }, 
+								{
+								"http://purl.org/dc/terms/type" : "xmpp.room",
+								"http://purl.org/dc/terms/URI" : tabo.jid,
+								"http://purl.org/dc/terms/contributor" : tabo.jid + "/" + $("#nick").val(),
+								"http://purl.org/dc/terms/mediator" : client._jid
+								}
+							);
+						}
+						else{
+							// #######################################################
+							// publish IWC event 
+							gadgets.openapp.publish({"type": "namespaced-properties", "event": "focus" }, 
+								{
+								"http://purl.org/dc/terms/type" : "xmpp.contact",
+								"http://purl.org/dc/terms/URI" : tabo.jid,
+								"http://purl.org/dc/terms/mediator" : client._jid
+								}
+							);
+						}
+						
+						$("#conversations ul li a:contains(" + getLabel(tabo.jid)+ ")").removeClass("updated");
+					}
+				});
+				conversations.tabs( "option", "fx", { opacity: 'toggle' });
+				
+				$( "#conversations span.ui-icon-close" ).live( "click", function() {
+					var index = $( "li", conversations ).index( $( this ).parent() );
+					conversations.tabs("remove", index );
+				});
+				
+				$("#dialog_addrosteritem").dialog({ 
+					autoOpen: false,
+					closeOnEscape: true, 
+					modal: true, 
+					buttons: [
+						{
+							text: "Ok",
+							click: function() { 
+								$(this).dialog("close"); 
+								
+								var ojid = jQuery.trim($("#addrosteritem_jid").val());
+								if(ojid != ""){
+									var oname = jQuery.trim($("#addrosteritem_name").val());
+									var ogroups = jQuery.trim($("#addrosteritem_group").val()).split(",");
+									
+									var item = {"jid":ojid};
+									if(oname){
+										item["name"] = oname;
+									}
+									if(ogroups.length > 0){
+										item["groups"] = ogroups;
+									}
+									
+									var cb = function(result){
+										if(result == true){
+											client.subscribePresence(ojid);
+										}
+									}
+									client.setRosterItem(item,cb);
+								}
+							}
+						}
+					]
+				});
+				
+				$("#dialog_registeruser").dialog({ 
+					autoOpen: false,
+					closeOnEscape: true, 
+					modal: true, 
+					buttons: [
+						{
+							text: "Ok",
+							click: function() { 
+								$(this).dialog("close");
+								var ffields = {};
+								$("#dialog_registeruser input").each(function(i,e){
+									ffields[e.id.substring(13)] = e.value;
+								});
+								client.submitUserRegistrationForm(ffields,function(r){client.disconnect();});
+							}
+						}
+					]
+				});
+				
+				$("#dialog_configureroom").dialog({ 
+					autoOpen: false,
+					closeOnEscape: true, 
+					modal: true, 
+					buttons: [
+						{
+							text: "Ok",
+							click: function() { 
+								$(this).dialog("close");
+								var form = {};
+								var room = $("#dialog_configureroom span")[0].innerHTML;
+								$("#dialog_configureroom input").each(function(i,e){
+									form[e.id] = e.value;
+								});
+								$("#dialog_configureroom select").each(function(i,e){
+									form[e.id] = e.value;
+								});
+								
+								client.configureRoom(room,form,function(r){});
+							}
+						}
+					]
+				});
+				
+				$("#dialog_createroom").dialog({ 
+					autoOpen: false,
+					closeOnEscape: true, 
+					modal: true, 
+					buttons: [
+						{
+							text: "Ok",
+							click: function() { 
+								$(this).dialog("close");
+								var rm = $("#mucroom").val();
+								client.createRoom(rm,"owner",gui_configureroom);
+							}
+						}
+					]
+				});
+				
+				$("#dialog_selectmucservice").dialog({ 
+					autoOpen: false,
+					closeOnEscape: true, 
+					modal: true, 
+					buttons: [
+						{
+							text: "Ok",
+							click: function() { 
+								$(this).dialog("close");
+								var sv = $("#mucservice").val();
+								client.discoverRooms(sv,function(r){
+									$("#smucservice").html(sv);
+									$("#selectmucroom").html("");
+									for(var i=0;i<r.length;i++){
+										$("#selectmucroom").append("<option value='"+ r[i].jid +"'>" +r[i].name + "(" + r[i].jid + ")</option>");
+									}
+									$("#dialog_selectmucroom").dialog("open");
+								});
+							}
+						}
+					]
+				});
+				
+				$("#dialog_selectmucroom").dialog({ 
+					autoOpen: false,
+					closeOnEscape: true, 
+					modal: true, 
+					buttons: [
+						{
+							text: "Ok",
+							click: function() { 
+								$(this).dialog("close");
+								var roomjid = $("#selectmucroom").val();
+								enterRoom(roomjid,$("#nick").val(),$("#mucroompass").val());
+								
+								// #######################################################
+								// publish IWC event 
+								gadgets.openapp.publish({"type": "namespaced-properties", "event": "enter" }, 
+									{
+										"http://purl.org/dc/terms/type" : "xmpp.room",
+										"http://purl.org/dc/terms/URI" : roomjid,
+										"http://purl.org/dc/terms/contributor" : roomjid + "/" + $("#nick").val(),
+										"http://purl.org/dc/terms/mediator" : client._jid
+									}
+								);
+							}
+						}
+					]
+				});
+				
+				$("#dialog_handlesubscription").dialog({ 
+					autoOpen: false,
+					closeOnEscape: true, 
+					modal: true, 
+					buttons: [
+						{
+							text: "Approve",
+							click: function() { 
+								$(this).dialog("close");
+								var ojid = $("#subscriber_jid").html();
+								client.handlePresenceSubscription(ojid,true);
+								gui_getRoster();
+							}
+						},
+						{
+							text: "Deny",
+							click: function() { 
+								$(this).dialog("close"); 
+								var ojid = $("#subscriber_jid").html();
+								client.handlePresenceSubscription(ojid,false); 
+							}
+						}
+					]
+				});
+				
+				//$("#dialog_unsubscribepresence").dialog({ closeOnEscape: false , modal: true});
+			});
+			
+			$("#nick").keypress(inputNick); 
+			
+			if($.cookie("xmpp:jid") != null && $.cookie("xmpp:pass") != null){
+				$("#jid").val($.cookie("xmpp:jid"));
+				$("#password").val($.cookie("xmpp:pass"));
+				//connect($.cookie("xmpp:jid"),$.cookie("xmpp:pass"));
+			}
+			gadgets.openapp.publish({"type": "namespaced-properties", "event": "dummy" },{});
+		}
+		
+		gadgets.openapp.connect(iwcEventCallback);
+		gadgets.util.registerOnLoadHandler(init);
+		gadgets.window.adjustHeight(400);
+	</script>
+	
+	<div id="dialog_addrosteritem" title="Add Contact">
+		JID: <input id="addrosteritem_jid" type="text" value="renzel@role.dbis.rwth-aachen.de" size="30"/><br/>
+		Name: <input id="addrosteritem_name" type="text" value="Dominik Renzel" size="30"/><br/>
+		Groups: <input id="addrosteritem_group" type="text" value="ROLE" size="30"/> (comma-separated)
+	</div>
+	
+	<div id="dialog_registeruser" title="Register Account">
+	</div>
+	
+	<div id="dialog_selectmucservice" title="Enter Room - Choose Multi-User Chat Service">
+		Service: <input id="mucservice" type="text" value="muc.role.dbis.rwth-aachen.de" size="30"></input>
+	</div>
+	
+	<div id="dialog_selectmucroom" title="Enter Room - Choose Room">
+		Select room in <span id="smucservice"></span> and enter password if necessary.<br/>
+		Room: <select id="selectmucroom"></select><br/>
+		Password: <input id="mucroompass" type="password" value="" />
+	</div>
+	
+	<div id="dialog_createroom" title="Create Room">
+		Room: <input id="mucroom" type="text" value="" size="30"></input>
+	</div>
+	
+	<div id="dialog_configureroom" title="Configure Room">
+	</div>
+	
+	<div id="dialog_handlesubscription" title="Handle Subscription">
+		<span id="subscriber_jid"></span> requests to exhchange presence data with you.
+	</div>
+	
+	<div id="maindiv">
+		<div id="login_box">
+			<span class="prompt">JID:</span>
+			<input type="text" value="" id="jid" size="40" />
+			<span class="prompt">PWD:</span>
+			<input type="password" value="" id="password" size="15" />
+			<img width="16" src="http://role-project.svn.sourceforge.net/svnroot/role-project/trunk/gadgets/xmpp/resources/connect.png" alt="Connect" title="Connect to XMPP server" onClick="gui_connect()"/>
+			<img width="16" src="http://role-project.svn.sourceforge.net/svnroot/role-project/trunk/gadgets/xmpp/resources/disconnect.png" alt="Disconnect" title="Disconnect from XMPP server" onClick="gui_disconnect()"/>
+			<img width="16" src="http://role-project.svn.sourceforge.net/svnroot/role-project/trunk/gadgets/xmpp/resources/register.png" alt="Register" title="Register new XMPP account" onClick="gui_register()"/>
+			<br/>
+			<span class="prompt">Presence:</span>
+			<select onChange="gui_setPresence()" name="availability" id="availability" class="icon-menu">
+				<option value="chat">Available</option>
+				<option value="away">Away</option>
+				<option value="xa">Extended Away</option>
+				<option value="dnd">Do not Disturb</option>
+			</select>
+			<span class="prompt">Status:</span>
+			<input type="text" value="Online" id="status"/>
+			<span class="prompt">Nick:</span>
+			<input type="text" value="" id="nick" size="15" />
+		</div>
+		<div id="content">
+		<table cellpadding="5" id="maintab">
+			<colgroup>
+				<col width="*">
+				<col width="170">
+			</colgroup>
+			<tr><td>
+			<div id="conversations">
+				<ul></ul>
+			</div>
+			</td>
+			<td>
+				<img src="http://role-project.svn.sourceforge.net/svnroot/role-project/trunk/gadgets/xmpp/resources/addroster.png" alt="Add Contact" title="Add new contact" onClick="gui_subscribePresence()"/>
+				<img src="http://role-project.svn.sourceforge.net/svnroot/role-project/trunk/gadgets/xmpp/resources/enterroom.png" alt="Enter Room" title="Enter room" onClick="gui_selectmucservice()"/>
+				<img src="http://role-project.svn.sourceforge.net/svnroot/role-project/trunk/gadgets/xmpp/resources/createroom.png" alt="Create Room" title="Create new room" onClick="gui_createroom()" />
+				<img src="http://role-project.svn.sourceforge.net/svnroot/role-project/trunk/gadgets/xmpp/resources/createroom.png" alt="Discover Nodes" title="Discover Nodes" onClick="gui_discoverNodes()" />
+				
+				<div id="roster">
+					<ul id="friendlist"></ul>
+				</div>
+				
+			</td></tr>
+		</table>
+		</div>
+		
+	</div>
+]]>
+</Content>
+</Module>

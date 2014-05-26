@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="Realtime Notetaking"
+		description="A simple realtime note taking widget."
+		author="Dominik Renzel"
+		author_email="renzel@dbis.rwth-aachen.de"
+		height="300">
+  	<Require feature="opensocial-0.8" />
+    <Require feature="openapp" />
+    <OAuth>
+		<Service name="openapp" xmlns:openapp="http://www.role-project.eu/xml/openapp/opensocialext/" 
+			openapp:service="http://purl.org/role/terms/spaceService"
+			openapp:permitReadAppend="http://purl.org/role/terms/data">
+			<Request method="" url=""/>
+			<Authorization url=""/>
+			<Access method="" url=""/>
+		</Service>
+    </OAuth>
+  </ModulePrefs>
+  <Content type="html">
+    <![CDATA[
+		
+		<script src="http://dbis.rwth-aachen.de/gadgets/iwc/lib/iwc.js"></script>
+		
+		<!-- JavaScript Block -->
+		<script>
+			
+			var space;
+			var user;
+			var iwcClient;
+			
+			gadgets.util.registerOnLoadHandler(init);
+			
+			function init(){
+				console.log("Widget loaded");
+				
+				space = new openapp.oo.Resource(openapp.param.space());
+				user = new openapp.oo.Resource(openapp.param.user());
+				
+				space.getInfo(function(info) {
+					var spacename = info[openapp.ns.dcterms + "title"];
+					document.getElementById("sname").innerHTML = spacename;
+				});
+				
+				user.getInfo(function(info) {
+					var username = info[openapp.ns.dcterms + "title"];
+					document.getElementById("uname").innerHTML = username;
+				});
+				
+				iwcClient = new iwc.Client()
+				iwcClient.connect(iwcCallback);
+				
+				renderNotes();
+			}
+			
+			function iwcCallback(intent){
+				console.log("Template: Received intent");
+				console.log(intent);
+				
+				if (intent.action == "ACTION_UPDATE" && 
+					intent.extras.ns == "my:ns:note"){
+					window.location.reload();
+				}
+			}
+			
+			function storeNote(){
+				var note = {"text":document.getElementById("note").value};
+				space.create({
+					relation: openapp.ns.role + "data",
+					type: "my:ns:note",
+					representation: note,
+					callback: function(sub){
+						publishResourceUpdate(sub.uri);
+						window.location.reload();
+					}
+				});
+			}
+			
+			function renderNotes(){
+				space.getSubResources({
+					relation: openapp.ns.role + "data",
+					type: "my:ns:note",
+					onEach: function(note) {
+						note.getRepresentation("rdfjson",function(r){
+							var ne = document.createElement("li");
+							var ntext = document.createTextNode(r.text);
+							ne.appendChild(ntext);
+							document.getElementById("notes").appendChild(ne);
+						});
+					}
+				});
+			}
+			
+			function publishResourceUpdate(uri){
+				var intent = {		
+					"component": "",
+					"data":uri,
+					"dataType":"text/json",		
+					"action":"ACTION_UPDATE",
+					"flags" :["PUBLISH_GLOBAL"],
+					"extras" :{"ns":"my:ns:note"}
+				};
+				iwcClient.publish(intent);
+			}
+
+		</script>
+		
+		<!-- HTML Block -->
+		<div>Hello <span id="uname"></span>, welcome to space <span id="sname"></span>.</div>
+		<input type="text" id="note" /><button onclick="storeNote()">Add Note</button>
+		<ul id="notes"/>
+	]]>
+  </Content>
+</Module>

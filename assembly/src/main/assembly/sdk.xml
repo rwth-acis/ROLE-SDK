@@ -1,0 +1,161 @@
+<assembly>
+	<id>sdk</id>
+	<formats>
+		<format>zip</format>
+		<format>tar.gz</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<dependencySets>
+		<dependencySet>
+			<outputDirectory>role-${project.version}-sdk</outputDirectory>
+			<outputFileNameMapping>webapps/${artifact.artifactId}.${artifact.extension}
+			</outputFileNameMapping>
+			<!--<outputFileNameMapping>webapps/${artifact.artifactId}-${artifact.version}${dashClassifier?}.${artifact.extension} 
+				</outputFileNameMapping> -->
+			<useTransitiveDependencies>false</useTransitiveDependencies>
+			<includes>
+				<include>org.mortbay.jetty:jetty-runner</include>
+			</includes>
+		</dependencySet>
+		<dependencySet>
+			<outputDirectory>role-${project.version}-sdk/webapps/role-uu-prototype</outputDirectory>
+			<useTransitiveDependencies>false</useTransitiveDependencies>
+			<includes>
+				<include>eu.role-project:role-uu-prototype</include>
+			</includes>
+			<unpack>true</unpack>
+		</dependencySet>
+	</dependencySets>
+	<fileSets>
+		<!-- Includes for SDK home directory -->
+
+		<!-- include README -->
+		<fileSet>
+			<outputDirectory>role-${project.version}-sdk</outputDirectory>
+			<directory>${basedir}/src/main/webapp</directory>
+			<includes>
+				<include>README</include>
+				<include>CHANGELOG</include>
+			</includes>
+		</fileSet>
+
+		<!-- Includes for SDK bin directory -->
+
+		<!-- include start scripts for local development server -->
+		<fileSet>
+			<outputDirectory>role-${project.version}-sdk/bin</outputDirectory>
+			<directory>${basedir}/src/main/webapp/webapps</directory>
+			<includes>
+				<include>start.cmd</include>
+				<include>start.sh</include>
+			</includes>
+		</fileSet>
+
+		<!-- Includes for SDK doc directory -->
+
+		<!-- Include API docs for ROLE libraries generated with JSDoc (see trunk/assembly/pom.xml 
+			for integrating further libraries into automatic JSDoc generation -->
+		<fileSet>
+			<outputDirectory>role-${project.version}-sdk/doc</outputDirectory>
+			<directory>${project.build.directory}/doc</directory>
+			<includes>
+				<include>**/*</include>
+			</includes>
+		</fileSet>
+
+		<!-- Includes for SDK lib directory -->
+
+		<!-- Include compiled OpenApp library files (openapp must have been built 
+			first) -->
+		<fileSet>
+			<outputDirectory>role-${project.version}-sdk/lib/openapp
+			</outputDirectory>
+			<directory>../libraries/openapp/target/classes</directory>
+			<includes>
+				<include>**/*.js</include>
+			</includes>
+		</fileSet>
+
+		<!-- Include compiled IWC library files (iwc must have been built first) -->
+		<fileSet>
+			<outputDirectory>role-${project.version}-sdk/lib/iwc
+			</outputDirectory>
+			<directory>../libraries/iwc/target/classes</directory>
+			<includes>
+				<include>**/*.js</include>
+			</includes>
+		</fileSet>
+
+
+		<!-- Includes for SDK src directory -->
+
+		<!-- Include sample gadgets showing instructional or reference implementations 
+			for ROLE software components -->
+		<fileSet>
+			<outputDirectory>role-${project.version}-sdk/src/gadget/samples
+			</outputDirectory>
+			<directory>../gadgets/widgetSamples</directory>
+			<includes>
+				<include>**/*</include>
+			</includes>
+		</fileSet>
+		
+		<!-- Include developer gadgets supporting the development of ROLE technology-enabled widgets -->
+		<fileSet>
+			<outputDirectory>role-${project.version}-sdk/src/gadget/development
+			</outputDirectory>
+			<directory>../gadgets/development</directory>
+			<includes>
+				<include>**/*</include>
+			</includes>
+		</fileSet>
+		
+		<!-- ROLE IWC Test Stub Widget -->
+		<fileSet>
+			<outputDirectory>role-${project.version}-sdk/src/gadget/development</outputDirectory>
+			<directory>../gadgets/iwc</directory>
+			<includes>
+				<include>iwc-teststub.xml</include>
+			</includes>
+		</fileSet>
+		
+		<!-- Test SDK Services Widget -->
+		<fileSet>
+			<outputDirectory>role-${project.version}-sdk/src/gadget/development
+			</outputDirectory>
+			<directory>../gadgets/development</directory>
+			<includes>
+				<include>testservices.xml</include>
+			</includes>
+		</fileSet>
+		
+		<!-- Includes for SDK webapps directory -->
+
+	</fileSets>
+	
+	<!-- Include development server start page -->
+	<!-- Add filtering to files where version number etc. need be added -->
+	<files>
+		<file>
+			<source>${basedir}/src/main/webapp/VERSION</source>
+			<outputDirectory>role-${project.version}-sdk</outputDirectory>
+			<filtered>true</filtered>
+		</file>
+		<file>
+			<source>${basedir}/src/main/webapp/index.html</source>
+			<outputDirectory>role-${project.version}-sdk</outputDirectory>
+			<filtered>true</filtered>
+		</file>
+		<file>
+			<source>${basedir}/src/main/webapp/doc/gadget/samples/index.html</source>
+			<outputDirectory>role-${project.version}-sdk/src/gadget/samples</outputDirectory>
+			<filtered>true</filtered>
+		</file>
+		<file>
+			<source>${basedir}/src/main/webapp/doc/gadget/development/index.html</source>
+			<outputDirectory>role-${project.version}-sdk/src/gadget/development</outputDirectory>
+			<filtered>true</filtered>
+		</file>
+	</files>
+		
+</assembly>

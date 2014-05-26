@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+  <ModulePrefs title="Working with events" author_email="mpalmer@gmail.com" height="320" description="The purpose of this widget is to show how to work with events, both sending and recieving.">
+    <Optional feature="openapp" />
+    <Optional feature="content-rewrite">
+	    <Param name="exclude-url">*</Param>
+	</Optional>
+  </ModulePrefs>
+  <Content type="html"><![CDATA[
+
+    <!-- ========= Style section ============ -->
+	<style>
+		img {max-width:68px; border: 1px solid white;}
+		img.selected {border: 1px solid red;}
+		h1 {margin-bottom: 3px;font-size: large;}
+		#name {padding: 3px;}
+		#description {font-size:small; padding: 5px;padding-top: 2px;}
+		#origin {position: absolute; bottom: 2px;right: 2px;font-size:xx-small;}
+	</style>
+	
+	
+    <!-- ========= HTML section (inline content) ============ -->
+   	<h1>Computer Scientists</h1>
+    <div>
+      <img title="Gordon Moore" src="http://www.computerhistory.org/fellowawards/media/img/fellows/1998_gordon_moore_sm.jpg" data-desc="Fundamental early work in the design and production of semiconductor devices, co-founder Fairchild and Intel." data-bio="http://www.computerhistory.org/fellowawards/hall/bios/Gordon,Moore"></img>
+      <img title="Vinton Cerf" src="http://www.computerhistory.org/fellowawards/media/img/fellows/2000_vinton_cerf.jpg" data-desc="Contributions to computer architecture, operating systems, and software engineering." data-bio="http://www.computerhistory.org/fellowawards/hall/bios/Vinton,Cerf"></img>
+      <img title="Douglas C. Engelbart" src="http://www.computerhistory.org/fellowawards/media/img/fellows/2005_doug_engelbart_sm.jpg" data-desc="Advanced the study of human-computer interaction, developing the mouse input device, and for the application of computers to improving organizational efficiency." data-bio="http://www.computerhistory.org/fellowawards/hall/bios/Douglas,Engelbart"></img>
+      <img title="Allan Kay" src="http://www.computerhistory.org/fellowawards/media/img/fellows/1999_alan_kay_sm.jpg" data-desc="Fundamental contributions to personal computing and human interface development; co-founder Xerox PARC." data-bio="http://www.computerhistory.org/fellowawards/hall/bios/Alan,Kay"></img>
+      <img title="Dennis Ritchie" src="http://www.computerhistory.org/fellowawards/media/img/fellows/1997_dennis_ritchie_sm.jpg" data-desc="Co-creation, with Ken Thompson, of the UNIX operating system, and for development of the C programming language." data-bio="http://www.computerhistory.org/fellowawards/hall/bios/Dennis,Ritchie"></img>
+      <img title="Ken Thompson" src="http://www.computerhistory.org/fellowawards/media/img/fellows/1997_ken_thompson_sm.jpg" data-desc="Co-creation, with Dennis Ritchie, of the UNIX operating system, and for development of the C programming language." data-bio="http://www.computerhistory.org/fellowawards/hall/bios/Ken,Thompson"></img>
+      <img title="Linus Torvalds" src="http://www.computerhistory.org/fellowawards/media/img/fellows/2008_linus_torvalds_sm.jpg" data-desc="Creator of the Linux kernel and the manager of open source development of the widely used Linux operating system." data-bio="http://www.computerhistory.org/fellowawards/hall/bios/Linus,Torvalds"></img>
+      <img title="Tim Berners-Lee" src="http://www.computerhistory.org/fellowawards/media/img/fellows/2003_tim_berners-lee_sm.jpg" data-desc="Seminal contributions to the development of the World Wide Web." data-bio="http://www.computerhistory.org/fellowawards/hall/bios/Tim,Berners-Lee"></img>
+    </div>
+    <a target="_blank" id="name"></a>
+    <div id="description"></div>
+	<a target="_blank" id="origin" href="http://www.computerhistory.org/fellowawards/hall/">http://www.computerhistory.org/fellowawards/hall/</a>
+
+
+   <!--======   JavaScript section    ========->
+   <!-- For simplicity, lets rely on jquery for manipulating the DOM. -->
+   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" type="text/javascript"></script>
+   <script>
+   	var sentEventTime;
+   	
+   	 // Extract the event message from the DOM node above.
+   	 function extractMessageFromNode(node) {         
+         //Construct the message using Dublin Core properties, see http://dublincore.org/documents/dcmi-terms/
+         var message = {};
+         message[openapp.ns.dcterms+"title"] = node.title;
+         message[openapp.ns.dcterms+"description"] = node.getAttribute("data-desc");
+         message[openapp.ns.foaf+"name"] = node.title;
+         message[openapp.ns.foaf+"depiction"] = node.src;
+         message[openapp.ns.rdfs+"seeAlso"] = node.getAttribute("data-bio");
+		 return message;
+   	 }
+   	
+   	 // Selection of a Computer scientist.
+     var selEl;
+   	 function selectNode(node, message) {
+         if (selEl) {
+         	$(selEl).removeClass("selected");
+         }
+   	 	selEl = node;
+   	 	$(selEl).addClass("selected");
+   	 	$("#name").html(message[openapp.ns.dcterms+"title"]);
+   	 	$("#name").attr("href", message[openapp.ns.rdfs+"seeAlso"]);
+   	 	$("#description").html(message[openapp.ns.dcterms+"description"]);
+   	 }
+   	 
+   	 // When gadget is inited
+	 gadgets.util.registerOnLoadHandler(function() {
+
+		// Listen for clicks on images.
+		$("img").click(function(e) {
+			sentEventTime = new Date();
+
+			// Extract a message and select the node
+			var message = extractMessageFromNode(e.currentTarget);
+			selectNode(e.currentTarget, message)
+			
+			// Send the event
+			var url = message[openapp.ns.rdfs+"seeAlso"];
+			gadgets.openapp.publish({uri: url}, message);
+       });
+       
+       gadgets.openapp.connect(function(envelope, message) {
+	       	if (sentEventTime == null || (new Date().getTime() - sentEventTime.getTime()) >= 500) {
+	       		var sel = $("img").each(function(index, el) {
+	       			var attr = el.getAttribute("data-bio");
+	       			if (attr === message["http://schema.org/itemReviewed"] ||
+	       				attr === message[openapp.ns.rdfs+"seeAlso"] ||
+	       				attr === envelope.uri) {
+	       				selectNode(el, extractMessageFromNode(el));
+	       				return false;
+	       			}
+	       		});
+       		}
+       });
+     });
+   </script>
+]]></Content>
+</Module>

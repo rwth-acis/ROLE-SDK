@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<html>
+	<head>
+		<title>Learning Space:</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<link rel="stylesheet/less" type="text/css" href="/ui/css/style.less">
+		<script src="/libs/less/less-min.js" type="text/javascript"></script>
+		<link rel="shortcut icon" href="/s/logo.icon" type="image/x-icon"/>
+		<link type="text/css" href="/libs/jqueryui/themes/base/jquery.ui.all.css" rel="stylesheet"></link>
+		<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+		<script data-main="/ui/javascript/main" src="/libs/requirejs-jquery/require-jquery.js"></script>
+	</head>
+	<body class="notLoggedIn notOwner notParticipant">
+		<div id="dialogNode" style="display:none"></div>
+		<div id="header">
+			<a href="http://role-project.eu/"><img id="logo" src="/s/logo.small" width="100" height="40" alt="ROLE"/></a>
+			<div id="signInNode"></div>
+			<div id="layoutNode">
+				<label title="Fixed width"><input type="radio" name="option_layout" value="flowing" checked="checked" /><img src="/ui/icons/columnF.png"></img></label>
+				<label title="One column"><input type="radio" name="option_layout" value="oneColumn"/><img src="/ui/icons/column1.png"></img></label>
+				<label title="Two columns"><input type="radio" name="option_layout" value="twoColumns"/><img src="/ui/icons/column2.png"></img></label>
+				<label title="Three columns"><input type="radio" name="option_layout" value="threeColumns"/><img src="/ui/icons/column3.png"></img></label>
+			</div>
+			<div class="bar">
+					<a href="/" class="barTitle">Start</a> &nbsp; > &nbsp;
+					<a class="barTitle" id="spaceTitleNode">SpaceTitle</a>
+					<a id="addToGoogleLinkNode" style="display: none"><img src="http://gmodules.com/ig/images/plus_google.gif" border="0" alt="Add to Google"></a>
+			</div>
+		</div>
+		<div id="main">
+				<div class="sideSection">
+					<div>
+						<div class="sideHeader">Widgets<span id="addWidgetNode" style="display:none" title="Add widget">&nbsp;+</span></div>
+						<div id="widgetsListNode"></div>
+					</div>
+					<div>
+						<div class="sideHeader">Apps<span id="addWebAppNode" style="display:none" title="Add App">&nbsp;+</span></div>
+						<div id="webAppNode"></div>
+					</div>
+					<div>
+						<div class="sideHeader">Participants<span id="addParticipantNode" style="display:none" title="Add participant">&nbsp;+</span></div>
+						<div id="participantsNode"></div>
+					</div>
+					<div>
+						<div class="sideHeader">Resources<span id="addResourceNode" style="display:none" title="Add resource">&nbsp;+</span></div>
+						<div id="resourcesNode"></div>
+					</div>
+				</div>
+				<div class="widgetsBox" id="widgetsNode"></div>
+		</div>
+		<div id="footer">
+			<div class="section background">
+			</div>
+			<div class="section">
+				<div id="dashboard">
+					<div id="signedInNode" style="display: none">
+						<div class="dashboardLabel">Personal widgets<span id="addDashboardWidgetNode" title="Add widget">+</span></div>
+						<div id="dashboardWidgetsNode"></div>
+					</div>
+					<div id="dashboardSignInNode">
+						<div class="dashboardLabel"><a id="dashboardSignInLinkNode">Sign in</a> to see your personal tools here.</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

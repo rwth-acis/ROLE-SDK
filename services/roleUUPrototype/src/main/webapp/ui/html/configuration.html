@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Configuration</title>
+<script src="/d/openapp"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+</head>
+<body>
+    <script id="mainTemplate" type="text/x-jquery-tmpl">
+		<p>Please choose a subsection.</p>
+		<ul>{{each data[uri]["http://purl.org/openapp/configuration"]}}{{if typeof idToDescription(parseId($value.value)) !== "undefined"}}
+			<li><a href="${$value.value}">${idToDescription(parseId($value.value)).title}</a></li>
+		{{/if}}{{/each}}</ul>
+    </script>
+    <script id="oauthTemplate" type="text/x-jquery-tmpl">
+		<hr/>
+		<h2>Clients:</h2>
+		<table>
+			<tr>
+				<th>Client identifier</th>
+				<th>Action</th>
+			</tr>
+			{{each data[uri]["http://purl.org/dc/terms/hasPart"]}}<tr>
+				<td>${parseId($value.value)}</td>
+				<td><button onclick="openapp.resource.del('${$value.value}');$(this).closest('tr').remove()">Delete</button></td>
+			</tr>{{/each}}
+		</table>
+		<hr/>
+		<form method="post">
+			<input type="hidden" name="openapp.ns.rdf" value="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+			<input type="hidden" name="openapp.ns.rdfs" value="http://www.w3.org/2000/01/rdf-schema#"/>
+			<input type="hidden" name="openapp.ns.dcterms" value="http://purl.org/dc/terms/"/>
+			<input type="hidden" name="openapp.ns.config" value="http://kmr.csc.kth.se/rdf/conserve/config/"/>
+			<input type="hidden" name="openapp.rdf.predicate" value="http://purl.org/dc/terms/hasPart"/>
+			<input type="hidden" name="openapp.rdf.type" value="http://kmr.csc.kth.se/rdf/conserve/config/OAuthClient"/>
+			Client identifier: <input type="text" name="openapp.rdfs.label" value=""/><br/>
+			Client secret: <input type="text" name="openapp.config.secret" value=""/><br/>
+			<input type="submit" value="Add"/>
+			</p>
+		</form>
+		<hr/>
+    </script>
+    
+	<h1 id="title"></h1>
+	<script type="text/javascript">
+	var removeTopic = function(uri) {
+		var queryStart = uri.indexOf("?");
+		if (uri.lastIndexOf(":", queryStart !== -1 ? queryStart : uri.length)
+				< uri.lastIndexOf("/", queryStart !== -1 ? queryStart : uri.length)) {
+			return uri;
+		}
+		return uri.substring(0, uri.lastIndexOf("/", queryStart !== -1 ? queryStart : uri.length));
+	};
+	var parseId = function(uri) {
+		return uri.substring(uri.lastIndexOf("/") + 1);
+	};
+	var idToDescription = function(id) {
+		switch (id) {
+		case "p9Z7U-p5VGuAZRDsT-64wA":
+			return { title: "OAuth", template: "oauthTemplate" };
+		default:
+			return { title: "Configuration", template: "mainTemplate" };
+		}
+	};
+	var contextUri = removeTopic(document.location.href);
+	var configDescription = idToDescription(parseId(contextUri));
+	$("#title").text(configDescription.title);
+	
+	openapp.resource.get(contextUri, function(context) {
+		$("#" + configDescription.template).tmpl(context).appendTo($(document.body));
+	}, { "http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate":
+		"http://purl.org/openapp/info" });
+	
+	</script>
+</body>
+</html>

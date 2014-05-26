@@ -1,0 +1,74 @@
+html, body { 
+	margin: 0px; 
+	padding: 0px; 
+	font-family: sans-serif;
+	font-size: 90%; 
+}
+
+#pageContent {
+	margin-top: 5%;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 1em;
+	max-width: 50em;
+	h1 {
+		color: #00aa00;
+	}
+}
+
+.authenticationBoxes {
+	margin-left: -.5em;
+	.authenticationBox {
+		float: left;
+		width: 15em;
+		margin: 0em 1em 1em 0em;
+		padding: 1em;
+		border: 1px solid #aaa;
+		border-radius: .5em;
+		h2 {
+			margin-top: 0em;
+		}
+		h3 {
+			background: #fff;
+			border-radius: .5em;
+			border: 1px solid #fff;
+			padding: 1px;
+		}
+		img {
+			vertical-align: middle;
+			margin: .5em .5em .7em .5em;
+		}
+		a {
+			color: #000;
+			text-decoration: none;
+		}
+		.message {
+			font-weight: bold;
+		}
+		box-shadow: 4px 4px 16px #eee;
+	}
+	.authenticationBox:hover {
+		//background: #aaffaa;
+		h3 {
+			border: 1px solid #aaa;
+		}
+		h3:hover {
+			border: 2px solid #00cc55;
+			padding: 0px;
+		}
+		border: 1px solid #00cc55;
+		box-shadow: 1px 1px 32px #aaffaa;
+	}
+}
+
+.text {
+	border: 1px solid #aaa;
+	border-radius: .2em;
+	margin: 1px;
+	padding: .2em;
+}
+
+.text:focus {
+	margin: 0px;
+	border: 2px solid #aaa;
+}

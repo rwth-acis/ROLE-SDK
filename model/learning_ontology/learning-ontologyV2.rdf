@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Change Log -->
+<!-- 07/10/11(AK)  -->
+<!-- Added links to glossary -->
+<rdf:RDF xml:base="file:///X:/Aktuelles/Role/WP2/Semantics/sourceforge/learning-ontology.rdfs" xmlns:dcterms="http://purl.org/dc/terms" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:role="http://www.role-project.eu/semantics/iwmkold#">
+	<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#SequentialObject">
+		<rdf:type>
+			<rdf:Description rdf:about="http://www.w3.org/2002/07/owl#Class"/>
+		</rdf:type>
+		<rdfs:comment>Sequential object is an object that is used within a sequence.</rdfs:comment>
+		<rdfs:seeAlso>https://ilias.uni-koblenz.de/goto.php?target=git_233_948&amp;client_id=default</rdfs:seeAlso>
+		<rdfs:subClassOf>
+			<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#Object"/>
+		</rdfs:subClassOf>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#LearningActivity">
+		<rdf:type>
+			<rdf:Description rdf:about="http://www.w3.org/2002/07/owl#Class"/>
+		</rdf:type>
+		<rdfs:subClassOf>
+			<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#SequentialObject"/>
+		</rdfs:subClassOf>
+		<rdfs:comment>A learning activity is a representation of a necessary operation to be performed to complete a learning task. It consists of decision activities (DA) or concrete activities (CA). </rdfs:comment>
+		<rdfs:seeAlso>https://ilias.uni-koblenz.de/goto.php?target=git_139_948&amp;client_id=default</rdfs:seeAlso>
+		<owl:unionOf rdf:parseType="Collection">
+			<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#ConcreteActivity"/>
+			<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#DecisionActivity"/>
+		</owl:unionOf>
+	</rdf:Description>
+	<!-- PROPERTIES -->
+	<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#functionality">
+		<rdf:type>
+			<rdf:Description rdf:about="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+		</rdf:type>
+		<rdfs:domain>
+			<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#LearningActivity"/>
+		</rdfs:domain>
+		<rdfs:range>
+			<owl:Class rdf:about="http://www.role-project.eu/semantics/iwmkold#Functionality">
+				<rdfs:seeAlso>https://ilias.uni-koblenz.de/goto.php?target=git_214_948&amp;client_id=default</rdfs:seeAlso>
+				<rdfs:subClassOf>
+					<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#Object"/>
+				</rdfs:subClassOf>
+				<rdfs:comment>Functionality describes the purpose of a tool or service for which it is designed and its capability to fulfill specific functions. </rdfs:comment>
+				<rdfs:label/>
+				<rdfs:label/>
+			</owl:Class>
+		</rdfs:range>
+		<rdfs:domain>
+			<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#LearningTechnique"/>
+		</rdfs:domain>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#doesRequireBefore">
+		<rdf:type>
+			<rdf:Description rdf:about="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+		</rdf:type>
+		<rdfs:domain>
+			<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#SequentialObject"/>
+		</rdfs:domain>
+		<rdfs:range>
+			<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#SequentialObject"/>
+		</rdfs:range>
+		<rdf:type>
+			<rdf:Description rdf:about="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+		</rdf:type>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#ConcreteActivity">
+		<rdf:type>
+			<rdf:Description rdf:about="http://www.w3.org/2002/07/owl#Class"/>
+		</rdf:type>
+		<owl:disjointWith>
+			<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#DecisionActivity"/>
+		</owl:disjointWith>
+		<rdfs:subClassOf>
+			<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#LearningActivity"/>
+		</rdfs:subClassOf>
+		<rdfs:comment>A concrete activity is a step in the learning process. </rdfs:comment>
+		<rdfs:seeAlso>https://ilias.uni-koblenz.de/goto.php?target=git_216_948&amp;client_id=default</rdfs:seeAlso>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#DecisionActivity">
+		<rdf:type>
+			<rdf:Description rdf:about="http://www.w3.org/2002/07/owl#Class"/>
+		</rdf:type>
+		<owl:disjointWith>
+			<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#ConcreteActivity"/>
+		</owl:disjointWith>
+		<rdfs:subClassOf>
+			<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#LearningActivity"/>
+		</rdfs:subClassOf>
+		<rdfs:seeAlso>https://ilias.uni-koblenz.de/goto.php?target=git_234_948&amp;client_id=default</rdfs:seeAlso>
+		<rdfs:comment>An decision activity is a selection of references to at least one learning strategy.</rdfs:comment>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#LearningStrategy">
+		<rdf:type>
+			<rdf:Description rdf:about="http://www.w3.org/2002/07/owl#Class"/>
+		</rdf:type>
+		<rdfs:subClassOf>
+			<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#Object"/>
+		</rdfs:subClassOf>
+		<rdfs:seeAlso>https://ilias.uni-koblenz.de/goto.php?target=git_177_948&amp;client_id=default</rdfs:seeAlso>
+		<rdfs:comment>A learning strategy is a sequence of learning activities (concrete activities and decision activities).</rdfs:comment>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#strategicOption">
+		<rdf:type>
+			<rdf:Description rdf:about="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+		</rdf:type>
+		<rdfs:domain>
+			<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#DecisionActivity"/>
+		</rdfs:domain>
+		<rdfs:range>
+			<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#LearningStrategy"/>
+		</rdfs:range>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#LearningTechnique">
+		<rdf:type>
+			<rdf:Description rdf:about="http://www.w3.org/2002/07/owl#Class"/>
+		</rdf:type>
+		<rdfs:subClassOf>
+			<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#LearningStrategy"/>
+		</rdfs:subClassOf>
+		<owl:equivalentClass>
+			<rdf:Description>
+				<owl:onProperty>
+					<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#strategyHasActivity"/>
+				</owl:onProperty>
+				<rdf:type>
+					<rdf:Description rdf:about="http://www.w3.org/2002/07/owl#Restriction"/>
+				</rdf:type>
+				<owl:allValuesFrom>
+					<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#ConcreteActivity"/>
+				</owl:allValuesFrom>
+			</rdf:Description>
+		</owl:equivalentClass>
+		<rdfs:seeAlso>https://ilias.uni-koblenz.de/goto.php?target=git_178_948&amp;client_id=default</rdfs:seeAlso>
+		<rdfs:comment>A learning technique is a exceptional case of learning strategy consisting only of concrete activities.</rdfs:comment>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#strategyHasActivity">
+		<rdf:type>
+			<rdf:Description rdf:about="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+		</rdf:type>
+		<rdfs:domain>
+			<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#LearningStrategy"/>
+		</rdfs:domain>
+		<rdfs:range>
+			<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#LearningActivity"/>
+		</rdfs:range>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#techniqueHasActivity">
+		<rdf:type>
+			<rdf:Description rdf:about="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+		</rdf:type>
+		<rdfs:domain>
+			<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#LearningTechnique"/>
+		</rdfs:domain>
+		<rdfs:range>
+			<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#ConcreteActivity"/>
+		</rdfs:range>
+		<rdfs:subPropertyOf>
+			<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#strategyHasActivity"/>
+		</rdfs:subPropertyOf>
+		<owl:sameAs>
+			<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#strategyHasActivity"/>
+		</owl:sameAs>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#Object">
+		<rdf:type>
+			<rdf:Description rdf:about="http://www.w3.org/2002/07/owl#Class"/>
+		</rdf:type>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#name">
+		<rdf:type>
+			<rdf:Description rdf:about="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+		</rdf:type>
+		<rdfs:domain>
+			<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#Object"/>
+		</rdfs:domain>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#iconurl">
+		<rdf:type>
+			<rdf:Description rdf:about="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+		</rdf:type>
+		<rdfs:domain>
+			<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#Object"/>
+		</rdfs:domain>
+		<rdfs:range>
+			<rdf:Description rdf:about="http://www.w3.org/2001/XMLSchema#string"/>
+		</rdfs:range>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#description">
+		<rdf:type>
+			<rdf:Description rdf:about="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+		</rdf:type>
+		<rdfs:domain>
+			<rdf:Description rdf:about="http://www.role-project.eu/semantics/iwmkold#Object"/>
+		</rdfs:domain>
+		<rdfs:range>
+			<rdf:Description rdf:about="http://www.w3.org/2001/XMLSchema#string"/>
+		</rdfs:range>
+	</rdf:Description>
+</rdf:RDF>

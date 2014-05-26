@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+  <ModulePrefs title="Working with resources" author_email="mpalmer@gmail.com" height="320" description="The purpose of this widget is to show how to work with resources, both creating and loading them.">
+  	<Require feature="opensocial-0.9" />
+    <Require feature="openapp" />
+    <Optional feature="content-rewrite">
+	    <Param name="exclude-url">*</Param>
+	</Optional>
+    <OAuth>
+ 	<Service name="openapp" xmlns:openapp="http://www.role-project.eu/xml/openapp/opensocialext/"
+               openapp:service="http://purl.org/role/terms/spaceService"
+               openapp:permitReadAppend="http://purl.org/role/terms/data">
+        <Request method="" url=""/>
+        <Authorization url=""/>
+        <Access method="" url=""/>
+      </Service>
+    </OAuth>
+  </ModulePrefs>
+  <Content type="html"><![CDATA[	
+	
+    <!-- ========= Content section ============ -->
+    <button id="add" type="button">add resource</button>
+	<div id="comments"></div>
+
+   <!--======   JavaScript section    ========->
+   <!-- For simplicity, lets rely on jquery for manipulating the DOM. -->
+   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" type="text/javascript"></script>
+   
+   <script>
+	 gadgets.util.registerOnLoadHandler(function() {
+		var space = new openapp.oo.Resource(openapp.param.space());
+		
+		// Load all resources typed as foaf:Document in the current space (related via the data relation)
+		space.getSubResources({
+			relation: openapp.ns.role + "data",
+			type: openapp.ns.foaf+"Document",
+			onEach: showResource});
+		
+		// Function to show a single resource as HTML
+		function showResource(resource) {
+			resource.getRepresentation(null, function(data) {
+				resource.getMetadata(null, function(md) {
+					$("#comments").append('<p>'+data+' - <span style="font-size:xx-small">'+md[openapp.ns.dcterms+"title"]+'</span></p>');
+				});
+			});
+		}
+		
+		// Create a new resource (with representation and metadata) when the user clicks on the "add resource" button
+		$("button").click(function(e) {
+       		//A new resource is created in the space via the relation, with a specific type and with the given metadata. 
+       		space.create({
+       			metadata: {"http://purl.org/dc/terms/title": "Resource created at "+new Date().toString()},
+       			representation: "<div>Hello world!</div>",
+       			medieType: "text/html",
+       			relation: openapp.ns.role + "data",
+       			type: openapp.ns.foaf+"Document",
+       			callback: showResource
+       		});
+       });
+     });
+   </script>
+]]></Content>
+</Module>

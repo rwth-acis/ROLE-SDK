@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport"
+	content="width=100%; 
+             initial-scale=1;
+             maximum-scale=1;
+             minimum-scale=1; 
+             user-scalable=no;" />
+<title>ROLE</title>
+<link rel="stylesheet"
+	href="//ajax.aspnetcdn.com/ajax/jquery.ui/1.8.13/themes/base/jquery-ui.css" />
+<link rel="stylesheet" href="/s/css/default.css" />
+<link rel="stylesheet" href="/s/css/role.css" />
+</head>
+<body onload="role.init()">
+	<div id="header"></div>
+	<!-- <div id="shade"></div> -->
+	<!-- <div id="dashboard" style="display: none"></div> -->
+	<input id="currentPageId" type="hidden" value="12" />
+	<div id="tabsHeader">
+		<div id="tabs" class="rave-ui-tabs">
+			<div id="tab-12" class="rave-ui-tab rave-ui-tab-selected">
+				<div id="pageTitle-12" class="page-title"
+					onclick="rave.viewPage(12);">Activity</div>
+				<div id="pageMenuWrapper">
+					<span id="pageMenuButton" class="ui-icon ui-icon-circle-triangle-s"
+						title="Page Actions Menu"></span>
+					<div id="pageMenu" class="page-menu">
+						<div id="pageMenuEdit" class="page-menu-item">Edit Page</div>
+						<div id="pageMenuDelete"
+							class="page-menu-item page-menu-item-disabled">Delete Page</div>
+						<div id="pageMenuMove"
+							class="page-menu-item page-menu-item-disabled">Move Page</div>
+					</div>
+				</div>
+			</div>
+			<button id="add_page" title="Add a New Page" style="display: none;"></button>
+		</div>
+	</div>
+	<div id="pageContent">
+		
+	
+		<div class="sideSection" id="sidebar">
+		</div>
+		<div style="margin: 10% 1em 1em 1em">
+			<h1 style="color: #00cc55; text-transform: none; font-size: 3em;">New space</h1>
+			<form action="spaces" method="post">
+				<input type="hidden" name="openapp.ns.rdf" value="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+				<input type="hidden" name="openapp.ns.rdfs" value="http://www.w3.org/2000/01/rdf-schema#"/>
+				<input type="hidden" name="openapp.ns.dcterms" value="http://purl.org/dc/terms/"/>
+				<input type="hidden" name="openapp.rdf.predicate" value="http://purl.org/role/terms/space"/>
+				<input type="hidden" name="openapp.rdf.type" value="http://purl.org/role/terms/Space"/>
+				<p style="font-size: 18px">
+					http://<span id="spacesBaseUri"></span>/spaces/<input name="openapp.rdfs.label" type="text" style="font-size: 18px; border-radius: 3px; border: 1px solid #ccc; color: #00aa00; width: 8em"/>
+					<input type="submit" value="Create" style="padding: 5px; font-weight: bold; border-radius: 5px; border: 2px solid #ccc; background: url(/s/images/wavebg2.png); cursor: pointer"/>
+				</p>
+			</form>
+		</div>
+		<div class="region-wrapper flow-layout" id="region-0-wrapper">
+			<div class="region" id="region-0-id"></div>
+		</div>
+		<div class="clear-float">&nbsp;</div>
+	</div>
+	<div id="widget-widgetStore-wrapper" style="display: none">
+		<div class="widget" style="overflow: hidden; padding: 0px">
+			<iframe id="widgetStoreFrame" scrolling="auto" marginwidth="0"
+				marginheight="0" frameborder="0" vspace="0" hspace="0" height="100%"
+				width="100%"></iframe>
+		</div>
+	</div>
+	<div id="dialog" title="Add a New Page" class="dialog">
+		<form id="pageForm">
+			<div id="pageFormErrors" class="error"></div>
+			<fieldset class="ui-helper-reset">
+				<label for="tab_title">Title</label> <input type="text"
+					name="tab_title" id="tab_title" value=""
+					class="required ui-widget-content ui-corner-all" /> <label
+					for="pageLayout">Select Page Layout:</label> <select
+					name="pageLayout" id="pageLayout">
+					<option value="columns_1" id="columns_1_id">One Column</option>
+					<option value="columns_2" id="columns_2_id" selected="selected">Two
+						Columns</option>
+					<option value="columns_2wn" id="columns_2wn_id">Two
+						Columns (wide/narrow)</option>
+					<option value="columns_3" id="columns_3_id">Three Columns</option>
+					<option value="columns_3nwn" id="columns_3nwn_id">Three
+						Columns (narrow/wide/narrow)</option>
+					<option value="columns_4" id="columns_4_id">Four Columns</option>
+					<option value="columns_3nwn_1_bottom" id="columns_3nwn_1_bottom">Four
+						Columns (narrow/wide/narrow/bottom)</option>
+				</select>
+			</fieldset>
+		</form>
+	</div>
+	<div id="movePageDialog" title="Move Page" class="dialog">
+		<div>Move this page:</div>
+		<form id="movePageForm">
+			<select id="moveAfterPageId">
+			</select>
+		</form>
+	</div>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.js"></script>
+	<script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.2.min.js"></script>
+	<script src="/s/script/jquery.url.js" type="text/javascript"></script>
+	<script
+		src="//ajax.aspnetcdn.com/ajax/jquery.ui/1.8.13/jquery-ui.min.js"></script>
+	<script
+		src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.8.1/jquery.validate.min.js"></script>
+	<script
+		src="/gadgets/js/container.js?c=1&amp;container=default&amp;debug=1"></script>
+	<script src="/d/openapp"></script>
+	<script src="/s/script/rave.js"></script>
+	<script src="/s/script/rave_api.js"></script>
+	<script src="/s/script/rave_opensocial.js"></script>
+	<script src="/s/script/rave_wookie.js"></script>
+	<script src="/s/script/rave_layout.js"></script>
+	<script type="text/javascript">
+		openapp_forceXhr = true;
+		_role_dashboard_manualinit = true;
+		_role_userprofile_href = "http://" + document.location.host + "/user/role:ple?mode=dashboard";
+	</script>
+	<script src="/d/openapp"></script>
+	<script
+		src="//ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+	<script type="text/javascript">
+		$("#spacesBaseUri").text(document.location.host);
+	</script>
+	<script src="/s/script/strophe.js"></script>
+	<script src="/s/script/groupie.js"></script>
+	<script src="/s/script/role.js"></script>
+	<script src="/s/script/role_dashboard.js"></script>	
+	
+	<iframe style="display: none" id="templates"
+		src="/s/templates/role.html"></iframe>
+</body>
+</html>

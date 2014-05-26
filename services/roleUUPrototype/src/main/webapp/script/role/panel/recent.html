@@ -1,0 +1,11 @@
+<a class="sideEntry recentEntry sideBox" data-index="{{recentIndex}}"
+	data-uri="{{uri}}" id="sideEntry-recent{{recentIndex}}" href="{{uri}}"
+	title="{{title}}">
+	<button class="sideEntrySelButton"
+		style="float: right; font-size: 10px;" title="Close">✖</button>
+	<button class="sideEntryNotSelButton recentReselectButton"
+		style="float: right; font-size: 10px;"
+		onclick="var env = JSON.parse($(this).attr('openappEnvelope')); env.republished = true; gadgets.openapp.publish(env)"
+		openappEnvelope="{{stringified}}" title="Reselect">↺</button>
+	<div class="recentEntryTitle">{{title}}</div>
+</a>

@@ -1,0 +1,116 @@
+ROLE SDK - Change Log
+=====================
+
+Release Notes - ROLE - Version Shori Final
+------------------------------------------
+
+** Bug
+    * [ROLE-126] - Members of a space are allowed to add tools visible to all other members
+    * [ROLE-371] - OpenID verification failed
+    * [ROLE-381] -  IE9 can not display role-sandbox.eu
+    * [ROLE-386] - Caching issues with Widget Store
+    * [ROLE-418] - Bug in Linux FF for the login in SDK
+    * [ROLE-515] - Store OS feature list needs saving twice to reflect change in SPARQL results
+    * [ROLE-516] - Activity space displays one widget unless refreshed
+    * [ROLE-517] - Integrated Wishing in SDK shows Requirements Bazaar in Space Frame
+    * [ROLE-518] - Loading Requirements Bazaar jQuery plug-in overwrites previously initialized jQuery object
+    * [ROLE-519] - 1 No sign in with IE9 (Internet Explorer)
+
+
+** Improvement
+    * [ROLE-399] - Tooltips for widgets and spaces 
+
+** Shori-task
+    * [ROLE-430] - Finalize ROLE Requirements Bazaar
+    * [ROLE-433] - Develop the ROLE Platform
+    * [ROLE-434] - ROLE ontology version 2 to be used by ROLE services
+    * [ROLE-438] - Integrate CAM visualisation tools in ROLE Platform
+    * [ROLE-449] - Extract widget bundles from existing ROLE Platform spaces and add them to the store
+    * [ROLE-450] - Provide an interface in the ROLE Platform to add tools and bundles to a space from the store
+    * [ROLE-464] - Provide an interface which allows to add widgets and bundles from other platforms to the store
+    * [ROLE-468] - Collection of user-to-user interactions from RIWC by CAM
+    * [ROLE-494] - Streamline documentation in the ROLE SDK
+
+** Sub-task
+    * [ROLE-431] - Provide OpenApp server library v1.0
+    * [ROLE-432] - Provide OpenApp JavaScript API v1.0
+    * [ROLE-448] - Provide real-time updates
+    * [ROLE-511] - Set up builds of JavaScript in Maven
+
+
+Release Notes - ROLE SDK - Version Shori Milestone 9
+----------------------------------------------------
+
+** Bug
+    * [ROLE-384] - Unable to add too to widget store
+    * [ROLE-387] - Malfunctioning widget makes whole space unusable
+    * [ROLE-392] - Missing definition on purl.org
+    * [ROLE-415] - XMPP users name appears as null
+    * [ROLE-417] - XMPP add friend on linux
+
+** Improvement
+    * [ROLE-395] - Display the owner of a space
+    * [ROLE-421] - XMPP Documentation
+
+** New Feature
+    * [ROLE-514] - Integrate ROLE Requirements Bazaar with ROLE SDK
+
+** Shori-task
+    * [ROLE-429] - Refine ROLE Requirements Bazaar
+    * [ROLE-440] - Provide an implementation to integrate web applications and track their interaction in spaces
+    * [ROLE-441] - Evaluate the integration of web applications and tracking of their interaction in spaces
+    * [ROLE-442] - Evaluate the SRE integration with the widget store and provide feedback for improvement on the design and functionality.
+    * [ROLE-453] - Document the possibilities for adding widgets from the store into the different environments
+    * [ROLE-461] - Provide functionality in ROLE Platform to transfer bundles to the store from the space UI
+    * [ROLE-472] - Provide welcome bundle, 2 widgets (simple about page + content viewer)
+    * [ROLE-473] - Present tweet categorization bundle, 5 widgets
+
+** Sub-task
+    * [ROLE-138] - Configuration of SDK
+
+
+Release Notes - ROLE SDK - Version Shori Milestone 8
+----------------------------------------------------
+- Tested and works best on Windows using Chrome and Firefox
+- Tested on Linux (Ubuntu) Chrome and Firefox
+
+** Improvement
+    * [ROLE-396] - Join a space prompt
+
+** Task
+    * [ROLE-123] - publish semantic description files on a ROLE Web server
+
+** Feature (not yet linked to JIRA)
+	* Introduction of friend lists (XMPP roster list) in space interface
+		* click on space member -> add to friendlist
+		* private 1-on-1 chat with friends in parallel to space chat
+	* Improved design with icons in the header and footer (relates to ROLE-396)
+	* Nudges for not having joined a space and not being signed in (partially relates to ROLE-123)
+	* Spaces can now be shared 
+		* via iframe and script tag 
+		* via social-network buttons (Facebook, Twitter and Google+)
+		
+Release Notes - ROLE SDK - Version Shori Milestone 7
+----------------------------------------------------
+
+RWTH
+----
+- included new Strophe branch introducing both XMPP over BOSH/WebSocket transport
+- integration of new Strophe branch into ROLE Reference Implementation
+- default resource for XMPP over BOSH now set to standard-compliant "http-bind" (eases using SDK with XMPP Server; tutorial about to be completed; will be available from ROLE Sourceforge MediaWiki within the next few days; linked from ROLE SDK index page)
+- minor corrections of XMPP-related console logs
+- introduced fix for http://role-is.dbis.rwth-aachen.de:9085/browse/ROLE-372 (however, resolution not possible, since Widget Store seems to not show select buttons at all now.)
+
+UU
+----
+- added new OpenApp sample widgets: http://role-project.svn.sourceforge.net/viewvc/role-project/trunk/gadgets/widgetSamples/openapp/
+- sample widgets demonstrate functionality including:
+  - The basics of how to work with events, both sending and recieving.
+(events.xml and events-send-receive.xml)
+  - Range of example events that other developer can be inspired from,
+that is, mostly from which vocabularies to use. (events-examples.xml)
+  - How to work with resources, both creating and loading them.
+(resources.xml, resources-read-write.xml, resources-space-read.xml and
+resources-user-read.xml)
+
+

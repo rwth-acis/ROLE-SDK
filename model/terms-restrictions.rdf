@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Changelog -->
+<!-- 30/09/11 (ID) -->
+<!-- ROLE ontology meta description removed as it is OWL Lite syntactically incorrect -->
+<!-- Added class role:FunctionalityType with property role:realizesWidgetType to reflect WP2 tool categories and their mapping to the widget store widget types -->
+<!-- Added property role:relatedFunctio0nality -->
+<!-- 07/10/11 (AK, ID) -->
+<!-- Added links to glossary -->
+<!-- Changed URIs of ToolFunctionality Instances to match WP2 database -->
+
+<rdf:RDF 
+	xmlns:dc="http://purl.org/dc/elements/1.1/" 
+	xmlns:dcterms="http://purl.org/dc/terms/" 
+	xmlns:owl="http://www.w3.org/2002/07/owl#" 
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" 
+	xmlns:role="http://purl.org/role/terms/">
+	<!-- OWL Lite compatibility tricks -->
+	<owl:DatatypeProperty rdf:about="http://purl.org/dc/terms/description"/>
+	<owl:DatatypeProperty rdf:about="http://purl.org/dc/terms/title"/>
+	<owl:DatatypeProperty rdf:about="http://purl.org/dc/terms/subject"/>
+	<!-- ROLE ontology meta description removed as it is OWL Lite syntactically incorrect (ID)
+	<owl:Ontology rdf:about="http://purl.org/role/terms/">
+		<dcterms:title xml:lang="en">ROLE EU-funded project core ontology</dcterms:title>
+		<owl:versionInfo>version 0.1</owl:versionInfo>
+		<dcterms:description xml:lang="en">Role Ontology</dcterms:description>
+		<rdfs:seeAlso rdf:resource="http://role-project.eu" rdfs:label="ROLE project Homepage"/>
+	</owl:Ontology>
+	-->
+
+<!--Redeclaration of classes, need to indicate owl:Class to pass OWL-Lite valid if not explicit dependencies are checked.-->
+	<owl:Class rdf:about="http://xmlns.com/foaf/0.1/Agent"/>
+
+	<owl:Restriction rdf:nodeID="_title_Restriction">
+	  <owl:onProperty rdf:resource="http://purl.org/dc/terms/title" />
+	  <owl:allValuesFrom rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+	</owl:Restriction>
+
+	<owl:Restriction rdf:nodeID="_description_Restriction">
+	  <owl:onProperty rdf:resource="http://purl.org/dc/terms/description" />
+	  <owl:allValuesFrom rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+	</owl:Restriction>
+
+	<owl:Restriction rdf:nodeID="_source_Restriction">
+	  <owl:onProperty rdf:resource="http://purl.org/dc/terms/source" />
+	  <owl:allValuesFrom rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+	</owl:Restriction>
+
+	<owl:Restriction rdf:nodeID="_seeAlso_Restriction">
+	  <owl:onProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#seeAlso" />
+	  <owl:allValuesFrom rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+	</owl:Restriction>
+
+	<owl:Restriction rdf:nodeID="_maker_Restriction">
+	  <owl:onProperty rdf:resource="http://xmlns.com/foaf/0.1/maker"/>
+	  <owl:allValuesFrom rdf:resource="http://purl.org/role/terms/Actor"/>
+	</owl:Restriction>
+
+	<owl:Restriction rdf:nodeID="_img_Restriction">
+	  <owl:onProperty rdf:resource="http://xmlns.com/foaf/0.1/img"/>
+	  <owl:allValuesFrom rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+	</owl:Restriction>
+
+	<owl:Restriction rdf:nodeID="_depicts_Restriction">
+	  <owl:onProperty rdf:resource="http://xmlns.com/foaf/0.1/depicts"/>
+	  <owl:allValuesFrom rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+	</owl:Restriction>
+
+<!-- CLASSES -->
+	<owl:Class rdf:about="http://purl.org/role/terms/Tool">
+		<rdfs:label>Tool</rdfs:label>
+		<rdfs:seeAlso rdf:resource="https://ilias.uni-koblenz.de/goto.php?target=git_189_948&amp;client_id=default"/>
+		<rdfs:comment>Any software used as a means of accomplishing a learning task or goal.</rdfs:comment>
+		<rdfs:subClassOf rdf:resource="http://purl.org/role/terms/LearningResource"/>
+		<rdfs:subClassOf rdf:nodeId="_source_Restriction"/>
+		<rdfs:subClassOf rdf:nodeId="_title_Restriction"/>
+		<rdfs:subClassOf rdf:nodeId="_seeAlso_Restriction"/>
+		<rdfs:subClassOf rdf:nodeId="_description_Restriction"/>
+		<rdfs:subClassOf rdf:nodeId="_maker_Restriction"/>
+		<rdfs:subClassOf rdf:nodeId="_img_Restriction"/>
+		<rdfs:subClassOf rdf:nodeId="_depicts_Restriction"/>
+		<rdfs:subClassOf rdf:nodeId="_subject_Restriction"/>
+//functionality, category, 
+	</owl:Class>
+	<owl:Class rdf:about="http://purl.org/role/terms/ConfiguredTool">
+		<rdfs:label>Configured Tool</rdfs:label>
+		<rdfs:seeAlso rdf:resource="https://ilias.uni-koblenz.de/goto.php?target=git_215_948&amp;client_id=default"/>
+		<rdfs:comment>
+		Specification how a tool can be used by providing guidance and a suggested starting configuration for the tool.
+		Specifies how a tool can be used by providing guidance and a suggested starting configuration for the tool.
+		 An instance of the class Configured Tool should be used to refer to a tool that comes with a set of 
+		 configuration information. It is used to describe what is contained in a Bundle in addition
+		 to other resources that can be documents, artifacts, or references to users.
+		</rdfs:comment>
+		<rdfs:subClassOf rdf:resource="http://purl.org/role/terms/LearningResource"/>
+	</owl:Class>
+	<owl:Class rdf:about="http://purl.org/role/terms/Widget">
+		<rdfs:label>Widget</rdfs:label>
+		<rdfs:seeAlso rdf:resource="https://ilias.uni-koblenz.de/goto.php?target=git_191_948&amp;client_id=default"/>
+		<rdfs:comment>Widgets are small tools that provide functionality in a user interface.Widgets
+		 follow some standard that makes it possible to run it in different environments.A widget can
+		  refer to at least one functionality. Widgets are often Web-enabled. </rdfs:comment>
+		<rdfs:subClassOf rdf:resource="http://purl.org/role/terms/Tool"/>
+	</owl:Class>
+	<owl:Class rdf:about="http://purl.org/role/terms/Space">
+		<rdfs:label>Space</rdfs:label>
+		<rdfs:seeAlso rdf:resource="https://ilias.uni-koblenz.de/goto.php?target=git_193_948&amp;client_id=default"/>
+		<rdfs:comment>A space is a setting where a group of users can perform one or several activities.</rdfs:comment>
+		<rdfs:subClassOf rdf:resource="http://purl.org/role/terms/ResourceBundle"/>
+	</owl:Class>
+
+	<owl:Class rdf:about="http://purl.org/role/terms/LearningResource">
+		<rdfs:label>Learning Resource</rdfs:label>
+		<rdfs:seeAlso rdf:resource="https://ilias.uni-koblenz.de/goto.php?target=git_222_948&amp;client_id=default"/>
+		<rdfs:comment>A learning resource is a resource used in a learning context</rdfs:comment>
+	</owl:Class>
+	<owl:Class rdf:about="http://purl.org/role/terms/Actor">
+		<rdfs:label>Actor</rdfs:label>
+		<rdfs:seeAlso rdf:resource="https://ilias.uni-koblenz.de/goto.php?target=git_144_948&amp;client_id=default"/>
+		<rdfs:comment>Human being or (software-) agent involved in the learning situation performing actions with a certain purpose.</rdfs:comment>
+		<rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Agent"/>
+	</owl:Class>
+	<owl:Class rdf:about="http://purl.org/role/terms/Artifact">
+		<rdfs:label>Artifact</rdfs:label>
+		<rdfs:seeAlso rdf:resource="https://ilias.uni-koblenz.de/goto.php?target=git_146_948&amp;client_id=default"/>
+		<rdfs:comment>Any digital object which is accessible, manageable or manipulable by agents. 
+		The term artifact describes a form of object (e.g. file format, media type), which comprises content.</rdfs:comment>
+		<rdfs:subClassOf rdf:resource="http://purl.org/role/terms/LearningResource"/>
+	</owl:Class>
+	<owl:Class rdf:about="http://purl.org/role/terms/ResourceBundle">
+		<rdfs:label>Resource Bundle </rdfs:label>
+		<rdfs:seeAlso rdf:resource="https://ilias.uni-koblenz.de/goto.php?target=git_219_948&amp;client_id=default"/>
+		<rdfs:comment>A resource bundle is a set of learning resources bundled to fit a particular purpose. 
+		Possible resources in a bundle can be documents, widgets, web tools, etc.</rdfs:comment>
+	</owl:Class>
+	<owl:Class rdf:about="http://purl.org/role/terms/Functionality">
+		<rdfs:label>Functionality</rdfs:label>
+		<rdfs:seeAlso rdf:resource="https://ilias.uni-koblenz.de/goto.php?target=git_214_948&amp;client_id=default"/>
+		<rdfs:comment>Functionality is the purpose of a tool for which it is designed or exists.
+		In a learning context the functionality of a tool is to enable or support learning activities.</rdfs:comment>
+	</owl:Class>
+	<owl:Class rdf:about="http://purl.org/role/terms/WidgetType">
+		<rdfs:label>Widget Type</rdfs:label>
+		<rdfs:seeAlso rdf:resource="https://ilias.uni-koblenz.de/goto.php?target=git_220_948&amp;client_id=default"/>
+		<rdfs:comment>Class used to describe the type of a Widget. Used with the property role:hasWidgetType</rdfs:comment>
+	</owl:Class>
+	<owl:Class rdf:about="http://purl.org/role/terms/FunctionalityType">
+		<rdfs:seeAlso rdf:resource="https://ilias.uni-koblenz.de/goto.php?target=git_232_948&amp;client_id=default"/>
+	</owl:Class>
+
+<!--#####     PROPERTIES    ####  -->
+	<owl:ObjectProperty rdf:about="http://purl.org/role/terms/hasWidgetType">
+		<rdfs:label>has Widget Type</rdfs:label>
+		<rdfs:comment>property used to describe the type of a Widget. Points to an instance of the class Widget Type</rdfs:comment>
+		<rdfs:domain rdf:resource="http://purl.org/role/terms/Widget"/>
+		<rdfs:range rdf:resource="http://purl.org/role/terms/WidgetType"/>
+	</owl:ObjectProperty>
+	<owl:ObjectProperty rdf:about="http://purl.org/role/terms/functionalityTool">
+		<rdfs:label>Functionality has Tool</rdfs:label>
+		<rdfs:comment>Points from a Functionality to a Tool that possesses this functionality</rdfs:comment>
+		<rdfs:domain rdf:resource="http://purl.org/role/terms/Functionality"/>
+		<rdfs:range rdf:resource="http://purl.org/role/terms/Tool"/>
+	</owl:ObjectProperty>
+	<owl:ObjectProperty rdf:about="http://purl.org/role/terms/toolFunctionality">
+		<rdfs:label>Tool has Functionality</rdfs:label>
+		<rdfs:comment>Points from a Tool to a functionality offered by this tool</rdfs:comment>
+		<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
+		<owl:inverseOf rdf:resource="http://purl.org/role/terms/functionalityTool"/>
+		<rdfs:domain rdf:resource="http://purl.org/role/terms/Tool"/>
+		<rdfs:range rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</owl:ObjectProperty>
+	<owl:ObjectProperty rdf:about="http://purl.org/role/terms/hasResource">
+		<rdfs:label>has Resource</rdfs:label>
+		<rdfs:comment>Property linking a resource bundle to one or several resources composing it</rdfs:comment>
+		<rdfs:domain rdf:resource="http://purl.org/role/terms/ResourceBundle"/>
+		<rdfs:range rdf:resource="http://purl.org/role/terms/LearningResource"/>
+	</owl:ObjectProperty>
+	<owl:ObjectProperty rdf:about="http://purl.org/role/terms/hasTool">
+		<rdfs:label>has Tool</rdfs:label>
+		<rdfs:comment>Subproperty of hasResource that links a Resource Bundle to a Tool.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://purl.org/role/terms/ResourceBundle"/>
+		<rdfs:range rdf:resource="http://purl.org/role/terms/Tool"/>
+		<rdfs:subPropertyOf rdf:resource="http://purl.org/role/terms/hasResource"/>
+	</owl:ObjectProperty>
+	<owl:ObjectProperty rdf:about="http://purl.org/role/terms/hasConfiguredTool">
+		<rdfs:label>has Configured Tool</rdfs:label>
+		<rdfs:comment>SubProperty of hasResource to links a resource bundle to a Configured tool</rdfs:comment>
+		<rdfs:domain rdf:resource="http://purl.org/role/terms/ResourceBundle"/>
+		<rdfs:range rdf:resource="http://purl.org/role/terms/ConfiguredTool"/>
+		<rdfs:subPropertyOf rdf:resource="http://purl.org/role/terms/hasResource"/>
+	</owl:ObjectProperty>
+	<owl:ObjectProperty rdf:about="http://purl.org/role/terms/hasArtifact">
+		<rdfs:label>has Artifact</rdfs:label>
+		<rdfs:comment>SubProperty of hasResource to links a resource bundle to an Artifact</rdfs:comment>
+		<rdfs:domain rdf:resource="http://purl.org/role/terms/LearningResource"/>
+		<rdfs:range rdf:resource="http://purl.org/role/terms/Artifact"/>
+		<rdfs:subPropertyOf rdf:resource="http://purl.org/role/terms/hasResource"/>
+	</owl:ObjectProperty>
+	<owl:DatatypeProperty rdf:about="http://purl.org/role/terms/userPreferences">
+		<rdfs:label>has User Preferences</rdfs:label>
+		<rdfs:comment>for a ConfiguredTool instance, gives the XML description of the user's preferences for the corresponding tool</rdfs:comment>
+		<rdfs:domain rdf:resource="http://purl.org/role/terms/ConfiguredTool"/>
+		<rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+	</owl:DatatypeProperty>
+	<owl:DatatypeProperty rdf:about="http://purl.org/role/terms/category">
+		<rdfs:label>Learning resource has category</rdfs:label>
+		<rdfs:comment>Property used to describe the domain category or the topic of a learning resource. It can be used for 
+		example to link a Widget used for remote lab experiment on optics to the DBPedia URI of Category:Optics. 
+		It is a subproperty of dcterm:subject, but using this property instead means the subject resource is a role:LearningResource </rdfs:comment>
+		<rdfs:domain rdf:resource="http://purl.org/role/terms/LearningResource"/>
+		<rdfs:subPropertyOf rdf:resource="http://purl.org/dc/terms/subject"/>
+	</owl:DatatypeProperty>
+
+	
+	<!--######    Deprecated Properties that should be replaced by already existing ones   #######  -->
+	<owl:DatatypeProperty rdf:about="http://purl.org/role/terms/hasDescription">
+		<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+		<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+		<rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+		<owl:versionInfo>use instead dcterms:description</owl:versionInfo>
+		<rdfs:subPropertyOf rdf:resource="http://purl.org/dc/terms/description"/>
+	</owl:DatatypeProperty>
+	<owl:DatatypeProperty rdf:about="http://purl.org/role/terms/hasName">
+		<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+		<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+		<rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+		<owl:versionInfo>use instead foaf:name that apply to owl:Things and not only foaf:Persons</owl:versionInfo>
+	</owl:DatatypeProperty>
+	<owl:DatatypeProperty rdf:about="http://purl.org/role/terms/hasTag">
+		<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+		<rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+		<owl:versionInfo>use instead dc:subject when used with literal or dcterms:subject with non-literal objects such as URIs</owl:versionInfo>
+	</owl:DatatypeProperty>
+	<owl:DatatypeProperty rdf:about="http://purl.org/role/terms/hasURL">
+		<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+		<rdfs:domain rdf:resource="http://purl.org/role/terms/Widget"/>
+		<rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#anyURI"/>
+		<owl:versionInfo> use foaf:homepafe instead: links a Thing to a webpage about it</owl:versionInfo>
+	</owl:DatatypeProperty>
+	<owl:ObjectProperty rdf:about="http://purl.org/role/terms/hasAuthor">
+		<rdfs:domain rdf:resource="http://purl.org/role/terms/Widget"/>
+		<rdfs:range rdf:resource="http://purl.org/role/terms/Actor"/>
+		<owl:versionInfo>use dcterms:creator instead</owl:versionInfo>
+	</owl:ObjectProperty>
+	<owl:DatatypeProperty rdf:about="http://purl.org/role/terms/hasEmail">
+		<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+		<rdfs:domain rdf:resource="http://purl.org/role/terms/Actor"/>
+		<rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+		<owl:versionInfo>use foaf:mbox instead</owl:versionInfo>
+	</owl:DatatypeProperty>
+	<owl:DatatypeProperty rdf:about="http://purl.org/role/terms/hasThumbnail">
+		<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+		<rdfs:domain rdf:resource="http://purl.org/role/terms/Widget"/>
+		<rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#base64Binary"/>
+		<owl:versionInfo>to link a thing to an image that depicts it, use foaf:depiction (domain owl:Thing, range foaf:Image).
+		Then in foaf, an image can be linked to its thumbnail with foaf:thumbnail (domain foaf:Image, range foaf:Image)</owl:versionInfo>
+	</owl:DatatypeProperty>
+	<owl:DatatypeProperty rdf:about="http://purl.org/role/terms/hasScreenshot">
+		<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+		<rdfs:domain rdf:resource="http://purl.org/role/terms/Widget"/>
+		<rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#base64Binary"/>
+		<owl:versionInfo>for the idea of screenshot of a software project use
+		 doap:screenshots, which turn the subject into a doap:Project (i.e. software project) instance (a Widget can perfectly be 
+		 typed as a sofware project). Possible to use foaf:depiction, but less precise.</owl:versionInfo>
+	</owl:DatatypeProperty>
+	
+	<rdf:Description rdf:about="http://purl.org/role/terms/hasFunctionalityType">
+		<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+		<rdfs:domain rdf:resource="http://purl.org/role/terms/Functionality"/>
+		<rdfs:range rdf:resource="http://purl.org/role/terms/FunctionalityType"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/terms/realizesWidgetType">
+		<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+		<rdfs:domain rdf:resource="http://purl.org/role/terms/FunctionalityType"/>
+		<rdfs:range rdf:resource="http://purl.org/role/terms/WidgetType"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/dc/terms/relation">
+		<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://purl.org/role/terms/relatedFunctionality">
+		<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+		<rdfs:domain rdf:resource="http://purl.org/role/terms/Functionality"/>
+		<rdfs:range rdf:resource="http://purl.org/role/terms/Functionality"/>
+	</rdf:Description>
+</rdf:RDF>

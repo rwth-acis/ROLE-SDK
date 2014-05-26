@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+    <ModulePrefs title="CAM Sample Widget" width="250" height="500">
+	<Require feature="opensocial-0.9" />
+    	<Require feature="pubsub"/>
+    	<Require feature="dynamic-height"/>
+    	<Require feature="osapi"/>
+    </ModulePrefs>
+    
+    <Content type="html">
+    	<![CDATA[
+    		<script src="http://role-project.svn.sourceforge.net/viewvc/role-project/tags/m2-gunpowder/libraries/cam/src/main/javascript/CamLib.js"></script>
+    		
+    		<div style="background-color:#F2F2F2;overflow:auto;">
+	            <br>
+	            <table>
+	            	<tr>
+	            		<td colspan="2"> <span style="font-variant:normal; font-size:80%"> <a href="https://sites.google.com/site/camschema/home" target="_blank"> CAM Tutorial </a> </span> </td>  
+	            	</tr>
+	            	<tr>
+	            		<td colspan="2"> <span style="font-variant:normal; font-size:80%"> or contact: kerstin.schmidt@fit.fraunhofer.de </span> </td>  
+	            	</tr>
+		        	<tr>
+		        		<td> <input type="button" id="query" onclick='queryCam()' value="query"> </td>
+		        		<td> <textarea id="queryString" name="queryString" cols="60" rows="5"> select * from Event order by dateTime desc limit 5 </textarea> </td>
+					</tr>
+					<tr>
+		        		<td colspan="2"> <span style="font-variant:normal; font-size:80%"> <div id="queryArea"> </div> </span> </td>
+					</tr>
+					<tr>
+		        		<td colspan="2"> <span style="font-variant:normal; font-size:80%"> <div id="resultArea"> </div> </span> </td>
+					</tr>
+				</table>
+				</span>
+			</div>
+    	
+			<script type="text/javascript">
+			
+				// This widget provides an 
+				//		* input-line where you can write your query
+				// 		* an outputline where the result is printed
+				//		* a submit butten with which you execute the query 
+			
+				function queryCam() {
+					var sql_query = document.getElementById("queryString").value;
+					document.getElementById("queryArea").innerHTML = sql_query + "<br> ------------- <br>";
+
+					var ws_url = "http://giotto.informatik.rwth-aachen.de/role-live/CamWebServiceDefault/";
+					var query_token = "SecretDefaultToken";
+					var live_db = "true";
+					
+					CamLib.queryCam(ws_url, query_token, sql_query, live_db, queryCamCallback);
+				}
+				
+		// Callback Method for gadgets.io.makeRequest()
+		// parses the result of the above given SQL query 
+				function queryCamCallback(queryResult) {
+					document.getElementById("resultArea").innerHTML = "";
+					var resultString = "";
+					for (key in queryResult.data) {
+						resultString = resultString + JSON.stringify(queryResult.data[key]) + "<br>";
+					}
+					document.getElementById("resultArea").innerHTML = resultString;
+				}
+			</script>
+		]]>
+    </Content>
+</Module>
