@@ -1,18 +1,19 @@
 define(["com", "jquery", "role/ui/ui", "role/model/user", "role/header/title",
-        "role/feature/authentication", "role/feature/xmpp", "role/feature/iwc",
+        "role/feature/authentication", "role/feature/duimanager", "role/feature/xmpp", "role/feature/iwc",
         "role/feature/dashboard", "role/feature/viewer", "role/feature/title",
         "role/feature/favicon", "role/view/home", "role/view/newspace",
-        "role/view/learningspace", "role/view/personalspace"
+        "role/view/learningspace", "role/view/personalspace", "role/view/activities", "detectmobile"
         /*"less!space.less",*/ ],
 function(com, $, ui, user, titleHeader,
-		authenticationFeature, xmppFeature, iwcFeature, dashboardFeature, viewerFeature,
+		authenticationFeature, duiManager, xmppFeature, iwcFeature, dashboardFeature, viewerFeature,
 		titleFeature, favIconFeature, homeView, newSpaceView, learningSpaceView,
-		personalSpaceView) {
+		personalSpaceView, activitiesView, detectMobile) {
 	
 	com.add(ui);
 	com.add(user);
 	com.add(titleHeader);
 	com.add(authenticationFeature);
+	com.add(duiManager);		//added by Ke Li: DUI manager
 	com.add(xmppFeature);
 	com.add(viewerFeature);
 	com.add(titleFeature);
@@ -21,7 +22,7 @@ function(com, $, ui, user, titleHeader,
 	com.add(newSpaceView);
 	com.add(learningSpaceView);
 	com.add(personalSpaceView);
-//	com.add(activitiesView);
+	com.add(activitiesView);
 	
 //	com.add(iwcFeature);
 //	com.add(dashboardFeature);

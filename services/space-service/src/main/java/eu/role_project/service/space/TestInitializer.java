@@ -2,11 +2,20 @@ package eu.role_project.service.space;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.core.UriBuilder;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONValue;
+
+import com.fasterxml.uuid.Generators;
+import com.fasterxml.uuid.impl.NameBasedGenerator;
 
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
@@ -223,7 +232,110 @@ public class TestInitializer extends AbstractInitializer {
 						"http://role-project.svn.sourceforge.net/viewvc/role-project/trunk/gadgets/portfolio/gadget.xml");
 		store().in(tool2).put(ConserveTerms.type,
 				"http://purl.org/role/terms/OpenSocialGadget");
+//keli
+		
+		//create or get the device concept stored in user1
+		Concept pc = store().in(user1).sub(ROLETerms.device).acquire("pc");
+		//set the device current space to space1
+//		store().in(pc).put(ROLETerms.cs, space1.getUuid());
+		store().in(pc).as(ROLETerms.cs).type("text/plain").string("");
+		//blabla same for other devices
+		Concept mac = store().in(user1).sub(ROLETerms.device).acquire("mac");
+//		store().in(mac).put(ROLETerms.cs, space1.getUuid());
+		store().in(mac).as(ROLETerms.cs).type("text/plain").string("");
+		
+		Concept iphone = store().in(user1).sub(ROLETerms.device).acquire("iphone");
+//		store().in(iphone).put(ROLETerms.cs, space1.getUuid());
+		store().in(iphone).as(ROLETerms.cs).type("text/plain").string("");
+		
+		Concept andro = store().in(user1).sub(ROLETerms.device).acquire("android");
+//		store().in(andro).put(ROLETerms.cs, space1.getUuid());
+		store().in(andro).as(ROLETerms.cs).type("text/plain").string("");
+		
+		Concept ipad = store().in(user1).sub(ROLETerms.device).acquire("ipad");
+//		store().in(ipad).put(ROLETerms.cs, space1.getUuid());
+		store().in(ipad).as(ROLETerms.cs).type("text/plain").string("");
+		
+		
+		//store device config in the concept of member
+		Concept d1 = store().in(member1).sub(ROLETerms.dc).acquire(pc.getId());
+		//let this device config point to the right device
+		store().in(d1).put(ConserveTerms.reference, pc.getUuid());
+		//get the widget uri
+		//let the widget to one of those displayed widgets
+//		store().in(d1).put(ROLETerms.aw, store().resolve(tool1uri).getUuid());
+		String tool1uri = store().in(tool1).uri().toString();
+		LinkedList<String> awl = new LinkedList<String>();
+		awl.add(tool1uri);
+		String awStr = JSONValue.toJSONString(awl);
+		store().in(d1).as(ROLETerms.aw).type("application/json").string(awStr);
+		
+		//blabla same for other devices
+		Concept d2 = store().in(member1).sub(ROLETerms.dc).acquire(mac.getId());
+		store().in(d2).put(ConserveTerms.reference, mac.getUuid());
+		awl = new LinkedList<String>();
+//		awl.add(tool1uri);
+		awStr = JSONValue.toJSONString(awl);
+		store().in(d2).as(ROLETerms.aw).type("application/json").string(awStr);
+		
+		Concept d3 = store().in(member1).sub(ROLETerms.dc).acquire(iphone.getId());
+		store().in(d3).put(ConserveTerms.reference, iphone.getUuid());
+		awl = new LinkedList<String>();
+//		awl.add(tool1uri);
+		awStr = JSONValue.toJSONString(awl);
+		store().in(d3).as(ROLETerms.aw).type("application/json").string(awStr);
+		
+		Concept d4 = store().in(member1).sub(ROLETerms.dc).acquire(andro.getId());
+		store().in(d4).put(ConserveTerms.reference, andro.getUuid());
+		awl = new LinkedList<String>();
+//		awl.add(tool1uri);
+		awStr = JSONValue.toJSONString(awl);
+		store().in(d4).as(ROLETerms.aw).type("application/json").string(awStr);
+		
+		Concept d5 = store().in(member1).sub(ROLETerms.dc).acquire(ipad.getId());
+		store().in(d5).put(ConserveTerms.reference, ipad.getUuid());
+		awl = new LinkedList<String>();
+//		awl.add(tool1uri);
+		awStr = JSONValue.toJSONString(awl);
+		store().in(d5).as(ROLETerms.aw).type("application/json").string(awStr);
+		System.err.println("devices inited!...");
+		
+		//create widget states for widget from NULL
+		Map<String, Object> ws = new LinkedHashMap<String, Object>();
+		ws.put("wState1", 123);
+		ws.put("wState2", "hellowidget");
+		ws.put("wState3", true);
+		String widgetStateJsonString = JSONValue.toJSONString(ws);
+		store().in(tool1).as(ROLETerms.ws).type("application/json").string(widgetStateJsonString);
+		
+		//create space state for the app
+		Map<String, Object> as = new LinkedHashMap<String, Object>();
+		as.put("appState1", 321);
+		as.put("appState2", "helloapp");
+		as.put("appState3", false);
+		String appStateJsonString = JSONValue.toJSONString(as);
+		store().in(space1).as(ROLETerms.as).type("application/json").string(appStateJsonString);
+		
+/*		
+		NameBasedGenerator uriUuidGenerator = Generators
+				.nameBasedGenerator(NameBasedGenerator.NAMESPACE_URL);		
+Concept device = store().in(user1).sub(ROLETerms.device).create("keli-pc");
+store.putControl(store.createControl(device.getUuid(),
+		uriUuidGenerator.generate("http://purl.org/role/terms/device/currentSpace"),
+		space1_id, space1.getId()));
+Concept m = store().in(space1).sub(ROLETerms.member).get(member1_id);
+Concept d = store().in(m).sub(ROLETerms.device).create(device.getId());
+store().in(d).put(ROLETerms.dc, "widget1, widget2, widget3");
+*/
 
+/*
+store.putControl(store.createControl(d.getUuid(),
+		device.getUuid(),
+		uriUuidGenerator.generate("[widget1, widget2]"),
+		"[widget1, widget2]"));
+	*/	
+		
+//		keli
 		// Tool 4
 		Concept tool4 = store().in(defaultUser).sub(ROLETerms.tool)
 				.acquire(tool4_id);

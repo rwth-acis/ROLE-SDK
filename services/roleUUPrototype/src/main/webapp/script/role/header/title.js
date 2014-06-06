@@ -1,4 +1,4 @@
-define([ "com", "jquery", "../model/space", "handlebars!./title", "../content/info" ], function(com, $, space, template, infoContent) { return {
+define([ "com", "jquery", "../model/space", "handlebars!./title" ], function(com, $, space, template) { return {
 
 	interfaces : [ "http://purl.org/role/ui/Header#" ],
 	
@@ -6,16 +6,11 @@ define([ "com", "jquery", "../model/space", "handlebars!./title", "../content/in
 	
 	createUI : function(container) {
 		com.on("http://purl.org/role/ui/Space#", "load", function(space) {
-			var node = $(template({
+			$(template({
 				uri : space.getUri(),
 				title : space.getTitle(),
-				subtitle : space.getSubtitle(), 
-				description: space.getDescription() || ""
+				subtitle : space.getSubtitle()
 			})).appendTo(container);
-			
-			node.click(function() {
-				infoContent.toggleVisible();
-			});
 		});
 	}
 	

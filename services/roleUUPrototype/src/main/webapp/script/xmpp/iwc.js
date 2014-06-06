@@ -137,6 +137,7 @@ iwc.Proxy = function() {
 	
 	//onIntent is called when an intent is received. A JSON intent object is passed to the function
 	this.onIntent = function(){};
+
 	
 	//onDroppedIntent is called when an intent is received but the trust threshold prohibits the delivery. A JSON intent object is passed to the function
 	this.onDroppedIntent = function(){};
@@ -242,7 +243,7 @@ iwc.Proxy = function() {
 		return this._pubSubEntity;
 	};
 	
-		
+	
 	/**
 	 * connects the proxy to local interwidget communication
 	 * @param callback (Function(intent)) is called when a local or remote JSON intent object is received.
@@ -293,8 +294,8 @@ iwc.Proxy = function() {
 						//console.log("Self JID: " + Strophe.getBareJidFromJid(self._xmppClient.jid));
 						
 						self._xmppClient.pubsub.subscribe(
-							Strophe.getBareJidFromJid(self._xmppClient.jid) + "/" + self._pubSubNode,
-							self._pubSubEntity,
+							Strophe.getBareJidFromJid(self._xmppClient.jid), 
+							self._pubSubEntity, 
 							self._pubSubNode,
 							function(result){
 								//console.log("Subscruption result: ");
@@ -400,8 +401,8 @@ iwc.Proxy = function() {
 				
 				if (result.type == "result"){
 					self._xmppClient.pubsub.subscribe(
-						Strophe.getBareJidFromJid(self._xmppClient.jid) + "/" + self._pubSubNode,
-						self._pubSubEntity,
+						Strophe.getBareJidFromJid(self._xmppClient.jid), 
+						self._pubSubEntity, 
 						self._pubSubNode,
 						function(result){
 							//console.log("Subsceeeeeription result: ");
@@ -467,11 +468,15 @@ iwc.Proxy = function() {
 						
 						var publisherJid = intent.sender;
 						if (publisherJid.indexOf("?") > -1)
-							publisherJid = publisherJid.split("?")[0];
+						  publisherJid = publisherJid.split("?")[0];
 					
 						//check if this instance is the sender of the intent.
 						//if so, do not process it
-						if (Strophe.getBareJidFromJid(this._xmppClient.jid) !== Strophe.getBareJidFromJid(publisherJid)) {		
+						if (this._xmppClient.jid !== publisherJid) {
+							if (typeof intent.categories != "undefined" && intent.categories.indexOf("DUI") != -1
+								&& typeof intent.component != "undefined" 
+								&& (intent.component == "duimanager" || intent.component == ""))
+								return;
 							//publish locally
 							//console.log("");
 							this.publish(intent);
@@ -492,7 +497,13 @@ iwc.Proxy = function() {
 		var publishGlobal = false;
 		//'component' and 'sender' properties must always be available in 'intent' objects
 		if (typeof message.component != "undefined" && typeof message.sender != "undefined") {
-			if (message.component == this._componentName || message.component == "") {
+			if (typeof message.categories != "undefined" && message.categories.indexOf("DUI") != -1
+				//the target component of the intent must be this or a broadcast
+				&& (message.component == "duimanager" || message.component == "")
+				//only accept local intents
+				&& (typeof message.flags == "undefined" || message.flags.indexOf("PUBLISH_GLOBAL") == -1))
+				return;
+			else if (message.component == this._componentName || message.component == "") {
 				this.onIntent(message);
 			}
 			if (typeof message.flags != "undefined") {
@@ -550,7 +561,9 @@ iwc.Proxy = function() {
 				eventparams["items"] = items;
 				//console.log("Event Parsed...");
 				//console.log(eventparams);
-				this.riwcEventHandler(eventparams);
+				var fromNode = fchild.firstChild.attributes[0].nodeValue;
+				if (fromNode == this._pubSubNode) //messages from other space node are meaningless
+					this.riwcEventHandler(eventparams);
 			}
 		}
 		
@@ -584,7 +597,7 @@ iwc.Proxy = function() {
 					console.log("Configuration before publish complete?");
 					console.log(result);
 				*/
-					console.log("Publishing intent... ");
+					//console.log("Publishing intent... "+self._xmppClient.jid+":"+self._xmppClient.service);
 					self._xmppClient.pubsub.publishItem(self._pubSubEntity, self._pubSubNode, item, callback);
 				/* 
 				});

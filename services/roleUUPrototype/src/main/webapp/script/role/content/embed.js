@@ -1,4 +1,4 @@
-define([ "com", "jquery", "handlebars!./embed", "../../config" ], function(com, $, template, config) { return {
+define([ "com", "jquery", "handlebars!./embed" ], function(com, $, template) { return {
 
 	interfaces : [ "http://purl.org/role/ui/Content#" ],
 	
@@ -26,45 +26,7 @@ define([ "com", "jquery", "handlebars!./embed", "../../config" ], function(com, 
 			self.heightNode = node.find("#space_height").change(c);
 			self.dashboardNode = node.find("#dashboard_check").change(c);
 			node.find(".role_content_close").click(function() {self.toggleVisible();});
-			$("#createBundleFromSpace").click(function() {
-				self.shareToWidgetStore();
-			});
 		});
-		com.on("http://purl.org/role/ui/Activity#", "select", function(currentActivity) {
-			self.currentActivity = currentActivity;
-		});
-
-	},
-	
-	shareToWidgetStore: function() {
-	    var newWindow = window.open("","Test","width=1100,height=800,scrollbars=1,resizable=1")
-    	var widgets = this.currentActivity.getWidgets();
-    	var gspecs = [];
-    	for (var i=0;i<widgets.length;i++) {
-    		gspecs.push({
-    			"http://www.w3.org/1999/02/22-rdf-syntax-ns#type": "http://purl.org/role/terms/OpenSocialGadget",
-    			"http://purl.org/dc/terms/source": widgets[i]._widget._widgetSource,
-    			"http://purl.org/dc/terms/title": widgets[i].getTitle(),
-    			"http://purl.org/dc/terms/description": widgets[i].getDescription() || ""    			
-    		});
-    	}
-    	var bundle = {
-    		widgets: gspecs,
-    		"http://purl.org/dc/terms/title": this.currentActivity.getTitle(),
-    		"http://purl.org/dc/terms/description": this.currentActivity.getDescription() || "",
-    		"http://www.w3.org/1999/02/22-rdf-syntax-ns#type": "http://purl.org/role/terms/bundle"    		
-    	}
-
-	    var html = "<html><head></head><body>"
-    	html += '<form style="display:none" id="bundle" method="post" action="'+config.widgetstorecreatebundle+'">';
-		html += '<textarea rows="15" style="width:80%" name="bundle">';
-		html += JSON.stringify(bundle);
-   		html += '</textarea><input type="submit" name="Submit" value="Submit">';
-		html += '</form></body></html>';
-    	newWindow .document.write(html);
-    	setTimeout(function() {
-    		newWindow.document.forms["bundle"].submit();    		
-    	}, 1);
 	},
 	
 	toggleVisible: function() {

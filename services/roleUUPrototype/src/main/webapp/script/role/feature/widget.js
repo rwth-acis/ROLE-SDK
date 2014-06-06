@@ -90,7 +90,7 @@ define([ "com", "jquery", "../model/space", "../model/widget", "./activity", "ra
 	
 	_processWidget : function(widget, specResults, widgetContext) {
 		var hasPrefsToEdit, userPrefs, widgetInstance;
-//		widget.metadata = specResults.data.result[widget.widgetUrl];
+		widget.metadata = specResults.data.result[widget.widgetUrl];
 		if (typeof widget.metadata !== "undefined") {
 			hasPrefsToEdit = false;
 			userPrefs = widget.metadata.userPrefs;
@@ -156,15 +156,20 @@ define([ "com", "jquery", "../model/space", "../model/widget", "./activity", "ra
 			$(".widget-wrapper").css("display", "none").css(
 					"visibility", "visible");
 		} else {
+			var hasWidgetCanvas = $(".widget-wrapper-canvas").length>0 &&
+									$(".widget-wrapper-canvas").attr('id').match(/\w+\-([\w\d]+)\-\w+/)[1] != "widgetStore";
 			$(".widget-wrapper").each(
 					function() {
 						if ($(this).css("visibility") === "hidden") {
-							$(this).css("display", "none").css(
+							$(this).css(
 									"visibility", "visible");
 						}
+						if ( hasWidgetCanvas && !$(this).hasClass("widget-wrapper-canvas"))
+							$(this).css("display", "none");
 					});
 		}
-		$(".widget-wrapper").fadeIn();
+		if ($(".widget-wrapper-canvas").get(0) == null)    //ke li: if maximized widget does not exist, fade in  
+			$(".widget-wrapper").fadeIn();
 	},
 	
 	_fixIframes : function() {
@@ -225,67 +230,6 @@ define([ "com", "jquery", "../model/space", "../model/widget", "./activity", "ra
 				}.bind(this));
 			}.bind(this));
 		}
-	},
-	
-	/* Waiting for an array of objects containing {source: "gadgeturl", label: "somelabel"}
-	 * 
-	 */
-	addWidgets : function(widgets) {
-		var currentActivity = null, newTool;
-		var widgetUrls = [];		
-		for (var w=0;w<widgets.length;w++) {
-			if (widgets[w].source != null) {
-				widgetUrls.push(widgets[w].source);
-			}
-		}
-		com.one("http://purl.org/role/ui/Activity#", "select", function(activity) {
-					currentActivity = activity;
-		});
-
-		var toolUrisToCreate = {};		
-		var counter = widgetUrls.length;
-		var gadgetSpec = null;
-		var countdown = function()  {
-			counter--;
-			if (counter === 0) {
-				space.refresh(function() {
-					var tools, i, widget;
-					tools = openapp.resource.context(space._context).sub(openapp.ns.role + "tool").list();
-					for (i = 0; i < tools.length; i++) {
-						if (toolUrisToCreate[tools[i].uri]) {
-							widget = this._prepareWidget(openapp.resource.context(tools[i]).properties(), currentActivity);
-							widget.metadata = gadgetSpec.data.result[widget._widgetSource];
-							var wi = this._processWidget(widget, gadgetSpec, tools[i]);
-							currentActivity.addWidget(wi);
-							com.add(wi);
-						}
-					}
-					this._postprocessWidgets();
-				}.bind(this));
-			}
-		}.bind(this);
-		
-		this._getGadgetSpecs(widgetUrls, function(gs) {
-			gadgetSpec = gs;
-			for (var u=0;u<widgetUrls.length;u++) {
-				var widgetUrl = widgetUrls[u];
-				if (gadgetSpec.data.result[widgetUrl].hasOwnProperty("error")) {
-					//Provide some error message.
-					countdown();
-					continue;
-				}
-				newTool = openapp.resource.context(space._context).sub(openapp.ns.role + "tool")
-					.type(openapp.ns.role + "OpenSocialGadget")
-					.seeAlso(widgetUrl);
-				if (currentActivity.getUri() !== openapp.ns.role + "activity/Overview"
-						&& currentActivity.getUri() !== space.getUri()) {
-					newTool.control(openapp.ns.role + "activity", currentActivity.getUri());
-				}
-				newTool.create(function(tool) {
-					toolUrisToCreate[tool.uri] = true;
-					countdown();
-				});
-			}
-		}.bind(this));
 	}
+	
 }; });

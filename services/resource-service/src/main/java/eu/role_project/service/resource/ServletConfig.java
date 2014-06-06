@@ -23,6 +23,7 @@ public class ServletConfig extends GuiceServletContextListener {
 			"eu.role_project.service.space.ShindigModule",
 			"eu.role_project.service.user.UserModule",
 			"eu.role_project.service.space.SpaceModule",
+			"eu.role_project.service.dui.DuiModule",
 			"eu.role_project.service.realtime.RealtimeModule",
 			"eu.role_project.service.resource.RESTEasyModule" };
 

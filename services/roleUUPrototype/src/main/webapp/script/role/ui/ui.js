@@ -1,6 +1,6 @@
 define([ "com", "jquery", "handlebars!./ui", "handlebars!./panel", "handlebars!./header",
-         "handlebars!./content", "../content/browser" ], function(
-		com, $, uiTemplate, panelTemplate, headerTemplate, contentTemplate, browser) { return {
+         "handlebars!./content", "handlebars!./uimobile", "detectmobile" ], function(
+		com, $, uiTemplate, panelTemplate, headerTemplate, contentTemplate, uiMobileTemplate, detectMobile) { return {
 
 	interfaces : [ "http://purl.org/role/ui/Feature#", "http://purl.org/role/ui/UI#" ],
 	autoHide: null, 
@@ -9,7 +9,10 @@ define([ "com", "jquery", "handlebars!./ui", "handlebars!./panel", "handlebars!.
 	
 	load : function() {
 		com.on("http://purl.org/role/ui/DOMReady#", "domReady", function() {
-			$(uiTemplate()).appendTo(document.body);
+			if (detectMobile.isMobile())
+				$(uiMobileTemplate()).appendTo(document.body);
+			else
+				$(uiTemplate()).appendTo(document.body);
 			com.on("http://purl.org/role/ui/Panel#", "add", this.addPanel);
 			com.on("http://purl.org/role/ui/Panel#", "remove", this.removePanel);
 			com.on("http://purl.org/role/ui/Header#", "add", this.addHeader);
@@ -20,6 +23,11 @@ define([ "com", "jquery", "handlebars!./ui", "handlebars!./panel", "handlebars!.
 			var sidebar = $("#sidebar");
 			var sidebarInner = $("#sidebar .sideSectionInner");
 			var ui = this;
+			$("#progressbar").progressbar({value: 100});
+			var popupinfo = $("#popupinfo");
+			popupinfo.click(function(){
+				$(popupinfo).hide(1);
+			});
 			sidebar.hover(
 				function() {
 					if (!ui.autoHide) {return;}
@@ -28,8 +36,8 @@ define([ "com", "jquery", "handlebars!./ui", "handlebars!./panel", "handlebars!.
 				},
 				function() {
 					if (!ui.autoHide) {return;}
-					sidebar.stop().animate({'left': '-210px'}, 200);
-					sidebarInner.stop().animate({'left': '-210px'}, 200);
+					sidebar.stop().animate({'left': '-140px'}, 200);
+					sidebarInner.stop().animate({'left': '-140px'}, 200);				
 				});
 		}.bind(this));
 	},
@@ -63,16 +71,16 @@ define([ "com", "jquery", "handlebars!./ui", "handlebars!./panel", "handlebars!.
 		if (this.autoHide) {
 			//Shift pageContent to the left when there is more space
 			$("#pageContent").css("margin-left", "15px");
-			$("#content-wrapper>.widget").css("left", "15px");
+			$("#widget-widgetStore-wrapper>.widget").css("left", "15px");
 			//Hide the sidepanel, perhaps after an initial delay.
 			setTimeout(function() {
-				sidebar.stop().animate({'left': '-210px'}, initialAnimationTime || 200);
-				sidebarInner.stop().animate({'left': '-210px'}, initialAnimationTime || 200);				
+				sidebar.stop().animate({'left': '-140px'}, initialAnimationTime || 200);
+				sidebarInner.stop().animate({'left': '-140px'}, initialAnimationTime || 200);				
 			}, initialAnimationDelay || 1);
 		} else {
 			//Shift pageContent to the right to make room for the fixed sidePanel
-			$("#pageContent").css("margin-left", "222px");
-			$("#content-wrapper>.widget").css("left", "222px");
+			$("#pageContent").css("margin-left", "152px");
+			$("#widget-widgetStore-wrapper>.widget").css("left", "152px");
 			//Show the sidepanel, parhaps after an initial delay
 			setTimeout(function() {
 				sidebar.stop().animate({'left': '0px'}, initialAnimationTime || 200);
@@ -114,36 +122,36 @@ define([ "com", "jquery", "handlebars!./ui", "handlebars!./panel", "handlebars!.
 	_browserId : null,
 	
 	browse : function(url, id) {
-		if (url && url !== browser.getUrl()) {
-			this.content(browser, id);
-			browser.setUrl(url);
-		} else {
-			browser.setUrl();
-			this.content();
-		}
-	},
-	
-	content: function(component, id) {
-		var container = $('#content-wrapper').html("");
-		if (this._contentId) {
-			$("#sideEntry-" + this._contentId).removeClass("sideEntrySel");
-		}
-		if (this._contentId != null && this._contentId === id) {
-			delete this._contentId;
-			return;
-		}
-
-		if (component) {
-			component.createUI(container);
-			if (id) {
-				this._contentId = id;
-				$("#sideEntry-" + this._contentId).addClass("sideEntrySel");
+		var url = url || $('#widgetStoreFrame').attr('src');
+		var id = id || this._browserId;
+		$("#sideEntry-" + this._browserId).removeClass("sideEntrySel");
+		if ($('#widgetStoreFrame').attr('src') !== url
+				|| id !== this._browserId) {
+			if ($('#widgetStoreFrame').attr('src') !== 'about:blank') {
+				$('#widgetStoreFrame').attr('src', 'about:blank');
+				window.setTimeout(function() {
+					this.browse(url, id);
+				}.bind(this), 1);
+				return;
 			}
-			container.addClass('widget-wrapper-canvas').fadeIn();
-		} else {
-			container.fadeOut(0, function() {
-				container.removeClass('widget-wrapper-canvas');
+			$('#widgetStoreFrame').attr('src', url);
+			if (typeof this._browserId !== "undefined") {
+				$("#sideEntry-" + this._browserId).removeClass("sideEntrySel");
+			}
+			this._browserId = id;
+			$("#sideEntry-" + this._browserId).addClass("sideEntrySel");
+			if ($('#widget-widgetStore-wrapper').hasClass('widget-wrapper-canvas')) {
+				return;
+			}
+			this.canvas();
+		}
+		if ($('#widget-widgetStore-wrapper').hasClass('widget-wrapper-canvas')) {
+			$('#widget-widgetStore-wrapper').fadeOut(0, function() {
+				$('#widget-widgetStore-wrapper').removeClass('widget-wrapper-canvas');
 			});
+		} else {
+			$('#widget-widgetStore-wrapper').addClass('widget-wrapper-canvas').fadeIn();
+			$("#sideEntry-" + this._browserId).addClass("sideEntrySel");
 		}
 	},
 	
@@ -157,7 +165,7 @@ define([ "com", "jquery", "handlebars!./ui", "handlebars!./panel", "handlebars!.
 				$('#widget-' + currentCanvas + '-wrapper').removeClass("widget-wrapper-canvas");
 				$("#sideEntry-" + currentCanvas).removeClass("sideEntrySel");
 			}
-			$(".widget-wrapper").css("visibility", "visible");
+			$(".widget-wrapper").css("display", "");
 			(function(currentCanvas) {
 				window.setTimeout(function() {
 					var widget = rave.getWidgetById(currentCanvas);
@@ -167,6 +175,7 @@ define([ "com", "jquery", "handlebars!./ui", "handlebars!./panel", "handlebars!.
 						$(".widget-wrapper-canvas").find("iframe").attr("width", "100%");						
 					}
 					$('#widget-' + currentCanvas + '-wrapper').removeClass("widget-wrapper-canvas");
+					$('#widget-' + currentCanvas + '-wrapper').css({"width": "", "height": ""});
 					$("#sideEntry-" + currentCanvas).removeClass("sideEntrySel");
 				}, 1);
 			})(currentCanvas);
@@ -174,7 +183,10 @@ define([ "com", "jquery", "handlebars!./ui", "handlebars!./panel", "handlebars!.
 		if (typeof newCanvas !== "undefined"
 				&& ((typeof currentCanvas === "undefined" && dblClick) || (typeof currentCanvas !== "undefined"
 						&& currentCanvas !== newCanvas && currentCanvas !== "widgetStore"))) {
-			$(".widget-wrapper").css("visibility", "hidden");
+			$(".widget-wrapper").css("display", "none");
+			$("#widget-"+newCanvas+"-wrapper").css("display", "");
+			//$("#region-0-id").prepend($('#widget-' + newCanvas + '-wrapper'));
+			$('#widget-' + newCanvas + '-wrapper').css({"width": "", "height": ""});
 			$('#widget-' + newCanvas + '-wrapper').addClass("widget-wrapper-canvas");
 			$("#sideEntry-" + newCanvas).addClass("sideEntrySel");
 			this._browserId = newCanvas;

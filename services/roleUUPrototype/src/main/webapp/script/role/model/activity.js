@@ -45,66 +45,7 @@ define([ "com", "jquery" ], function(com, $) {
 	getTitle : function() {
 		return this._title;
 	},
-	setTitle : function(title) {
-		var self = this;
-		var res = new openapp.oo.Resource(this._uri, this._context);
-		res.getMetadata(null, function(md) {
-			md[openapp.ns.dcterms + "title"] = title;
-			res.setMetadata(md, null, function() {
-				self._context = res.context;
-				self._title = title;
-			});
-		})
-	},
-	
-	getDescription : function() {
-		if (!this._description)	{
-			if (this._context !== null && this._context.data !== "" &&
-				this._context.data[this._uri]["http://purl.org/dc/terms/description"] != null) {
-				this._description = this._context.data[this._uri]["http://purl.org/dc/terms/description"][0].value;
-			}
-		}
-		return this._description;
-	},
-	
-	setTitleAndDescription : function(ntitle, ndesc) {
-		var self = this;
-		var res = new openapp.oo.Resource(this._uri, this._context);
-		res.getMetadata(null, function(md) {
-			if (ntitle != null && ntitle != "") {
-				md[openapp.ns.dcterms + "title"] = ntitle;
-				self._title = ntitle;
-			} else {
-				md[openapp.ns.dcterms + "title"] = "No title";
-				self._title = "No title";
-			}
-			if (ndesc != null && ndesc != "") {
-				md[openapp.ns.dcterms + "description"] = ndesc;
-				self._description = ndesc;
-			} else {
-				delete md[openapp.ns.dcterms + "description"];
-				delete self._description;
-			}
-			res.setMetadata(md, null, function() {});
-		});
-	},
-	
-	remove : function() {
-		var self = this;
-		openapp.resource.del(this._uri, function() {
-			var c = getCookie("layouts");
-			var obj = {};
-			if (c != null) {
-				obj = JSON.parse(c);
-			}
-			delete obj[self._getActivityId()];
-			setCookie("layouts", JSON.stringify(obj));
-		});
-	},
 
-	getWidgets: function() {
-		return this._widgets;
-	},
 	setWidgets: function(widgets) {
 		this._owidgets = widgets;
 		var widget, counter = 0;
@@ -136,11 +77,10 @@ define([ "com", "jquery" ], function(com, $) {
 
 	
 	addWidget: function(widget) {
-		if (this._widgets.length !== 0) {
+		if (this._widgets.length !== 0)
 			widget.__order = this._widgets[this._widgets.length-1].__order + 1;
-		} else {
+		else
 			widget.__order = 1;
-		}
 		widget._activity = this;
 		this._owidgets.push(widget);
 		this._widgets.push(widget);
@@ -210,15 +150,10 @@ define([ "com", "jquery" ], function(com, $) {
 		
 		var aa = (this._alayout[wid] || {}).w;
 		var ca = (this._clayout[wid] || {}).w;
-		var ww;
-		if (widget._widget.metadata.modulePrefs) {
-			ww = widget._widget.metadata.modulePrefs.width;
-		};
-		ww = ww != null && ww > 0 ? ww : null;
 		if (this._space.isOwner()) {
-			return aa || ca || ww;
+			return aa || ca;
 		} else {
-			return ca || aa || ww;
+			return ca || aa;
 		}
 	},
 

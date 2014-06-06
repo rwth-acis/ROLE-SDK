@@ -32,10 +32,10 @@ public class SpaceListener extends AbstractListener {
 		Concept space = request.getCreated();
 		if (space != null && space.getPredicate().equals(ROLETerms.space)) {
 
-			String sid = space.getUuid().toString();
+			String sid = space.getId();
 			log.info("Adding created space to XMPP server: " + sid);
 			try {
-				realtime.getSpaceChatRoom(space);
+				realtime.getSpaceChatRoom(sid);
 				realtime.getSpacePubSubNode(sid);
 			} catch (IllegalArgumentException e) {
 				log.error("Error creating space over XMPP", e);
@@ -65,13 +65,17 @@ public class SpaceListener extends AbstractListener {
 			// uid = Base64UUID.encodeShortened(user.getUuid());
 			// // }
 			String uid = user.getUuid().toString();
-			String sid = space.getUuid().toString();
+			String sid = space.getId();
 			log.info("Granting user: '" + uid + "' membership to space: '"
 					+ sid + "'");
+			log.info("Granting user: '" + uid + "' membership to space: 'dui-"
+						+ uid + "'");
 			try {
 				log.info("Granting user: '" + uid + "' membership to space room: '"
 					+ sid + "'");
-				realtime.grantSpaceRoomMembership(space, uid);
+				
+				realtime.grantSpaceRoomMembership(sid, uid);
+				realtime.getUserPubSubNode(uid);
 				//log.info("Granting user: '" + uid + "' membership to space node: '"
 				//	+ sid + "'");
 				//realtime.grantSpaceNodeMembership(sid, uid);

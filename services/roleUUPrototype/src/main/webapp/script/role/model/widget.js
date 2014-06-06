@@ -12,45 +12,9 @@ define([ "com", "jquery" ], function(com, $) {
 	
 	_activity: null,
 	
-	getPrefsTitle : function() {
+	getTitle : function() {
 		return typeof this._widget.metadata.modulePrefs !== "undefined"
 			? this._widget.metadata.modulePrefs.title : "Widget";
-	},
-
-	getTitle : function() {
-		if (this._context !== null && this._context.data !== "" &&
-			this._context.data[this._context.uri]["http://purl.org/dc/terms/title"] != null) {
-			return this._context.data[this._context.uri]["http://purl.org/dc/terms/title"][0].value;
-		}
-		return this.getPrefsTitle();
-	},
-	
-	getDescription : function() {
-		if (this._context !== null && this._context.data !== "" && 
-			this._context.data[this._context.uri]["http://purl.org/dc/terms/description"] != null) {
-			return this._context.data[this._context.uri]["http://purl.org/dc/terms/description"][0].value;
-		}
-		return null;
-	},
-
-	setTitleAndDescription : function(ntitle, ndesc) {
-		var self = this;
-		var res = new openapp.oo.Resource(this._context.uri, this._context);
-		res.getMetadata(null, function(md) {
-			if (ntitle != null && ntitle != "") {
-				md[openapp.ns.dcterms + "title"] = ntitle;				
-			} else {
-				md[openapp.ns.dcterms + "title"] = "No title";
-			}
-			if (ndesc != null && ndesc != "") {
-				md[openapp.ns.dcterms + "description"] = ndesc;				
-			} else {
-				delete md[openapp.ns.dcterms + "description"];
-			}
-			res.setMetadata(md, null, function() {
-				self._context = res.context;
-			});
-		});
 	},
 	
 	getRegionWidgetId : function() {

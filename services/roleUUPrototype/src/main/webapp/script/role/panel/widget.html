@@ -1,10 +1,9 @@
 <a class="sideEntry sideEntryTool" href="javascript:void(0)"
 	id="sideEntry-{{regionWidgetId}}" style="display: none;"
-	title="{{description}}"
 	onmousedown="$('#widget-{{regionWidgetId}}-title').get(0).scrollIntoView(); window.scrollBy(0, -40); return false"
 	onmouseover="$('#widget-{{regionWidgetId}}-wrapper').addClass('widget-wrapper-focus')"
 	onmouseout="$('#widget-{{regionWidgetId}}-wrapper').removeClass('widget-wrapper-focus')">
 	<button class="sideEntrySelButton"
 		style="float: right; font-size: 10px;" title="Close">✖</button>
-	<span class="widgettitle">{{title}}</span>
+	{{title}}
 </a>

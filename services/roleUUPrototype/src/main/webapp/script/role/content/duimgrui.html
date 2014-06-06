@@ -1,0 +1,255 @@
+<div id="content-deviceManager" style="display: none; overflow: visible;">
+	<style type="text/css">
+	label {
+		margin: 0 !important;
+	}
+	
+	.section {
+		border-bottom-width: thin;
+		border-bottom-style: solid;
+		border-top-style: solid;
+		border-left-color: #00aa00;
+		border-top-color: #00aa00;
+		border-right-color: #00aa00;
+		border-left-style: solid;
+		border-right-width: thin;
+		border-right-style: solid;
+		border-left-width: thin;
+		border-bottom-color: #00aa00;
+		border-top-width: thin;
+		padding-left: 1em;
+		padding-bottom: 1em;
+		padding-right: 1em;
+		overflow: auto;
+		margin-bottom: 0.5em;
+		margin-top: 0.5em;
+		margin-right: 1em;
+		margin-left: 1em
+	}
+	
+	.title {
+		color: #00aa00;
+		padding-bottom: 0.5em;
+		font-weight: bold;
+		font-size: 18px;
+		margin-top: 5px
+	}
+	
+	.widgetInfo {
+		width: 30% !important;
+		display: -moz-inline-box;
+		display: inline-block;
+		border: hidden !important;
+		min-width: 8em;
+		vertical-align: middle;
+		cursor: pointer;
+	}
+	
+	.coupleInfo {
+		width: 30% !important;
+		display: -moz-inline-box;
+		display: inline-block;
+		border: hidden !important;
+		min-width: 8em;
+		vertical-align: middle;
+	}
+	
+	.duiInfoTitle {
+		width: 30%;
+		display: -moz-inline-box;
+		display: inline-block;
+		min-width: 8em;
+		vertical-align: middle;
+		font-weight: bold;
+		font-size: 15px;
+		background-color: #94EE94
+	}
+	
+	.duiButton {
+		padding: 5px; 
+		font-weight: bold; 
+		border-radius: 5px; 
+		border: 2px solid #ccc; 
+		background: url(/s/images/wavebg2.png); 
+		cursor: pointer;
+		vertical-align: middle
+	}
+	
+	select {
+		vertical-align: middle;
+		min-width: 8em;
+		background: url(/s/images/wavebg2.png);
+		font-weight: bold;
+		padding: 5px;
+		cursor: default !important;
+	}
+	
+	.duiInfoDiv {
+		padding-left: 3px;
+	}
+	
+	.duiInfoDiv:hover {
+		background-color: #CDD6CD
+	}
+	
+	.selected {
+		background-color: #95E695 !important
+	}
+	</style>
+	<div id="dui-currentDeciceInfo-section" class="section">
+		<div class="title">Current Device Info:</div>
+		<div>
+		<button id="dui-currentDevice-btn" class="duiButton">getInfo</button>
+		<button id="dui-reconnect-btn" class="duiButton">reconnect</button>
+		</div>
+		<div style="margin-top: 10px; margin-bottom: 5px; font-size: 15px">
+			<span>device name:</span> <label id="dui-currentDeviceName-label" style="font-weight: bold">sample</label>
+		</div>
+		<div>
+		<span style="font-size: 15px">displayed widgets:</span>
+		<ul id="dui-currentDisplayedWidgets-list" style=""></ul>
+		</div>
+	</div>
+	<div id="dui-deviceControl-section" class="section">
+		<div class="title">New/Remove Device:</div>
+		<div>
+			<label for="dui-deviceName-input" style="font-size: 18px; vertical-align: middle;">device name: </label>
+			<input type="text" id="dui-deviceName-input" style="font-size: 18px; padding-left: 5px; border-radius: 3px; border: 2px solid #00cc55; color: #000; width: 8em; vertical-align: middle;"/>
+			<button id="dui-newDevice-btn" class="duiButton">new device</button>
+			<button id="dui-removeDevice-btn" class="duiButton">remove device</button>
+		</div>
+	</div>
+	<div id="dui-conn-section" class="section">
+		<div class="title">Device Connectivity</div>
+		<div>
+		<button id="dui-refreshConn-btn" class="duiButton">refresh
+			connectivities</button>
+		</div>
+		<div style="margin-top: 10px;">
+			<label class="duiInfoTitle">device name</label><label class="duiInfoTitle">connectivity</label>
+		</div>
+		<div id="dui-conn-div" style="margin-top: 3px;">
+			<div id="dui-conn-div-device_1">
+				<label class="coupleInfo">device_1</label><label id="dui-conn-info-device_1"
+					class="coupleInfo">unknown</label>
+			</div>
+			<div id="dui-conn-div-device_2">
+				<label class="coupleInfo">device_2</label><label id="dui-conn-info-device_2"
+					class="coupleInfo">unknown</label>
+			</div>
+		</div>
+	</div>
+	<div class="section">
+		<div class="title">Device Config</div>
+		<div style="margin-bottom: 1em;">
+		<select id="dui-selectDevice" class="duiSelect"></select>
+		<button id="dui-loadConfig-btn" class="duiButton">reload</button>
+		<button id="dui-switch-btn" class="duiButton">switch to...</button>
+		<button id="dui-saveConfig-btn" class="duiButton">set current device to...</button>
+		</div>
+		<div id="dui-device-configurations">
+		<div id="dui-accordion" style="width: 60%;">
+		<h3><a href="#">Device Info</a></h3>
+		<div id="dui-accordion-meta">
+			<table style="display: none;">
+				<tr>
+					<td><span>Name: </span></td>
+					<td><span id="dui-accordion-name">11</span></td>
+				</tr>
+				<tr>
+					<td><span>Owner:</span></td>
+					<td><span id="dui-accordion-owner"></span></td>
+				</tr>
+				<tr>
+					<td style="padding-right: 10px;"><span>Current space: </span></td>
+					<td><span id="dui-accordion-cs"></span></td>
+				</tr>
+			</table>
+		</div>
+		<h3><a href="#">Device profile</a></h3>
+		<div id="dui-accordion-profile">
+			<span id="dui-accordion-noinfo" style="display: none;">No profile has been set to the device</span>
+			<table id="dui-accordion-dvcinfo" style="display: none;">
+				<tr id="dui-accordion-os">
+					<td style="padding-right: 10px;"><span>Operating system: </span></td>
+					<td><span id="dui-accordion-os-value"></span></td>
+				</tr>
+				<tr id="dui-accordion-browser">
+					<td><span>Browser: </span></td>
+					<td><span id="dui-accordion-browser-value"></span></td>
+				</tr>
+				<tr id="dui-accordion-ua">
+					<td style="padding-right: 10px;"><span>User agent info: </span></td>
+					<td><span id="dui-accordion-ua-value"></span></td>
+				</tr>
+			</table>
+		</div>
+		<h3><a href="#">Device displaying widgets</a></h3>
+		<div id="dui-accordion-widgets"></div>
+		</div>
+		</div>
+	</div>
+	<div class="section">
+		<div class="title">Widget Migration</div>
+		<div>
+		<label style="font-size: 18px; vertical-align: middle; padding-right: 10px">available widgets:</label>
+		<button id="dui-migSel-btn" class="duiButton when-member">migrate selected</button>
+		<button id="dui-widgetLocation-btn" class="duiButton">update locations</button>
+		</div>
+		<div style="margin-top: 10px; background-color: #94EE94">
+			<label class="duiInfoTitle">widget</label><label class="duiInfoTitle">current
+					location</label><label class="duiInfoTitle">destination</label>
+		</div>
+		<div id="dui-migration-div" style="margin-top: 3px">
+			<div id="dui-migration-sample_widget_1">
+				<label class="widgetInfo">sample_widget_1</label><label
+					id="dui-migration-sample_widget_1-current" class="widgetInfo">current
+					device</label><select id="dui-migration-sample_widget_1-target" class="widgetInfo"></select>
+			</div>
+			<div id="dui-migration-sample_widget_2">
+				<label class="widgetInfo">sample_widget_2</label><label
+					id="dui-migration-sample_widget_2-current" class="widgetInfo">current
+					device</label><select id="dui-migration-sample_widget_2-target" class="widgetInfo"></select>
+			</div>
+		</div>
+	</div>
+	<div class="section">
+		<div class="title">Stored Widget States</div>
+		<div>
+		<select id="dui-selectWidget" class="duiSelect"></select>
+		<button id="dui-loadWidgetState-btn" class="duiButton">reload</button>
+		</div>
+		<div style="margin-top: 10px">
+			<label class="duiInfoTitle">state name</label><label class="duiInfoTitle">state value</label>
+		</div>
+		<div id="dui-widgetState-div" style="margin-top: 3px;">
+			<div id="dui-widgetState-state_1">
+				<label class="coupleInfo">state_1</label><label id="dui-widgetState-value-state_1"
+					class="coupleInfo">value_1</label>
+			</div>
+			<div id="dui-widgetState-state_2">
+				<label class="coupleInfo">state_2</label><label id="dui-widgetState-value-state_2"
+					class="coupleInfo">value_2</label>
+			</div>
+		</div>
+	</div>
+	<div class="section">
+		<div class="title">Stored Application States</div>
+		<div>
+		<button id="dui-loadAppState-btn" class="duiButton">reload</button>
+		</div>
+		<div style="margin-top: 10px;">
+			<label class="duiInfoTitle">state name</label><label class="duiInfoTitle">state value</label>
+		</div>
+		<div id="dui-appStates" style="margin-top: 3px;">
+			<div id="dui-appState-app_state_1">
+				<label class="coupleInfo">app_state_1</label><label
+					id="dui-appState-value-app_state_1" class="coupleInfo">app_value_1</label>
+			</div>
+			<div id="dui-appState-app_state_2">
+				<label class="coupleInfo">app_state_2</label><label
+					id="dui-appState-value-app_state_2" class="coupleInfo">app_value_2</label>
+			</div>
+		</div>
+	</div>
+</div>
