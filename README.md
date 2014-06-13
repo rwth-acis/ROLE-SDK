@@ -1,10 +1,7 @@
 ROLE-SDK
 ========
 
-To build the SDK from SVN:
-> cd path_to_role_svn_trunk
-> mvn clean
-> mvn package
+To build the SDK run mvn clean package from the main folder.
 
 The result is a zip file (there is also a .tar.gz version).
 path_to_role_svn_trunk/assembly/target/role-m<x>-sdk.zip
