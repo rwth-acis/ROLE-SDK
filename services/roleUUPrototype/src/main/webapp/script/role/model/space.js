@@ -81,9 +81,9 @@ define([ "com", "jquery", "./widget", "./activity", "../ui/ui", "../model/user" 
 		}
 		
 		if (this._firstInit) {
-			com.trigger(this, "http://purl.org/role/ui/Space#", [ "load", "update",
-		        this._isMember ? "join" : "!join",
-				this._isMember ? "!leave" : "leave" ]);
+			com.trigger(this, "http://purl.org/role/ui/Space#", [ "load", "update"]);
+//		        this._isMember ? "join" : "!join",
+//				this._isMember ? "!leave" : "leave" ]);
 			this._firstInit = false;
 		} else {
 			com.trigger(this, "http://purl.org/role/ui/Space#", [ "update",
@@ -97,63 +97,11 @@ define([ "com", "jquery", "./widget", "./activity", "../ui/ui", "../model/user" 
 	},
 	
 	getTitle : function() {
-		if (this._context !== null && this._context.data !== "" &&
-			this._context.data[this._uri]["http://purl.org/dc/terms/title"] != null) {
+		if (this._context === null) {
+			return null;
+		} else { 
 			return this._context.data[this._uri]["http://purl.org/dc/terms/title"][0].value;
 		}
-		return null;
-	},
-
-	setTitle : function(ntitle) {
-		var self = this;
-		var res = new openapp.oo.Resource(this._uri, this._context);
-		res.getMetadata(null, function(md) {
-			md[openapp.ns.dcterms + "title"] = ntitle;
-			res.setMetadata(md, null, function() {
-				self._context = res.context;
-			});
-		});
-	},
-	
-	isMemberAllowedToAddTools: function() {
-		if (this._context !== null && this._context.data !== "" &&
-			this._context.data[this._uri]["http://purl.org/role/terms/memberAllowedToAddTools"] != null) {
-			return true;
-		}
-		return false;	
-	},
-	
-	getDescription : function() {
-		if (this._context !== null && this._context.data !== "" &&
-			this._context.data[this._uri]["http://purl.org/dc/terms/description"] != null) {
-			return this._context.data[this._uri]["http://purl.org/dc/terms/description"][0].value;
-		}
-		return null;
-	},
-
-	setTitleAndDescription : function(ntitle, ndesc, nallowedToAddTools) {
-		var self = this;
-		var res = new openapp.oo.Resource(this._uri, this._context);
-		res.getMetadata(null, function(md) {
-			if (ntitle != null && ntitle != "") {
-				md[openapp.ns.dcterms + "title"] = ntitle;				
-			} else {
-				md[openapp.ns.dcterms + "title"] = "No title";
-			}
-			if (ndesc != null && ndesc != "") {
-				md[openapp.ns.dcterms + "description"] = ndesc;				
-			} else {
-				delete md[openapp.ns.dcterms + "description"];
-			}
-			if (nallowedToAddTools != null && nallowedToAddTools !== false) {
-				md["http://purl.org/role/terms/memberAllowedToAddTools"] = "true";
-			} else {
-				delete md["http://purl.org/role/terms/memberAllowedToAddTools"];
-			}
-			res.setMetadata(md, null, function() {
-				self._context = res.context;
-			});
-		});
 	},
 	
 	getSubtitle : function() {

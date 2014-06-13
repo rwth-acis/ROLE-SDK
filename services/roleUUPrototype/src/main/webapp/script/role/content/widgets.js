@@ -1,23 +1,16 @@
-define([ "com", "jquery", "handlebars!./widget", "../model/space", "rave", "./info"], function(
-		com, $, widgetTemplate, space, rave, info) { return {
+define([ "com", "jquery", "handlebars!./widget", "../model/space", "../feature/duimanager", "detectmobile" ], function(
+		com, $, widgetTemplate, space, duiManager, detectMobile) { return {
 
 	interfaces : [ "http://purl.org/role/ui/Content#" ],
 	
 	createUI : function(container) {
-		var _currentActivity = null;
-		com.on("http://purl.org/role/ui/Activity#", "select", function(currentActivity) {
-			_currentActivity = currentActivity;
-		});
-
-		rave.api.rpc.moveWidget = function(uiState) {
-			var wid = rave.getObjectIdFromDomId(uiState.widget.id);
-			_currentActivity.setWidgetPosition(wid, uiState.targetIndex);
-			$(uiState.widget.parentElement).css("width", _currentActivity.getWidgetWidth(_currentActivity.getWidget(wid)));
-		};
 		com.on("http://purl.org/role/ui/Widget#", "add", function(widget) {
+			//added by Ke Li: when the widget is in the widget list but not in the to-be-displayed list, do not render it.
+			if (space.isMember() && duiManager.widgets.indexOf(widget.getRegionWidgetId()) != -1 
+					&& duiManager.widgetsWhiteList.indexOf(widget.getRegionWidgetId()) == -1)
+				return;
 			if (!document.getElementById("widget-" + widget.getRegionWidgetId() + "-wrapper")) {
 				var widgetUI = $(widgetTemplate({
-					widgetdescription: widget.getDescription(),
 					regionWidgetId: widget.getRegionWidgetId(),
 					title: widget.getTitle()
 				}));
@@ -28,94 +21,62 @@ define([ "com", "jquery", "handlebars!./widget", "../model/space", "rave", "./in
 //						alert("You need to sign in to perform this action.");
 //						return;						
 //					}
-					if (space.isCollaborative() && !space.isOwner()  && !space.isMemberAllowedToAddTools()) {
-						alert("Only owners of a space can add or remove widgets unless the owner has given explicit permission.");
+					if (space.isCollaborative() && !space.isOwner()) {
+						alert("Currently only the owners of a space can add and remove widgets.");
 						return;
 					}
 					if (confirm("Are you sure you want to remove this widget from your page?")) {
-						_currentActivity.removeWidget(widget);
 						openapp.resource.del(widget.getUri(), function() {
 							space.refresh(function() {
 								com.remove(widget);
+								duiManager.onUserRemoveWidget(widget); //added by Ke Li: watch on the only source that can really delete the widget
 							});
 						});
 					}
 				});
-				
-				if (space.isOwner() || space.isMemberAllowedToAddTools()) {
-					widgetUI.find(".widgetinfo-save-btn").show();
-					widgetUI.find(".cannotEditWidgetinfo").hide();
-					widgetUI.find(".widgetinfo-title").removeAttr("disabled");
-					widgetUI.find(".widgetinfo-description").removeAttr("disabled");
-				}
-
-				widgetUI.on("click", ".widget-toolbar-info-btn", function() {
-					widgetUI.find(".widgetinfo").toggle();
+				$(widgetUI).on("click", ".notmaximize img", function(){
+					var widgetId = widget.getRegionWidgetId();
+					if (widgetId != null) {
+						$('#widget-' + widgetId + '-wrapper').removeClass("widget-wrapper-canvas");
+						$("#sideEntry-" + widgetId).removeClass("sideEntrySel");
+						$(".widget-wrapper").css("display", "");
+						(function(id) {
+							window.setTimeout(function() {
+								var wdgt = rave.getWidgetById(id);
+								if (typeof wdgt !== "undefined") {
+									wdgt.minimize();
+									$(".widget-wrapper").find("iframe").attr("width", "100%");
+									$(".widget-wrapper-canvas").find("iframe").attr("width", "100%");						
+								}
+								$('#widget-' + id + '-wrapper').removeClass("widget-wrapper-canvas");
+								$('#widget-' + id + '-wrapper').css({"width": "", "height": ""});
+								$("#sideEntry-" + id).removeClass("sideEntrySel");
+							}, 1);
+						})(widgetId);
+					}
 				});
-				widgetUI.on("click", ".widgetinfo-cancel-btn", function() {
-					widgetUI.find(".widgetinfo").hide();
-				});
-
-				widgetUI.on("click", ".widgetinfo-save-btn", function() {
-					var t = widgetUI.find(".widgetinfo-title").val();
-					var d = widgetUI.find(".widgetinfo-description").val();
-					widget.setTitleAndDescription(t, d);
-					$("#widget-"+widget.getRegionWidgetId()+"-title").html(t);
-					$("#widget-"+widget.getRegionWidgetId()+"-toolbar").attr("title", d);
-					$("#sideEntry-"+widget.getRegionWidgetId()).attr("title", d).find(".widgettitle").html(t);
-					widgetUI.find(".widgetinfo").hide();
-				});
-				
-				
-				// Bazaar wishing functionality
-				if($(widgetUI).find(".integratedWishingElement").bazaarWishing) {
-					// integrated wishing libraries already loaded...
-					$(widgetUI).find(".integratedWishingElement").bazaarWishing({softwareUrl : widget._widget.widgetUrl});
-				}
-				else {
-					//require(["/s/script/jquery.plugin.bazaarWishing.nodeps.all.min.js"], function(bazaarWishingPlugin) {
-					require(["//requirements-bazaar.org/JQueryBazaarPlugin/js/jquery.plugin.bazaarWishing.nodeps.all.min.js"], function(bazaarWishingPlugin) {
-						$(widgetUI).find(".integratedWishingElement").bazaarWishing({softwareUrl : widget._widget.widgetUrl});
-					});
-				}
-				
-				$(widgetUI).on("click", ".widget-toolbar-wish-btn", function() {
-					// wishing without making an screenshot
-					$(widgetUI).find(".integratedWishingElement").bazaarWishing('toggle', false);
-				});
-				
-				
-				
 				// Make the widget resizable horizontally, unless we're in the dashboard
 				// where this currently causes issues
 				if (!$(document.body).is(".user-profile")) {
-					var widgetdiv = $("#widget-" + widget.getRegionWidgetId() + "-wrapper");
-					var w = widget.getWidth();
-					if (w != null) {
-						widgetdiv.css("width", ""+w+"px");
-					}
-					widgetdiv.resizable({
-						handles : "e",
-						resize : function() {
-							//$(this).css("overflow", "hidden");
-						},
-						start : function() {
-							$(this).addClass("widget-wrapper-focus");
-							$("#pageContent").find("iframe").css("visibility", "hidden");
-						},
-						stop : function() {
-							var j = $(this);
-							widget.setWidth(j.width());
-							j.removeClass("widget-wrapper-focus");
-							$("#pageContent").find("iframe").css("visibility", "visible");
-						}
-					});
+					if (!detectMobile.isMobile())
+						$("#widget-" + widget.getRegionWidgetId() + "-wrapper").resizable({
+							handles : "e",
+							resize : function() {
+								//$(this).css("overflow", "hidden");
+							},
+							start : function() {
+								$(this).addClass("widget-wrapper-focus");
+								$("#pageContent").find("iframe").css("visibility", "hidden");
+							},
+							stop : function() {
+								$(this).removeClass("widget-wrapper-focus");
+								$("#pageContent").find("iframe").css("visibility", "");
+							}
+						});
 				}
-			}
-			if (widget._widget.metadata.iframeUrl) {
-				rave.initWidgets([ widget._widget ]);				
-			}
-			rave.initUI();
+			}		
+			rave.initWidgets([ widget._widget ]);
+			rave.initUI(detectMobile.isMobile(), detectMobile.isTouch());
 		});
 		com.on("http://purl.org/role/ui/Widget#", "remove", function(widget) {
 			$("#widget-" + widget.getRegionWidgetId() + "-wrapper").remove();

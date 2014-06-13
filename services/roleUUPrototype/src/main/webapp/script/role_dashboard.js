@@ -66,7 +66,7 @@ jQQ.isolate(function($){
 	role.dashboard = (function(){
 		
 		var dashboardToggle = function() {
-			var expandedHeight = 400;
+			var expandedHeight = Math.floor(screen.height/3);
 			var collapsedHeight = 25;
 			if ($("#_role_dashboard_container").hasClass("dashboard-expanded")) {
 				$("#_role_dashboard_overlay").css("bottom", "0px");

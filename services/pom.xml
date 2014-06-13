@@ -20,5 +20,6 @@
 		<module>user-service</module>
 		<module>realtime-service</module>
 		<module>roleUUPrototype</module>
+		<module>dui-service</module>
 	</modules>
 </project>

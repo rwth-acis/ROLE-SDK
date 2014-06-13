@@ -1,33 +1,33 @@
 (function(){var openapp = {};
 this.openapp = openapp;
 openapp.event = {};
-var gadgets = "undefined" !== typeof this.gadgets ? this.gadgets : {};
+var gadgets = typeof this.gadgets !== "undefined" ? this.gadgets : {};
 this.gadgets = gadgets;
 gadgets.openapp = gadgets.openapp || {};
-var usePostMessage = "undefined" !== typeof window && "undefined" !== typeof window.parent && "undefined" !== typeof window.postMessage && "undefined" !== typeof JSON && "undefined" !== typeof JSON.parse && "undefined" !== typeof JSON.stringify, usePubSub = !usePostMessage && "undefined" !== typeof gadgets && "undefined" !== typeof gadgets.pubsub && "undefined" !== typeof gadgets.pubsub.subscribe && "undefined" !== typeof gadgets.pubsub.unsubscribe && "undefined" !== typeof gadgets.pubsub.publish, 
+var usePostMessage = typeof window !== "undefined" && typeof window.parent !== "undefined" && typeof window.postMessage !== "undefined" && typeof JSON !== "undefined" && typeof JSON.parse !== "undefined" && typeof JSON.stringify !== "undefined", usePubSub = !usePostMessage && typeof gadgets !== "undefined" && typeof gadgets.pubsub !== "undefined" && typeof gadgets.pubsub.subscribe !== "undefined" && typeof gadgets.pubsub.unsubscribe !== "undefined" && typeof gadgets.pubsub.publish !== "undefined", 
 init = {postParentOnly:true}, ownData = null, doCallback = null, onMessage = null;
 usePostMessage ? (onMessage = function(a) {
-  if("string" === typeof a.data && '{"OpenApplicationEvent":{' === a.data.slice(0, 25)) {
+  if(typeof a.data === "string" && a.data.slice(0, 25) === '{"OpenApplicationEvent":{') {
     var b = JSON.parse(a.data).OpenApplicationEvent;
-    if("openapp" === b.event && !0 === b.welcome && a.source === window.parent) {
-      for(var d in b.message) {
-        b.message.hasOwnProperty(d) && (init[d] = b.message[d])
+    if(b.event === "openapp" && b.welcome === true && a.source === window.parent) {
+      for(var c in b.message) {
+        b.message.hasOwnProperty(c) && (init[c] = b.message[c])
       }
     }else {
       b.source = a.source, b.origin = a.origin, b.toJSON = function() {
         var a = {}, b;
         for(b in this) {
-          this.hasOwnProperty(b) && ("function" !== typeof this[b] && "source" !== b && "origin" !== b) && (a[b] = this[b])
+          this.hasOwnProperty(b) && typeof this[b] !== "function" && b !== "source" && b !== "origin" && (a[b] = this[b])
         }
         return a
-      }, "function" === typeof doCallback && !0 === doCallback(b, b.message) && window.parent.postMessage(JSON.stringify({OpenApplicationEvent:{event:"openapp", receipt:!0}}), "*")
+      }, typeof doCallback === "function" && doCallback(b, b.message) === true && window.parent.postMessage(JSON.stringify({OpenApplicationEvent:{event:"openapp", receipt:true}}), "*")
     }
   }
-}, "undefined" !== typeof window.attachEvent ? window.attachEvent("onmessage", onMessage) : window.addEventListener("message", onMessage, !1), "undefined" !== typeof window.parent && window.parent.postMessage(JSON.stringify({OpenApplicationEvent:{event:"openapp", hello:!0}}), "*")) : usePubSub && (onMessage = function(a, b) {
+}, typeof window.attachEvent !== "undefined" ? window.attachEvent("onmessage", onMessage) : window.addEventListener("message", onMessage, false), typeof window.parent !== "undefined" && window.parent.postMessage(JSON.stringify({OpenApplicationEvent:{event:"openapp", hello:true}}), "*")) : usePubSub && (onMessage = function(a, b) {
   b.source = void 0;
   b.origin = void 0;
   b.sender = a;
-  "function" === typeof doCallback && !0 === doCallback(b, b.message) && gadgets.pubsub.publish("openapp-recieve", !0)
+  typeof doCallback === "function" && doCallback(b, b.message) === true && gadgets.pubsub.publish("openapp-recieve", true)
 });
 gadgets.openapp.RDF = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
 gadgets.openapp.connect = function(a) {
@@ -45,40 +45,51 @@ gadgets.openapp.publish = function(a, b) {
   a.date = a.date || new Date;
   a.message = b || a.message;
   if(usePostMessage) {
-    if(!1 === init.postParentOnly && null === ownData) {
+    if(init.postParentOnly === false && ownData === null) {
       ownData = {sender:"unknown", viewer:"unknown"};
-      if("undefined" !== typeof window.location && "string" === typeof window.location.search && "function" === typeof window.unescape) {
-        var d = window.location.search.substring(1).split("&"), c, e = {};
-        if(!(1 == d.length && "" === d[0])) {
-          for(var f = 0;f < d.length;f++) {
-            c = d[f].split("="), 2 == c.length && (e[c[0]] = window.unescape(c[1]))
+      if(typeof window.location !== "undefined" && typeof window.location.search === "string" && typeof window.unescape === "function") {
+        var c = window.location.search.substring(1).split("&"), d, e = {};
+        if(!(c.length == 1 && c[0] === "")) {
+          for(var g = 0;g < c.length;g++) {
+            d = c[g].split("="), d.length == 2 && (e[d[0]] = window.unescape(d[1]))
           }
         }
-        "string" === typeof e.url && (ownData.sender = e.url)
+        if(typeof e.url === "string") {
+          ownData.sender = e.url
+        }
       }
-      if("undefined" !== typeof opensocial && "function" === typeof opensocial.newDataRequest) {
-        d = opensocial.newDataRequest();
-        d.add(d.newFetchPersonRequest(opensocial.IdSpec.PersonId.VIEWER), "viewer");
-        var g = this;
-        d.send(function(c) {
+      if(typeof opensocial !== "undefined" && typeof opensocial.newDataRequest === "function") {
+        c = opensocial.newDataRequest();
+        c.add(c.newFetchPersonRequest(opensocial.IdSpec.PersonId.VIEWER), "viewer");
+        var f = this;
+        c.send(function(c) {
           c = c.get("viewer").getData();
-          "object" === typeof c && (null !== c && "function" === typeof c.getId) && (c = c.getId(), "string" === typeof c && (ownData.viewer = c));
-          g.publish(a, b)
+          if(typeof c === "object" && c !== null && typeof c.getId === "function" && (c = c.getId(), typeof c === "string")) {
+            ownData.viewer = c
+          }
+          f.publish(a, b)
         });
         return
       }
     }
-    null !== ownData && ("string" === typeof ownData.sender && (a.sender = ownData.sender), "string" === typeof ownData.viewer && (a.viewer = ownData.viewer));
-    d = JSON.stringify({OpenApplicationEvent:a});
-    if("undefined" !== window.parent) {
-      if(window.parent.postMessage(d, "*"), !init.postParentOnly) {
-        c = window.parent.frames;
-        for(e = 0;e < c.length;e++) {
-          c[e].postMessage(d, "*")
+    if(ownData !== null) {
+      if(typeof ownData.sender === "string") {
+        a.sender = ownData.sender
+      }
+      if(typeof ownData.viewer === "string") {
+        a.viewer = ownData.viewer
+      }
+    }
+    c = JSON.stringify({OpenApplicationEvent:a});
+    if(window.parent !== "undefined") {
+      if(window.parent.postMessage(c, "*"), !init.postParentOnly) {
+        d = window.parent.frames;
+        for(e = 0;e < d.length;e++) {
+          d[e].postMessage(c, "*")
         }
       }
     }else {
-      window.postMessage(d, "*")
+      window.postMessage(c, "*")
     }
   }else {
     usePubSub && gadgets.pubsub.publish("openapp", a)
@@ -86,98 +97,101 @@ gadgets.openapp.publish = function(a, b) {
 };
 openapp.io = {};
 openapp.io.createXMLHttpRequest = function() {
-  if("undefined" !== typeof XMLHttpRequest) {
+  if(typeof XMLHttpRequest !== "undefined") {
     return new XMLHttpRequest
+  }else {
+    if(typeof ActiveXObject !== "undefined") {
+      return new ActiveXObject("Microsoft.XMLHTTP")
+    }else {
+      throw{name:"XMLHttpRequestError", message:"XMLHttpRequest not supported"};
+    }
   }
-  if("undefined" !== typeof ActiveXObject) {
-    return new ActiveXObject("Microsoft.XMLHTTP")
-  }
-  throw{name:"XMLHttpRequestError", message:"XMLHttpRequest not supported"};
 };
-openapp.io.makeRequest = function(a, b, d) {
-  gadgets.io.makeRequest(a, function(c) {
-    var e, f, g, h, j, k, l, p;
-    if(null === document.getElementById("oauthPersonalize")) {
+openapp.io.makeRequest = function(a, b, c) {
+  gadgets.io.makeRequest(a, function(d) {
+    var e, g, f, h, i, j, k, m;
+    if(document.getElementById("oauthPersonalize") === null) {
       e = document.createElement("div");
-      f = document.createElement("input");
       g = document.createElement("input");
+      f = document.createElement("input");
       h = document.createElement("div");
-      j = document.createElement("input");
-      k = document.createElement("div");
-      l = document.createElement("span");
-      p = document.createElement("input");
+      i = document.createElement("input");
+      j = document.createElement("div");
+      k = document.createElement("span");
+      m = document.createElement("input");
       e.id = "oauthPersonalize";
-      f.id = "oauthPersonalizeButton";
-      g.id = "oauthPersonalizeDenyButton";
+      g.id = "oauthPersonalizeButton";
+      f.id = "oauthPersonalizeDenyButton";
       h.id = "oauthPersonalizeDone";
-      j.id = "oauthPersonalizeDoneButton";
-      k.id = "oauthPersonalizeComplete";
-      l.id = "oauthPersonalizeMessage";
-      p.id = "oauthPersonalizeHideButton";
-      f.id = "oauthPersonalizeButton";
+      i.id = "oauthPersonalizeDoneButton";
+      j.id = "oauthPersonalizeComplete";
+      k.id = "oauthPersonalizeMessage";
+      m.id = "oauthPersonalizeHideButton";
+      g.id = "oauthPersonalizeButton";
       e.style.display = "none";
       h.style.display = "none";
-      k.style.display = "none";
-      f.type = "button";
+      j.style.display = "none";
       g.type = "button";
-      j.type = "button";
-      p.type = "button";
-      f.value = "Continue";
-      g.value = "Ignore";
-      j.value = "Done";
-      p.value = "Hide";
+      f.type = "button";
+      i.type = "button";
+      m.type = "button";
+      g.value = "Continue";
+      f.value = "Ignore";
+      i.value = "Done";
+      m.value = "Hide";
       e.appendChild(document.createTextNode("In order to provide the full functionality of this tool, access to your personal data is being requested."));
       h.appendChild(document.createTextNode("If you have provided authorization and are still reading this, click the Done button."));
-      var m = document.getElementById("openappDialog");
-      null == m && (m = document.createElement("div"), null != document.body.firstChild ? document.body.insertBefore(m, document.body.firstChild) : document.body.appendChild(m));
-      m.appendChild(e);
-      m.appendChild(h);
-      m.appendChild(k);
-      e.appendChild(f);
+      var l = document.getElementById("openappDialog");
+      l == null && (l = document.createElement("div"), document.body.firstChild != null ? document.body.insertBefore(l, document.body.firstChild) : document.body.appendChild(l));
+      l.appendChild(e);
+      l.appendChild(h);
+      l.appendChild(j);
       e.appendChild(g);
-      h.appendChild(j);
-      k.appendChild(l);
-      k.appendChild(p);
-      g.onclick = function() {
+      e.appendChild(f);
+      h.appendChild(i);
+      j.appendChild(k);
+      j.appendChild(m);
+      f.onclick = function() {
         e.style.display = "none"
       };
-      p.onclick = function() {
-        k.style.display = "none"
+      m.onclick = function() {
+        j.style.display = "none"
       }
     }
-    if(c.oauthApprovalUrl) {
-      var r = function() {
-        q && (window.clearInterval(q), q = null);
-        n && (n.close(), n = null);
-        document.getElementById("oauthPersonalizeDone").style.display = "none";
-        document.getElementById("oauthPersonalizeComplete").style.display = "block";
-        openapp.io.makeRequest(a, b, d);
-        return!1
-      }, s = function() {
-        if(!n || n.closed) {
-          n = null, r()
+    d.oauthApprovalUrl ? (d = function(a) {
+      function b() {
+        h && (window.clearInterval(h), h = null);
+        j && (j.close(), j = null);
+        f();
+        return false
+      }
+      function c() {
+        if(!j || j.closed) {
+          j = null, b()
         }
-      }, t = c.oauthApprovalUrl, n = null, q = null;
-      c = {createOpenerOnClick:function() {
+      }
+      var d = a.destination, e = a.windowOptions, g = a.onOpen, f = a.onClose, j = null, h = null;
+      return{createOpenerOnClick:function() {
         return function() {
-          if(n = window.open(t, "_blank", "width=450,height=500")) {
-            q = window.setInterval(s, 100), document.getElementById("oauthPersonalize").style.display = "none", document.getElementById("oauthPersonalizeDone").style.display = "block"
+          if(j = window.open(d, "_blank", e)) {
+            h = window.setInterval(c, 100), g()
           }
-          return!1
+          return false
         }
       }, createApprovedOnClick:function() {
-        return r
-      }};
-      document.getElementById("oauthPersonalizeButton").onclick = c.createOpenerOnClick();
-      document.getElementById("oauthPersonalizeDoneButton").onclick = c.createApprovedOnClick();
-      f = "Please wait.";
-      document.all ? document.getElementById("oauthPersonalizeMessage").innerText = f : document.getElementById("oauthPersonalizeMessage").textContent = f;
-      document.getElementById("oauthPersonalize").style.display = "block"
-    }else {
-      c.oauthError ? (f = "The authorization was not completed successfully. (" + c.oauthError + ")", document.all ? document.getElementById("oauthPersonalizeMessage").innerText = f : document.getElementById("oauthPersonalizeMessage").textContent = f, document.getElementById("oauthPersonalizeComplete").style.display = "block") : (f = "You have now granted authorization. To revoke authorization, go to your Privacy settings.", document.all ? document.getElementById("oauthPersonalizeMessage").innerText = 
-      f : document.getElementById("oauthPersonalizeMessage").textContent = f, b(c))
-    }
-  }, d)
+        return b
+      }}
+    }({destination:d.oauthApprovalUrl, windowOptions:"width=450,height=500", onOpen:function() {
+      document.getElementById("oauthPersonalize").style.display = "none";
+      document.getElementById("oauthPersonalizeDone").style.display = "block"
+    }, onClose:function() {
+      document.getElementById("oauthPersonalizeDone").style.display = "none";
+      document.getElementById("oauthPersonalizeComplete").style.display = "block";
+      openapp.io.makeRequest(a, b, c)
+    }}), document.getElementById("oauthPersonalizeButton").onclick = d.createOpenerOnClick(), document.getElementById("oauthPersonalizeDoneButton").onclick = d.createApprovedOnClick(), g = "Please wait.", document.all ? document.getElementById("oauthPersonalizeMessage").innerText = g : document.getElementById("oauthPersonalizeMessage").textContent = g, document.getElementById("oauthPersonalize").style.display = "block") : d.oauthError ? (g = "The authorization was not completed successfully. (" + 
+    d.oauthError + ")", document.all ? document.getElementById("oauthPersonalizeMessage").innerText = g : document.getElementById("oauthPersonalizeMessage").textContent = g, document.getElementById("oauthPersonalizeComplete").style.display = "block") : (g = "You have now granted authorization. To revoke authorization, go to your Privacy settings.", document.all ? document.getElementById("oauthPersonalizeMessage").innerText = g : document.getElementById("oauthPersonalizeMessage").textContent = g, 
+    b(d))
+  }, c)
 };
 openapp.ns = {};
 openapp.ns.rdf = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
@@ -192,48 +206,43 @@ openapp.ns.widget = "http://purl.org/role/widget/";
 openapp.resource = {};
 var linkexp = /<[^>]*>\s*(\s*;\s*[^\(\)<>@,;:"\/\[\]\?={} \t]+=(([^\(\)<>@,;:"\/\[\]\?={} \t]+)|("[^"]*")))*(,|\$)/g, paramexp = /[^\(\)<>@,;:"\/\[\]\?={} \t]+=(([^\(\)<>@,;:"\/\[\]\?={} \t]+)|("[^"]*"))/g;
 function unquote(a) {
-  return'"' === a.charAt(0) && '"' === a.charAt(a.length - 1) ? a.substring(1, a.length - 1) : a
+  return a.charAt(0) === '"' && a.charAt(a.length - 1) === '"' ? a.substring(1, a.length - 1) : a
 }
 function parseLinkHeader(a) {
-  var b = (a + ",").match(linkexp);
-  a = {};
-  var d = {}, c = {}, e, f, g, h, j, k;
+  var b = (a + ",").match(linkexp), a = {}, c = {}, d = {}, e, g, f, h, i, j;
   for(e = 0;e < b.length;e++) {
-    f = b[e].split(">");
-    g = f[0].substring(1);
-    h = f[1];
-    f = {};
-    f.href = g;
-    g = h.match(paramexp);
-    for(h = 0;h < g.length;h++) {
-      j = g[h], j = j.split("="), k = j[0], f[k] = unquote(j[1])
+    g = b[e].split(">");
+    f = g[0].substring(1);
+    h = g[1];
+    g = {};
+    g.href = f;
+    f = h.match(paramexp);
+    for(h = 0;h < f.length;h++) {
+      i = f[h], i = i.split("="), j = i[0], g[j] = unquote(i[1])
     }
-    void 0 !== f.rel && "undefined" === typeof f.anchor && (a[f.rel] = f);
-    void 0 !== f.title && "undefined" === typeof f.anchor && (d[f.title] = f);
-    g = c[f.anchor || ""] || {};
-    h = g[f.rel || "http://purl.org/dc/terms/relation"] || [];
-    h.push({type:"uri", value:f.href});
-    g[f.rel || "http://purl.org/dc/terms/relation"] = h;
-    c[f.anchor || ""] = g
+    g.rel !== void 0 && typeof g.anchor === "undefined" && (a[g.rel] = g);
+    g.title !== void 0 && typeof g.anchor === "undefined" && (c[g.title] = g);
+    f = d[g.anchor || ""] || {};
+    h = f[g.rel || "http://purl.org/dc/terms/relation"] || [];
+    h.push({type:"uri", value:g.href});
+    f[g.rel || "http://purl.org/dc/terms/relation"] = h;
+    d[g.anchor || ""] = f
   }
   b = {};
   b.rels = a;
-  b.titles = d;
-  b.rdf = c;
+  b.titles = c;
+  b.rdf = d;
   return b
 }
-var isStringValue = function(a) {
-  return"" !== a && "string" === typeof a
-};
-openapp.resource.makeRequest = function(a, b, d, c, e, f) {
-  var g = openapp.io.createXMLHttpRequest(), h, j = 0;
-  if("undefined" !== typeof c) {
-    for(h in c) {
-      c.hasOwnProperty(h) && j++
+openapp.resource.makeRequest = function(a, b, c, d, e, g) {
+  var f = openapp.io.createXMLHttpRequest(), h, i = 0;
+  if(typeof d !== "undefined") {
+    for(h in d) {
+      d.hasOwnProperty(h) && i++
     }
-    if(0 < j) {
-      j = "";
-      -1 !== b.indexOf("?") && (j = b.substring(b.indexOf("?")), b = b.substring(0, b.length - j.length));
+    if(i > 0) {
+      i = "";
+      b.indexOf("?") !== -1 && (i = b.substring(b.indexOf("?")), b = b.substring(0, b.length - i.length));
       switch(b.substring(b.length - 1)) {
         case "/":
           b += ":";
@@ -243,207 +252,240 @@ openapp.resource.makeRequest = function(a, b, d, c, e, f) {
         default:
           b += "/:"
       }
-      for(h in c) {
-        c.hasOwnProperty(h) && (b = h === openapp.ns.rdf + "predicate" ? b + (";predicate=" + encodeURIComponent(c[h])) : b + (";" + encodeURIComponent(h) + "=" + encodeURIComponent(c[h])))
+      for(h in d) {
+        d.hasOwnProperty(h) && (b += h === openapp.ns.rdf + "predicate" ? ";predicate=" + encodeURIComponent(d[h]) : ";" + encodeURIComponent(h) + "=" + encodeURIComponent(d[h]))
       }
-      b += j
+      b += i
     }
   }
-  g.open(a, b, !0);
-  g.setRequestHeader("Accept", "application/json");
+  f.open(a, b, true);
+  f.setRequestHeader("Accept", "application/json");
   e = e || "";
-  if(0 < e.length || "POST" === a || "PUT" === a) {
-    g.setRequestHeader("Content-Type", "undefined" !== typeof f ? f : "application/json")
+  if(e.length > 0 || a === "POST" || a === "PUT") {
+    f.setRequestHeader("Content-Type", typeof g !== "undefined" ? g : "application/json")
   }
-  d = d || function() {
+  c = c || function() {
   };
-  g.onreadystatechange = function() {
-    if(4 === g.readyState) {
-      var a = {data:g.responseText, link:isStringValue(g.getResponseHeader("link")) ? parseLinkHeader(g.getResponseHeader("link")) : {}};
-      isStringValue(g.getResponseHeader("location")) ? a.uri = g.getResponseHeader("location") : isStringValue(g.getResponseHeader("content-base")) ? a.uri = g.getResponseHeader("content-base") : a.link.hasOwnProperty("http://purl.org/dc/terms/subject") && (a.uri = a.link["http://purl.org/dc/terms/subject"].href);
-      isStringValue(g.getResponseHeader("content-location")) && (a.contentUri = g.getResponseHeader("content-location"));
-      isStringValue(g.getResponseHeader("content-type")) && "application/json" === g.getResponseHeader("content-type").split(";")[0] && (a.data = JSON.parse(a.data));
-      a.subject = "undefined" !== typeof g.responseText ? a.data.hasOwnProperty("") ? a.data[""] : a.data[a.uri] || {} : {};
-      d(a)
+  f.onreadystatechange = function() {
+    if(f.readyState === 4) {
+      var a = {data:f.responseText, link:f.getResponseHeader("link") !== null ? parseLinkHeader(f.getResponseHeader("link")) : {}};
+      if(f.getResponseHeader("location") !== null && f.getResponseHeader("location").length > 0) {
+        a.uri = f.getResponseHeader("location")
+      }else {
+        if(f.getResponseHeader("content-base") !== null && f.getResponseHeader("content-base").length > 0) {
+          a.uri = f.getResponseHeader("content-base")
+        }else {
+          if(a.link.hasOwnProperty("http://purl.org/dc/terms/subject")) {
+            a.uri = a.link["http://purl.org/dc/terms/subject"].href
+          }
+        }
+      }
+      if(f.getResponseHeader("content-location") !== null) {
+        a.contentUri = f.getResponseHeader("content-location")
+      }
+      if(f.getResponseHeader("content-type") !== null && f.getResponseHeader("content-type").split(";")[0] === "application/json") {
+        a.data = JSON.parse(a.data)
+      }
+      a.subject = typeof f.responseText !== "undefined" ? a.data.hasOwnProperty("") ? a.data[""] : a.data[a.uri] || {} : {};
+      c(a)
     }
   };
-  g.send(e)
+  f.send(e)
 };
-"undefined" === typeof openapp_forceXhr && ("undefined" !== typeof gadgets && "undefined" !== typeof gadgets.io && "undefined" !== typeof gadgets.io.makeRequest) && (openapp.resource.makeRequest = function(a, b, d, c, e, f) {
-  var g = {}, h, j = 0;
-  if("undefined" !== typeof c) {
-    for(h in c) {
-      c.hasOwnProperty(h) && j++
-    }
-    if(0 < j) {
-      j = "";
-      -1 !== b.indexOf("?") && (j = b.substring(b.indexOf("?")), b = b.substring(0, b.length - j.length));
-      switch(b.substring(b.length - 1)) {
-        case "/":
-          b += ":";
-          break;
-        case ":":
-          break;
-        default:
-          b += "/:"
+if(typeof openapp_forceXhr === "undefined" && typeof gadgets !== "undefined" && typeof gadgets.io !== "undefined" && typeof gadgets.io.makeRequest !== "undefined") {
+  openapp.resource.makeRequest = function(a, b, c, d, e, g) {
+    var f = {}, h, i = 0;
+    if(typeof d !== "undefined") {
+      for(h in d) {
+        d.hasOwnProperty(h) && i++
       }
-      for(h in c) {
-        c.hasOwnProperty(h) && (b = h === openapp.ns.rdf + "predicate" ? b + (";predicate=" + encodeURIComponent(c[h])) : b + (";" + encodeURIComponent(h) + "=" + encodeURIComponent(c[h])))
+      if(i > 0) {
+        i = "";
+        b.indexOf("?") !== -1 && (i = b.substring(b.indexOf("?")), b = b.substring(0, b.length - i.length));
+        switch(b.substring(b.length - 1)) {
+          case "/":
+            b += ":";
+            break;
+          case ":":
+            break;
+          default:
+            b += "/:"
+        }
+        for(h in d) {
+          d.hasOwnProperty(h) && (b += h === openapp.ns.rdf + "predicate" ? ";predicate=" + encodeURIComponent(d[h]) : ";" + encodeURIComponent(h) + "=" + encodeURIComponent(d[h]))
+        }
+        b += i
       }
-      b += j
     }
+    f[gadgets.io.RequestParameters.GET_FULL_HEADERS] = true;
+    f[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.TEXT;
+    f[gadgets.io.RequestParameters.AUTHORIZATION] = gadgets.io.AuthorizationType.OAUTH;
+    f[gadgets.io.RequestParameters.OAUTH_SERVICE_NAME] = "openapp";
+    f[gadgets.io.RequestParameters.OAUTH_USE_TOKEN] = "always";
+    f[gadgets.io.RequestParameters.METHOD] = a;
+    f[gadgets.io.RequestParameters.HEADERS] = f[gadgets.io.RequestParameters.HEADERS] || {};
+    typeof e !== "undefined" && e !== null && (f[gadgets.io.RequestParameters.HEADERS]["Content-Type"] = typeof g !== "undefined" ? g : "application/json", f[gadgets.io.RequestParameters.POST_DATA] = e);
+    f[gadgets.io.RequestParameters.HEADERS].Accept = "application/json";
+    c = c || function() {
+    };
+    openapp.io.makeRequest(b, function(a) {
+      var b = {data:a.data, link:typeof a.headers.link !== "undefined" ? parseLinkHeader(a.headers.link[0]) : {}};
+      if(a.headers.hasOwnProperty("location")) {
+        b.uri = a.headers.location[0]
+      }else {
+        if(a.headers.hasOwnProperty("content-base")) {
+          b.uri = a.headers["content-base"][0]
+        }else {
+          if(b.link.hasOwnProperty("http://purl.org/dc/terms/subject")) {
+            b.uri = b.link["http://purl.org/dc/terms/subject"].href
+          }
+        }
+      }
+      if(a.headers.hasOwnProperty("content-location")) {
+        b.contentUri = a.headers["content-location"][0]
+      }
+      if(a.headers.hasOwnProperty("content-type") && a.headers["content-type"][0].split(";")[0] === "application/json") {
+        b.data = gadgets.json.parse(b.data)
+      }
+      b.subject = typeof a.data !== "undefined" ? b.data.hasOwnProperty("") ? b.data[""] : b.data[b.uri] || {} : {};
+      c(b)
+    }, f)
   }
-  g[gadgets.io.RequestParameters.GET_FULL_HEADERS] = !0;
-  g[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.TEXT;
-  g[gadgets.io.RequestParameters.AUTHORIZATION] = gadgets.io.AuthorizationType.OAUTH;
-  g[gadgets.io.RequestParameters.OAUTH_SERVICE_NAME] = "openapp";
-  g[gadgets.io.RequestParameters.OAUTH_USE_TOKEN] = "always";
-  g[gadgets.io.RequestParameters.METHOD] = a;
-  g[gadgets.io.RequestParameters.HEADERS] = g[gadgets.io.RequestParameters.HEADERS] || {};
-  "undefined" !== typeof e && null !== e && (g[gadgets.io.RequestParameters.HEADERS]["Content-Type"] = "undefined" !== typeof f ? f : "application/json", g[gadgets.io.RequestParameters.POST_DATA] = e);
-  g[gadgets.io.RequestParameters.HEADERS].Accept = "application/json";
-  d = d || function() {
-  };
-  openapp.io.makeRequest(b, function(a) {
-    var b = {data:a.data, link:"undefined" !== typeof a.headers.link ? parseLinkHeader(a.headers.link[0]) : {}};
-    a.headers.hasOwnProperty("location") ? b.uri = a.headers.location[0] : a.headers.hasOwnProperty("content-base") ? b.uri = a.headers["content-base"][0] : b.link.hasOwnProperty("http://purl.org/dc/terms/subject") && (b.uri = b.link["http://purl.org/dc/terms/subject"].href);
-    a.headers.hasOwnProperty("content-location") && (b.contentUri = a.headers["content-location"][0]);
-    a.headers.hasOwnProperty("content-type") && "application/json" === a.headers["content-type"][0].split(";")[0] && (b.data = gadgets.json.parse(b.data));
-    b.subject = "undefined" !== typeof a.data ? b.data.hasOwnProperty("") ? b.data[""] : b.data[b.uri] || {} : {};
-    d(b)
-  }, g)
-});
-openapp.resource.get = function(a, b, d) {
-  return openapp.resource.makeRequest("GET", a, b, d || {"http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate":openapp.ns.conserve + "info"})
+}
+openapp.resource.get = function(a, b, c) {
+  return openapp.resource.makeRequest("GET", a, b, c || {"http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate":openapp.ns.conserve + "info"})
 };
-openapp.resource.post = function(a, b, d, c, e) {
-  return openapp.resource.makeRequest("POST", a, b, d, c, e)
+openapp.resource.post = function(a, b, c, d, e) {
+  return openapp.resource.makeRequest("POST", a, b, c, d, e)
 };
-openapp.resource.put = function(a, b, d, c, e) {
-  return openapp.resource.makeRequest("PUT", a, b, d, c, e)
+openapp.resource.put = function(a, b, c, d, e) {
+  return openapp.resource.makeRequest("PUT", a, b, c, d, e)
 };
-openapp.resource.del = function(a, b, d) {
-  return openapp.resource.makeRequest("DELETE", a, b, d)
+openapp.resource.del = function(a, b, c) {
+  return openapp.resource.makeRequest("DELETE", a, b, c)
 };
 openapp.resource.context = function(a) {
   return{sub:function(b) {
-    var d = {};
+    var c = {};
     return{control:function(a, b) {
-      d[a] = b;
+      c[a] = b;
       return this
     }, type:function(a) {
       return this.control(openapp.ns.rdf + "type", a)
     }, seeAlso:function(a) {
       return this.control(openapp.ns.rdfs + "seeAlso", a)
     }, list:function() {
-      var c = [], e = a.subject[b], f, g, h, j, k, l;
-      if("undefined" === typeof e) {
-        return c
+      var d = [], e = a.subject[b], g, f, h, i, j, k;
+      if(typeof e === "undefined") {
+        return d
       }
       h = 0;
       a:for(;h < e.length;h++) {
-        f = e[h];
-        g = a.data[f.value];
-        for(j in d) {
-          if(d.hasOwnProperty(j)) {
-            if(!g.hasOwnProperty(j)) {
+        g = e[h];
+        f = a.data[g.value];
+        for(i in c) {
+          if(c.hasOwnProperty(i)) {
+            if(!f.hasOwnProperty(i)) {
               continue a
             }
-            l = !1;
-            for(k = 0;k < g[j].length;k++) {
-              if(g[j][k].value === d[j]) {
-                l = !0;
+            k = false;
+            for(j = 0;j < f[i].length;j++) {
+              if(f[i][j].value === c[i]) {
+                k = true;
                 break
               }
             }
-            if(!l) {
+            if(!k) {
               continue a
             }
           }
         }
-        c.push({data:a.data, link:{}, uri:f.value, subject:g})
+        d.push({data:a.data, link:{}, uri:g.value, subject:f})
       }
-      return c
-    }, create:function(c) {
+      return d
+    }, create:function(d) {
       if(!a.link.rdf.hasOwnProperty(b)) {
         throw"The context does not support the requested relation: " + b;
       }
       var e = a.uri;
-      d[openapp.ns.rdf + "predicate"] = b;
+      c[openapp.ns.rdf + "predicate"] = b;
       openapp.resource.post(e, function(a) {
-        c(a)
-      }, d)
+        d(a)
+      }, c)
     }}
   }, metadata:function() {
     return openapp.resource.context(a).content(openapp.ns.rest + "metadata")
   }, representation:function() {
     return openapp.resource.context(a).content(openapp.ns.rest + "representation")
   }, content:function(b) {
-    return{get:function(d) {
+    return{get:function(c) {
       openapp.resource.get(a.uri, function(a) {
-        d(a)
+        c(a)
       }, {"http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate":b})
-    }, mediaType:function(d) {
-      var c = null;
+    }, mediaType:function(c) {
+      var d = null;
       return{string:function(a) {
-        c = a;
+        d = a;
         return this
       }, json:function(a) {
-        c = JSON.stringify(a);
+        d = JSON.stringify(a);
         return this
       }, put:function(e) {
         openapp.resource.put(a.uri, function(a) {
-          "function" === typeof e && e(a)
-        }, {"http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate":b}, c, d)
+          typeof e === "function" && e(a)
+        }, {"http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate":b}, d, c)
       }}
     }, string:function(a) {
       return this.mediaType("text/plain").string(a)
     }, json:function(a) {
       return this.mediaType("application/json").json(a)
     }, graph:function() {
-      var d = {}, c = "";
+      var c = {}, d = "";
       return{subject:function(a) {
-        c = a;
+        d = a;
         return this
       }, resource:function(a, b) {
-        d[c] = d[c] || {};
-        d[c][a] = d[c][a] || [];
-        d[c][a].push({value:b, type:"uri"});
+        c[d] = c[d] || {};
+        c[d][a] = c[d][a] || [];
+        c[d][a].push({value:b, type:"uri"});
         return this
-      }, literal:function(a, b, g, h) {
-        d[c] = d[c] || {};
-        d[c][a] = d[c][a] || [];
-        d[c][a].push({value:b, type:"literal", lang:g, datatype:h});
+      }, literal:function(a, b, f, h) {
+        c[d] = c[d] || {};
+        c[d][a] = c[d][a] || [];
+        c[d][a].push({value:b, type:"literal", lang:f, datatype:h});
         return this
-      }, put:function(c) {
+      }, put:function(d) {
         openapp.resource.put(a.uri, function(a) {
-          "function" === typeof c && c(a)
-        }, {"http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate":b}, JSON.stringify(d))
+          typeof d === "function" && d(a)
+        }, {"http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate":b}, JSON.stringify(c))
       }}
     }}
   }, properties:function() {
-    var b = {}, d;
-    for(d in a.subject) {
-      a.subject.hasOwnProperty(d) && (b[d] = a.subject[d][0].value)
+    var b = {}, c;
+    for(c in a.subject) {
+      if(a.subject.hasOwnProperty(c)) {
+        b[c] = a.subject[c][0].value
+      }
     }
     return b
   }, string:function() {
-    return"string" === typeof a.data ? a.data : gadgets.json.stringify(a.data)
+    return typeof a.data === "string" ? a.data : gadgets.json.stringify(a.data)
   }, json:function() {
-    return"string" === typeof a.data ? null : a.data
+    return typeof a.data === "string" ? null : a.data
   }, followSeeAlso:function() {
-    var b = a.subject[openapp.ns.rdfs + "seeAlso"], d = 0, c, e;
-    if("undefined" !== typeof b) {
+    var b = a.subject[openapp.ns.rdfs + "seeAlso"], c = 0, d, e;
+    if(typeof b !== "undefined") {
       b = b[0].value;
       for(e = 0;e < b.length && e < a.uri.length && b.charAt(e) === a.uri.charAt(e);e++) {
-        "/" === b.charAt(e) && d++
+        b.charAt(e) === "/" && c++
       }
-      for(c = d;e < b.length;e++) {
-        "/" === b.charAt(e) && c++
+      for(d = c;e < b.length;e++) {
+        b.charAt(e) === "/" && d++
       }
-      return 3 > d || 4 < c ? this : openapp.resource.context({data:a.data, link:{}, uri:b, subject:a.data[b]})
+      return c < 3 || d > 4 ? this : openapp.resource.context({data:a.data, link:{}, uri:b, subject:a.data[b]})
+    }else {
+      return this
     }
-    return this
   }}
 };
 openapp.resource.content = function(a) {
@@ -456,10 +498,9 @@ openapp.resource.content = function(a) {
   }}
 };
 openapp.oo = {};
-openapp.oo.Resource = function(a, b, d) {
+openapp.oo.Resource = function(a, b) {
   this.uri = a;
-  this.context = b;
-  this.info = d
+  this.context = b
 };
 var OARP = openapp.oo.Resource.prototype;
 OARP.getURI = function() {
@@ -467,139 +508,127 @@ OARP.getURI = function() {
 };
 OARP._call = function(a) {
   var b = this;
-  null == this.context ? null == this._deferred ? (this._deferred = [a], openapp.resource.get(this.uri, function(a) {
+  this.context == null ? this._deferred == null ? (this._deferred = [a], openapp.resource.get(this.uri, function(a) {
     b.context = a;
-    a = b._deferred;
-    delete b._deferred;
-    for(var c = 0;c < a.length;c++) {
-      a[c].call(b)
+    for(a = 0;a < b._deferred.length;a++) {
+      b._deferred[a].call(b)
     }
+    delete b._deferred
   })) : this._deferred.push(a) : a.call(b)
 };
-OARP.refresh = function(a) {
-  delete this.context;
-  delete this.info;
-  a && this._call(function() {
-    a()
-  })
+OARP.refresh = function() {
+  delete this.context
 };
 OARP.getSubResources = function(a) {
   this._call(function() {
-    for(var b = null != a.type ? openapp.resource.context(this.context).sub(a.relation).type(a.type).list() : openapp.resource.context(this.context).sub(a.relation).list(), d = [], c = 0;c < b.length;c++) {
-      var e = b[c].uri;
+    for(var b = a.type != null ? openapp.resource.context(this.context).sub(a.relation).type(a.type).list() : openapp.resource.context(this.context).sub(a.relation).list(), c = [], d = 0;d < b.length;d++) {
+      var e = b[d].uri;
       if(a.followReference) {
-        var f = this.context.data[e]["http://www.w3.org/2002/07/owl#sameAs"];
-        null != f && 0 < f.length && (e = f[0].value)
+        var g = this.context.data[e][openapp.ns.rdfs + "seeAlso"];
+        if(g != null && g.length > 0) {
+          e = g[0].value
+        }
       }
-      f = new openapp.oo.Resource(e, null, b[c]);
-      null == a.followReference && (f._referenceLoaded = !0, e = this.context.data[e]["http://www.w3.org/2002/07/owl#sameAs"], null != e && 0 < e.length && (f._reference = e[0].value));
+      g = new openapp.oo.Resource(e);
+      if(a.followReference == null && (g._referenceLoaded = true, e = this.context.data[e][openapp.ns.rdfs + "seeAlso"], e != null && e.length > 0)) {
+        g._reference = e[0].value
+      }
       if(a.onEach) {
-        a.onEach(f)
+        a.onEach(g)
       }
-      a.onAll && d.push(f)
+      a.onAll && c.push(g)
     }
     if(a.onAll) {
-      a.onAll(d)
+      a.onAll(c)
     }
   })
 };
 OARP.followReference = function(a) {
-  this._referenceLoaded ? a(null != this._reference ? new openapp.oo.Resource(this._reference) : this) : this._call(function() {
-    var b = this.context.data[this.uri]["http://www.w3.org/2002/07/owl#sameAs"];
-    null != b && 0 < b.length ? a(new openapp.oo.Resource(b[0].value)) : a(this)
+  this._referenceLoaded ? a(this._reference != null ? new openapp.oo.Resource(this._reference) : this) : this._call(function() {
+    var b = this.context.data[this.uri][openapp.ns.rdfs + "seeAlso"];
+    b != null && b.length > 0 ? a(new openapp.oo.Resource(b[0].value)) : a(this)
   })
 };
 OARP.getReference = function(a) {
   this._referenceLoaded ? a(this._reference) : this._call(function() {
     var b = this.context.subject[openapp.ns.rdfs + "seeAlso"];
-    null != b && 0 < b.length ? a(this.context.subject[openapp.ns.rdfs + "seeAlso"][0].value) : a()
+    b != null && b.length > 0 ? a(this.context.subject[openapp.ns.rdfs + "seeAlso"][0].value) : a()
   })
 };
 OARP.getMetadata = function(a, b) {
   this._call(function() {
-    openapp.resource.context(this.context).metadata().get(function(d) {
+    openapp.resource.context(this.context).metadata().get(function(c) {
       switch(a || "properties") {
         case "properties":
-          b(openapp.resource.context(d).properties());
+          b(openapp.resource.context(c).properties());
           break;
         case "graph":
-          b(openapp.resource.content(d).graph());
+          b(openapp.resource.content(c).graph());
           break;
         case "rdfjson":
-          b(openapp.resource.content(d).json())
+          b(openapp.resource.content(c).json())
       }
     })
   })
-};
-OARP.getInfo = function(a) {
-  if(a) {
-    this.context || this.info ? a(openapp.resource.context(this.context || this.info).properties()) : this._call(function() {
-      a(openapp.resource.context(this.context || this.info).properties())
-    })
-  }else {
-    if(this.context || this.info) {
-      return openapp.resource.context(this.context || this.info).properties()
-    }
-  }
 };
 OARP.getRepresentation = function(a, b) {
   this._call(function() {
-    openapp.resource.context(this.context).representation().get(function(d) {
+    openapp.resource.context(this.context).representation().get(function(c) {
       switch(a || "text/html") {
         case "properties":
-          b(openapp.resource.context(d).properties());
+          b(openapp.resource.context(c).properties());
           break;
         case "graph":
-          b(openapp.resource.content(d).graph());
+          b(openapp.resource.content(c).graph());
           break;
         case "rdfjson":
-          b(openapp.resource.content(d).json());
+          b(openapp.resource.content(c).json());
           break;
         case "text/html":
-          b(openapp.resource.content(d).string())
+          b(openapp.resource.content(c).string())
       }
     })
   })
 };
-OARP.setMetadata = function(a, b, d) {
-  var c = {};
+OARP.setMetadata = function(a, b, c) {
+  var d = {};
   switch(b || "properties") {
     case "properties":
-      b = {};
-      for(var e in a) {
+      var b = {}, e;
+      for(e in a) {
         b[e] = [{type:"literal", value:a[e]}]
       }
-      c[this.context.uri] = b;
+      d[this.context.uri] = b;
       break;
     case "rdfjson":
-      c = a;
+      d = a;
       break;
     case "graph":
-      graph.put(d);
+      graph.put(c);
       return
   }
-  openapp.resource.put(this.context.uri, d, {"http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate":openapp.ns.rest + "metadata"}, JSON.stringify(c))
+  openapp.resource.put(this.context.uri, c, {"http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate":openapp.ns.rest + "metadata"}, JSON.stringify(d))
 };
-OARP.setRepresentation = function(a, b, d) {
+OARP.setRepresentation = function(a, b, c) {
   this._call(function() {
-    var c = openapp.resource.context(this.context).representation().mediaType(b);
-    "string" === typeof a ? c.string(a).put(d) : c.json(a).put(d)
+    var d = openapp.resource.context(this.context).representation().mediaType(b);
+    typeof a === "string" ? d.string(a).put(c) : d.json(a).put(c)
   })
 };
 OARP.create = function(a) {
   this._call(function() {
     var b = openapp.resource.context(this.context).sub(a.relation || openapp.ns.role + "data");
-    null != a.referenceTo && (b = b.seeAlso(a.referenceTo));
-    null != a.type && (b = b.type(a.type));
+    a.referenceTo != null && (b = b.seeAlso(a.referenceTo));
+    a.type != null && (b = b.type(a.type));
     b.create(function(b) {
-      var c = new openapp.oo.Resource(b.uri, b);
-      a.metadata ? c.setMetadata(a.metadata, a.format, function() {
-        a.representation ? c.setRepresentation(a.representation, a.medieType || "application/json", function() {
-          a.callback(c)
-        }) : a.callback(c)
-      }) : a.representation ? c.setRepresentation(a.representation, a.medieType || "application/json", function() {
-        a.callback(c)
-      }) : a.callback(c)
+      var d = new openapp.oo.Resource(b.uri, b);
+      a.metadata ? d.setMetadata(a.metadata, a.format, function() {
+        a.representation ? d.setRepresentation(a.representation, a.medieType || "application/json", function() {
+          a.callback(d)
+        }) : a.callback(d)
+      }) : a.representation ? d.setRepresentation(a.representation, a.medieType || "application/json", function() {
+        a.callback(d)
+      }) : a.callback(d)
     })
   })
 };
@@ -608,26 +637,26 @@ OARP.del = function(a) {
 };
 openapp.param = {};
 var parseQueryParams = function(a) {
-  var b, d, c = {};
-  if(0 > a.indexOf("?")) {
+  var b, c, d = {};
+  if(a.indexOf("?") < 0) {
     return{}
   }
   a = a.substr(a.indexOf("?") + 1).split("&");
-  if(!(1 == a.length && "" === a[0])) {
-    for(d = 0;d < a.length;d++) {
-      b = a[d].split("="), 2 == b.length && (c[b[0]] = window.unescape(b[1]))
+  if(!(a.length == 1 && a[0] === "")) {
+    for(c = 0;c < a.length;c++) {
+      b = a[c].split("="), b.length == 2 && (d[b[0]] = window.unescape(b[1]))
     }
   }
-  return c
-}, parseOpenAppParams = function(a) {
-  var b = {}, d = {}, c, e;
-  for(c in a) {
-    a.hasOwnProperty(c) && "openapp.ns." === c.substring(0, 11) && (b[c.substr(11)] = a[c])
-  }
-  for(c in a) {
-    a.hasOwnProperty(c) && (e = c.split("."), 3 === e.length && ("openapp" === e[0] && b.hasOwnProperty(e[1])) && (d[b[e[1]] + e[2]] = a[c]))
-  }
   return d
+}, parseOpenAppParams = function(a) {
+  var b = {}, c = {}, d, e;
+  for(d in a) {
+    a.hasOwnProperty(d) && d.substring(0, 11) === "openapp.ns." && (b[d.substr(11)] = a[d])
+  }
+  for(d in a) {
+    a.hasOwnProperty(d) && (e = d.split("."), e.length === 3 && e[0] === "openapp" && b.hasOwnProperty(e[1]) && (c[b[e[1]] + e[2]] = a[d]))
+  }
+  return c
 }, _openAppParams = parseOpenAppParams(parseQueryParams(parseQueryParams(window.location.href).url || ""));
 openapp.param.get = function(a) {
   return _openAppParams[a]

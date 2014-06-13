@@ -1,6 +1,6 @@
 define([ "com", "jquery", "../ui/ui", "../header/signin", "../feature/dashboardinit",
-         "../content/openspace" ], function(
-		com, $, ui, signInHeader, dashboardInitFeature, openSpaceContent) { return {
+         "../content/openspace", "../content/regidevice"], function(
+		com, $, ui, signInHeader, dashboardInitFeature, openSpaceContent, regiDevice) { return {
 
 	interfaces : [ "http://purl.org/role/ui/View#" ],
 	
@@ -23,6 +23,7 @@ define([ "com", "jquery", "../ui/ui", "../header/signin", "../feature/dashboardi
 		com.add(signInHeader);
 		com.add(dashboardInitFeature);
 		com.add(openSpaceContent);
+		com.add(regiDevice);
 		com.trigger(this, "http://purl.org/role/ui/Resource#", "select");
 	},
 	

@@ -78,19 +78,20 @@ var rave = rave || (function() {
             targetIndex: null
         };
 
-        function init() {
+        function init(isMobile, isTouch) {
             // initialize the sortable regions
-            $(".region").sortable({
+        	if (!isMobile)
+        		$(".region").sortable({
                         connectWith: '.region', // defines which regions are dnd-able
                         scroll: true, // whether to scroll the window if the user goes outside the areas
                         opacity: 0.5, // the opacity of the object being dragged
                         revert: true, // smooth snap animation
                         cursor: 'move', // the cursor to show while dnd
-                        handle: '.widget-title-bar', // the draggable handle
+                        handle: (typeof isTouch != "undefined" && isTouch==true)?'.tablet-sort-handler':'.widget-title-bar', // the draggable handle
                         forcePlaceholderSize: true, // size the placeholder to the size of the widget
                         start: dragStart, // event listener for drag start
                         stop : dragStop // event listener for drag stop
-            });
+        		});
             initGadgetUI();
         }
 

@@ -45,7 +45,6 @@ import org.jivesoftware.smackx.search.UserSearch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import se.kth.csc.kmr.conserve.Concept;
 import se.kth.csc.kmr.conserve.Listener;
 import se.kth.csc.kmr.conserve.core.Contapp;
 
@@ -278,7 +277,7 @@ public class RealtimeModule extends AbstractModule {
 	/**
 	 * Computes a Jabber ID (JID) for a given user identifier.
 	 * 
-	 * @param uid
+	 * @param sid
 	 *            String a user identifier
 	 * @return String a user JID
 	 */
@@ -307,7 +306,16 @@ public class RealtimeModule extends AbstractModule {
 	public static String getSpaceNodeIdentifier(String sid) {
 		return "space-" + sid;
 	}
-
+	
+	/**
+	 * Get the pubsub node identifier for a given user identifier
+	 * @param uid user id
+	 * @return
+	 */
+	public static String getUserNodeIdentifier(String uid){
+		return "dui-" + uid;
+	}
+	
 	/**
 	 * Registers a new user via XMPP In-Band Registration (XEP-077).
 	 * 
@@ -509,6 +517,26 @@ public class RealtimeModule extends AbstractModule {
 			return n;
 		}
 	}
+	
+	/**
+	 * Get the XMPP PubSub node for the given user as his/her private riwc realm.
+	 * If such a node does not yet exist, it is created automatically.
+	 * The node id is prefixed with "dui-"
+	 * @param uid the string presentation of the user
+	 * @return a Pubsub leaf node
+	 * @throws XMPPException
+	 */
+	public Node getUserPubSubNode(String uid) throws XMPPException {
+
+		Node r;
+		try {
+			r = pubsub.getNode(getUserNodeIdentifier(uid));
+			return r;
+		} catch (XMPPException e) {
+			Node n = createUserPubSubNode(uid);
+			return n;
+		}
+	}
 
 	/**
 	 * Creates an XMPP PubSub node for a given space and returns a configured
@@ -563,33 +591,75 @@ public class RealtimeModule extends AbstractModule {
 		// return configured node
 		return node;
 	}
+	
+	public Node createUserPubSubNode(String uid) throws XMPPException {
+
+		// Complete and send node configuration form
+		// TODO: Do we need to refine standard configuration?
+		// Documentation of all configuration options available at
+		// http://xmpp.org/extensions/xep-0060.html#registrar-formtypes-config
+
+		ConfigureForm form = new ConfigureForm(FormType.submit);
+
+		//dumpFormFields(form);
+
+		// TODO: set back to controlled node access once hook calls are clarified
+		
+		// for now continue with open access model
+		// form.setAccessModel(AccessModel.whitelist);
+		form.setPublishModel(PublishModel.open);
+		form.setAccessModel(AccessModel.open);
+		
+
+		form.setDeliverPayloads(true);
+		form.setPersistentItems(false);
+		form.setNotifyConfig(false);
+		form.setNotifyDelete(true);
+		form.setNotifyRetract(false);
+		
+		form.setNodeType(NodeType.leaf);
+		// TODO: see if this feature is supported and how it is realizable
+		form.setPresenceBasedDelivery(true);
+
+		// TODO: link pubsub node with chat room. Is it needed? Does it make
+		// sense?
+		// form.setReplyRoom(replyRooms)
+
+		// submit completed form
+		// Create the node
+		LeafNode node = (LeafNode) pubsub.createNode(
+				getUserNodeIdentifier(uid), form);
+
+		log.info("dui-" + uid + ": PubSub node created successfully");
+		// return configured node
+		return node;
+	}
 
 	/**
 	 * Provides access to an XMPP Multi-User Chat room for a given space. If a
 	 * respective room does not exist yet, it is automatically created with a
 	 * standard configuration.
 	 * 
-	 * @param space
+	 * @param sid
 	 *            String a space identifier
 	 * @return MultiUserChat an object allowing interaction in space chat room
 	 * @throws XMPPException
 	 *             in case room creation failed or connection problems occurred
 	 */
-	public MultiUserChat getSpaceChatRoom(Concept space) throws XMPPException {
+	public MultiUserChat getSpaceChatRoom(String sid) throws XMPPException {
 
 		RoomInfo r = null;
-		String sUUID = space.getUuid().toString();
 
 		try {
-			r = MultiUserChat.getRoomInfo(xc, getSpaceRoomJid(sUUID));
+			r = MultiUserChat.getRoomInfo(xc, getSpaceRoomJid(sid));
 			// if the respective room already exists, return a MUC object to
 			// interact.
-			MultiUserChat muc = new MultiUserChat(xc, getSpaceRoomJid(sUUID));
+			MultiUserChat muc = new MultiUserChat(xc, getSpaceRoomJid(sid));
 			return muc;
 		} catch (XMPPException e) {
 			// if the respective room does not yet exist, create and configure
 			// it first and then return it.
-			MultiUserChat muc = new MultiUserChat(xc, getSpaceRoomJid(sUUID));
+			MultiUserChat muc = new MultiUserChat(xc, getSpaceRoomJid(sid));
 
 			// create room; will be locked, since it is yet unconfigured.
 			muc.create("role-realtime-service");
@@ -604,9 +674,9 @@ public class RealtimeModule extends AbstractModule {
 
 			// the configuration options used below are available for both
 			// Openfire and ejabberd
-			s.setAnswer("muc#roomconfig_roomname", "Space " + space.getId() + " Chat");
+			s.setAnswer("muc#roomconfig_roomname", "Space " + sid + " Chat");
 			s.setAnswer("muc#roomconfig_roomdesc", "Chat room for ROLE space "
-					+ space.getId());
+					+ sid);
 			s.setAnswer("muc#roomconfig_publicroom", true);
 			s.setAnswer("muc#roomconfig_persistentroom", true);
 			s.setAnswer("muc#roomconfig_changesubject", true);
@@ -620,7 +690,7 @@ public class RealtimeModule extends AbstractModule {
 
 			// submit room configuration
 			muc.sendConfigurationForm(s);
-			log.info("Space " + space.getId() + ": chat room created and configured successfully");
+			log.info("Space " + sid + ": chat room created and configured successfully");
 
 			return muc;
 		}
@@ -650,68 +720,68 @@ public class RealtimeModule extends AbstractModule {
 	 * Grants membership for a given user to a given space, in particular in
 	 * terms of access for both space PubSub node and chat room.
 	 * 
-	 * @param space
-	 *            a space
+	 * @param sid
+	 *            a space identifier
 	 * @param uid
 	 *            a user identifier
 	 * @throws XMPPException
 	 */
-	public void grantSpaceMembership(Concept space, String uid)
+	public void grantSpaceMembership(String sid, String uid)
 			throws XMPPException {
-		grantSpaceRoomMembership(space, uid);
-		grantSpaceNodeMembership(space, uid);
+		grantSpaceRoomMembership(sid, uid);
+		grantSpaceNodeMembership(sid, uid);
 	}
 
 	/**
 	 * Revokes membership for a given user from a given space, in particular in
 	 * terms of access for both space PubSub node and chat room.
 	 * 
-	 * @param space
-	 *            a space
+	 * @param sid
+	 *            a space identifier
 	 * @param uid
 	 *            a user identifier
 	 * @throws XMPPException
 	 */
-	public void revokeSpaceMembership(Concept space, String uid)
+	public void revokeSpaceMembership(String sid, String uid)
 			throws XMPPException {
-		revokeSpaceRoomMembership(space, uid);
-		revokeSpaceNodeMembership(space, uid);
+		revokeSpaceRoomMembership(sid, uid);
+		revokeSpaceNodeMembership(sid, uid);
 	}
 
 	/**
 	 * Grants membership for a given user to the chat room for a given space.
 	 * 
-	 * @param space
-	 *            a space
+	 * @param sid
+	 *            a space identifier
 	 * @param uid
 	 *            a user identifier
 	 * @throws XMPPException
 	 *             in case room cannot be found, membership cannot be granted or
 	 *             connection problems occurred
 	 */
-	public void grantSpaceRoomMembership(Concept space, String uid)
+	public void grantSpaceRoomMembership(String sid, String uid)
 			throws XMPPException {
-		MultiUserChat muc = getSpaceChatRoom(space);
+		MultiUserChat muc = getSpaceChatRoom(sid);
 		muc.grantMembership(getUserJid(uid));
-		log.info("Space " + space.getId() + ": granted chat room membership to user" + uid);
+		log.info("Space " + sid + ": granted chat room membership to user" + uid);
 	}
 
 	/**
 	 * Revokes membership for a given user from the chat room for a given space.
 	 * 
-	 * @param space
-	 *            a space
+	 * @param sid
+	 *            a space identifier
 	 * @param uid
 	 *            a user identifier
 	 * @throws XMPPException
 	 *             in case room cannot be found, membership cannot be revoked or
 	 *             connection problems occurred
 	 */
-	public void revokeSpaceRoomMembership(Concept space, String uid)
+	public void revokeSpaceRoomMembership(String sid, String uid)
 			throws XMPPException {
-		MultiUserChat muc = getSpaceChatRoom(space);
+		MultiUserChat muc = getSpaceChatRoom(sid);
 		muc.revokeMembership(getUserJid(uid));
-		log.info("Space " + space.getId() + ": revoked chat room membership from user " + uid);
+		log.info("Space " + sid + ": revoked chat room membership from user " + uid);
 		
 	}
 
@@ -726,10 +796,10 @@ public class RealtimeModule extends AbstractModule {
 	 *             in case node cannot be found, membership cannot be granted or
 	 *             connection problems occurred
 	 */
-	public void grantSpaceNodeMembership(Concept space, String uid)
+	public void grantSpaceNodeMembership(String sid, String uid)
 			throws XMPPException {
-		setSpaceNodeAffiliation(space.getUuid().toString(), uid, OwnerAffiliation.Type.publisher);
-		log.info("Space " + space.getId() + ": granted PubSub node membership to user " + uid);
+		setSpaceNodeAffiliation(sid, uid, OwnerAffiliation.Type.publisher);
+		log.info("Space " + sid + ": granted PubSub node membership to user " + uid);
 	}
 
 	/**
@@ -744,10 +814,10 @@ public class RealtimeModule extends AbstractModule {
 	 *             in case node cannot be found, membership cannot be revoked or
 	 *             connection problems occurred
 	 */
-	public void revokeSpaceNodeMembership(Concept space, String uid)
+	public void revokeSpaceNodeMembership(String sid, String uid)
 			throws XMPPException {
-		setSpaceNodeAffiliation(space.getUuid().toString(), uid, OwnerAffiliation.Type.none);
-		log.info("Space " + space.getId() + ": revoked PubSub node membership from user " + uid);
+		setSpaceNodeAffiliation(sid, uid, OwnerAffiliation.Type.none);
+		log.info("Space " + sid + ": revoked PubSub node membership from user " + uid);
 	}
 
 	/**
@@ -791,6 +861,43 @@ public class RealtimeModule extends AbstractModule {
 
 		// publish payload including intent XML representation
 		n.publish(prepareIntentPayload(i));
+	}
+	
+	/**
+	 * Publish any intent as an item to the space xmpp node.
+	 * @param sid The space id
+	 * @param intent The instance of the Intent
+	 * @author Ke Li
+	 */
+	public void publishIntentToSpace(String sid, Intent intent){
+		// retrieve node for space
+		LeafNode n;
+		try {
+			n = (LeafNode) getSpacePubSubNode(sid);
+			//publish
+			n.publish(prepareIntentPayload(intent));
+		} catch (XMPPException e) {
+			log.error("Can not publish the item since exception throw during retrieving the node instance.");
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Publish any intent as an item to the xmpp node of the user
+	 * @param uid
+	 * @param intent
+	 */
+	public void publishIntentToUser(String uid, Intent intent){
+		// retrieve node for space
+		LeafNode n;
+		try {
+			n = (LeafNode) getUserPubSubNode(uid);
+			//publish
+			n.publish(prepareIntentPayload(intent));
+		} catch (XMPPException e) {
+			log.error("Can not publish the item since exception throw during retrieving the node instance.");
+			e.printStackTrace();
+		}
 	}
 
 	/**

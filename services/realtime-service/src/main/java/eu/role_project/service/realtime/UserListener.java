@@ -49,6 +49,7 @@ public class UserListener extends AbstractListener {
 			try {
 				realtime.registerUser(uid, pass);
 				log.info("XMPP account for user " + uid + " created successfully");
+				realtime.getUserPubSubNode(uid);
 			} catch (IllegalArgumentException e) {
 				log.error("Error creating XMPP account for user " + uid, e);
 			} catch (XMPPException e) {
