@@ -1,10 +1,17 @@
 package eu.role_project.service.space;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.ws.rs.core.Cookie;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.NewCookie;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
 import org.apache.shindig.auth.BlobCrypterSecurityToken;
@@ -19,6 +26,10 @@ import org.apache.shindig.gadgets.spec.GadgetSpec;
 import org.apache.shindig.gadgets.spec.ModulePrefs;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONValue;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.openrdf.model.Graph;
 import org.openrdf.model.URI;
 import org.openrdf.model.ValueFactory;
@@ -58,7 +69,17 @@ public class SpaceSystemResponder extends SystemResponder {
 
 	@Inject
 	private BlobCrypter crypter;
+	
+	@Inject
+	@Named("conserve.user.predicate")
+	private UUID userPredicateUuid;
+	
+	@Inject
+	@Named("conserve.session.context")
+	private UUID sessionContext;
 
+	private JSONParser parser = new JSONParser();
+	
 	@Override
 	public void addTriples(Graph graph, Request request, Concept context,
 			UriBuilder uriBuilder) {
@@ -90,6 +111,11 @@ public class SpaceSystemResponder extends SystemResponder {
 				"http://purl.org/role/terms/", "externalPassword");
 		final URI widgetPredicate = valueFactory.createURI(
 				"http://purl.org/role/terms/", "widget");
+		
+		final URI deviceConfigPredicate = valueFactory.createURI("http://purl.org/role/terms/", "deviceConfig");
+		final URI devicePredicate = valueFactory.createURI("http://purl.org/role/terms/", "device");
+		final URI displayWidgetPredicate = valueFactory.createURI("http://purl.org/role/terms/", "displayWidget");
+		final URI deviceProfilePredicate = valueFactory.createURI("http://purl.org/role/terms/", "deviceProfile");
 
 		UUID agent = securityInfo.getAgent();
 		String authUserUri = null;
@@ -98,10 +124,10 @@ public class SpaceSystemResponder extends SystemResponder {
 			authenticatedUser = store().require(agent);
 			authUserUri = store().in(authenticatedUser).uri().toString();
 		}
-
+		
 		// Jabber id
 		if (context.getPredicate().equals(ROLETerms.space)) {
-			String spaceId = context.getUuid().toString();
+			String spaceId = context.getId();
 			graph.add(
 					contextUri,
 					jidPredicate,
@@ -212,8 +238,62 @@ public class SpaceSystemResponder extends SystemResponder {
 							jidPredicate,
 							valueFactory.createURI("xmpp:" + userId + "@"
 									+ xmppHost));
+					if (securityInfo.getAgent()!= null && securityInfo.getAgent().equals(references.get(0).getObject())){
+						log.info("The member concept for the user is found!!");
+						//get the list of device config
+						List<Concept> dcl = store().in(concept).sub(ROLETerms.dc).list();
+						List<UUID> devices = getDeviceList(securityInfo.getAgent());
+						for (Concept deviceConfig: dcl){
+							//use the device config uri as uri ref
+							URI conceptDeviceCfgRef = valueFactory.createURI(store().in(deviceConfig).uri().toString());
+							//get the control that points to the device
+							List<Control> dvs = store().in(deviceConfig).get(ConserveTerms.reference);
+							if (dvs != null && dvs.iterator().hasNext()){
+								Control dv = dvs.get(0);
+								//get the concept of the device
+								Concept ccpt = store().get(dv.getObject());
+								//if exists, i.e. the device has not been deleted
+								if (ccpt != null){
+									devices.remove(ccpt.getUuid());
+									graph.add(conceptDeviceCfgRef, devicePredicate, 
+											//get the device uri and fill it into the graph
+											valueFactory.createURI(store().in(ccpt).uri().toString()));
+								//or has been deleted and this device config must not exist either
+								}
+								else{
+									store.deleteConcept(deviceConfig);
+									continue;
+								}
+								//get the list of displayed widget
+								List<String> dwList = getDisplayWidgets(deviceConfig);
+								for (String wUri: dwList){
+									//get the widget uri
+									URI widgetUri = valueFactory.createURI(wUri);
+									//fill it into the graph
+									graph.add(conceptDeviceCfgRef, displayWidgetPredicate, widgetUri);
+								}
+							}
+							else
+								store.deleteConcept(deviceConfig);
+							//create the list of references for device configs in the user profile
+							graph.add(conceptUserRef, deviceConfigPredicate, conceptDeviceCfgRef);
+						}
+						for (UUID dUuid: devices){
+							Concept d = store.getConcept(securityInfo.getAgent(), dUuid);
+							Concept dc = store().in(concept).sub(ROLETerms.dc).acquire(d.getId());
+							store().in(dc).put(ConserveTerms.reference, dUuid);
+						}
+					}
 				}
 
+			}
+			else if (concept.getPredicate().equals(ROLETerms.device)){
+				Content deviceProfile = store().in(concept).as(ROLETerms.dp).get();
+				String content = null;
+				if (deviceProfile != null){
+					content = store().as(deviceProfile).string();
+					graph.add(conceptUri, deviceProfilePredicate, valueFactory.createLiteral(content));
+				}
 			}
 		}
 	}
@@ -291,6 +371,99 @@ public class SpaceSystemResponder extends SystemResponder {
 			log.error("Error creating security token", e);
 		}
 		return token;
+	}
+/*
+	@Override
+	public Object doGet(Request request) {
+		String str = store().in(request.getContext()).uri().toString();
+		log.info("doGet: " + str);
+		String preDv = null;
+		String preUsr = null;
+		if (request instanceof RequestImpl 
+				&& request.getRelation().getUuid().equals(ConserveTerms.system)
+				&& request.getContext().getPredicate().equals(userPredicateUuid)) {
+			
+			HttpHeaders httpHeaders = ((RequestImpl) request).getRequestHeaders();
+			Map<String, Cookie> cookies = httpHeaders.getCookies();
+			if (cookies.containsKey("conserve_session")) {
+				Cookie sessionCookie = cookies.get("conserve_session");
+				String sessionCookieValue = sessionCookie.getValue();
+				Concept session = store.getConcept(sessionContext, sessionCookieValue);
+				if (session != null) {					
+					Content previousDevice = store().in(session).as(ROLETerms.pd).get();
+					Content previousUser = store().in(session).as(ROLETerms.pu).get();
+					if (previousDevice != null && previousUser != null){
+						preDv = store().as(previousDevice).string();
+						preDv = preDv.equals("")?null:preDv;
+						preUsr = store().as(previousUser).string();
+						preUsr = preUsr.equals("")?null:preUsr;
+					}
+					if (cookies.containsKey("device") && cookies.containsKey("duiUser")){
+						String clientCookie = cookies.get("device").getValue();
+						String clientCookieUsr = cookies.get("duiUser").getValue();
+						if (!clientCookie.equals("") && !clientCookieUsr.equals("")){
+							preDv = cookies.get("device").getValue();
+							preUsr = cookies.get("duiUser").getValue();
+							store().in(session).as(ROLETerms.pd).type("text/plain").string(preDv);
+							store().in(session).as(ROLETerms.pu).type("text/plain").string(preUsr);
+						}
+					}
+				}
+			}
+		}
+		
+		if (preDv != null && preUsr != null){
+			String host = ((RequestImpl)request).getUriInfo().getBaseUri().getHost();
+			Response response = (Response)super.doGet(request);
+			NewCookie cookie = new NewCookie("device", preDv, "/", host, "previous used device", 1200000, false);
+			NewCookie cookieUsr = new NewCookie("duiUser", preUsr, "/", host, "previous user uri", 1200000, false);
+			return Response.fromResponse(response).cookie(cookie, cookieUsr).build();
+		}
+		else
+			return super.doGet(request);
+	}
+*/	
+	private List<String> getDisplayWidgets(Concept deviceConfig){
+		Content aw = store().in(deviceConfig).as(ROLETerms.aw).get();
+		if (aw != null){
+			String widgetsListJson = store().as(aw).string();
+			Object obj;
+			List<String> dwList = new LinkedList<String>();
+			try {
+				obj = parser.parse(widgetsListJson);
+				JSONArray widgets = (JSONArray)obj;
+				for (Object wUri: widgets){
+					String widgetUri = (String)wUri;
+					Concept widget = store().resolve(widgetUri);
+					if (widget != null && ROLETerms.tool.equals(widget.getPredicate())){
+						boolean isOpenSocialGadget = null != store.getControls(
+								widget.getUuid(), ConserveTerms.type,
+								ROLETerms.OpenSocialGadget);
+						if (isOpenSocialGadget)
+							dwList.add(widgetUri);
+					}
+				}
+				store().as(aw).string(JSONValue.toJSONString(dwList));
+				return dwList;
+			} catch (ParseException e) {
+				e.printStackTrace();
+				return dwList;
+			}
+		}
+		else{
+			LinkedList<String> awl = new LinkedList<String>();
+			return awl;
+		}
+	}
+	
+	private List<UUID> getDeviceList(UUID user){
+		List<Concept> concepts = store.getConcepts(user);
+		List<UUID> devices = new ArrayList<UUID>();
+		for (Concept c: concepts){
+			if (c.getPredicate().equals(ROLETerms.device))
+				devices.add(c.getUuid());
+		}
+		return devices;
 	}
 
 }

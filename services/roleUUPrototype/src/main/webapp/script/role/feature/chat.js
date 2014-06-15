@@ -44,7 +44,7 @@ define([ "com", "jquery", "../model/user", "xmpp/groupie" ], function(com, $, us
 						to : Groupie.room + "/" + Groupie.nickname,
 						type : "unavailable"
 					}));
-					Groupie.connection.disconnect();
+//					Groupie.connection.disconnect();
 				}
 				$("#chatHeader").hide();
 				$("#chatEntries").hide();
@@ -56,7 +56,7 @@ define([ "com", "jquery", "../model/user", "xmpp/groupie" ], function(com, $, us
 						to : Groupie.room + "/" + Groupie.nickname,
 						type : "unavailable"
 					}));
-					Groupie.connection.disconnect();
+					//Groupie.connection.disconnect();
 				}
 			};			
 			

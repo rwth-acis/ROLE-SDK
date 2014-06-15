@@ -76,18 +76,18 @@
 								</copy>
 								<jsdoctoolkit jsdochome="${project.build.directory}/jsdoc-toolkit/"
 									template="outline" outputdir="${project.build.directory}/doc/api/javascript">
-									
+
 									<!-- JSDoc for OpenApp -->
 									<fileset
 										dir="${basedir}/../libraries/openapp/src/main/javascript">
 										<include name="**/*.js" />
 									</fileset>
-									
+
 									<!-- JSDoc for IWC -->
 									<fileset dir="${basedir}/../libraries/iwc/src/main/javascript">
 										<include name="**/*.js" />
 									</fileset>
-									
+
 								</jsdoctoolkit>
 							</tasks>
 						</configuration>
@@ -125,4 +125,4 @@
 			<version>7.4.2.v20110526</version>
 		</dependency>
 	</dependencies>
-</project> 
+</project>

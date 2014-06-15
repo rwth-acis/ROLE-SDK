@@ -1,3 +1,4 @@
+define(["../../strophe"], function(Strophe) {
 /*
   Copyright 2010, François de Metz <francois@2metz.fr>
 */
@@ -229,4 +230,5 @@ Strophe.addConnectionPlugin('disco',
         this._connection.send(iqresult.tree());
         return true;
     }
+});
 });

@@ -21,7 +21,7 @@ var Groupie = {
             if ($(presence).attr('type') === 'error' &&
                 !Groupie.joined) {
                 // error joining room; reset app
-                Groupie.connection.disconnect();
+//                Groupie.connection.disconnect();
             } else if (!Groupie.participants[nick] &&
                 $(presence).attr('type') !== 'unavailable') {
                 // add to participant list
@@ -267,7 +267,7 @@ domReady(function() { //$(document).ready(function () {
     });
 
 	$(document).bind('connect', function (ev, data) {
-	    //console.log("######## Do we really enter this function? It should be obsolete...");
+	    console.log("######## Do we really enter this function? It should be obsolete...");
 		
 		Groupie.connection = new Strophe.Connection(
 	       // 'http://bosh.metajack.im:5280/xmpp-httpbind');
@@ -305,6 +305,7 @@ domReady(function() { //$(document).ready(function () {
 	
 	$(document).bind('chat-disconnected', function () {
 	    Groupie.connection = null;
+	    $('#room-name').empty();
 	    $('#room-topic').empty();
 	    $('#participant-list').empty();
 	    $('#chat').empty();
@@ -315,6 +316,7 @@ domReady(function() { //$(document).ready(function () {
 	    Groupie.joined = true;
 	
 	    $('#leave').removeAttr('disabled');
+	    $('#room-name').text(Groupie.room);
 	
 	    Groupie.add_message("<div class='notice'>*** Room joined.</div>")
 	});

@@ -13,8 +13,6 @@ define([ "com", "jquery", "../model/space", "../ui/ui", "handlebars!./members", 
 			//$(container).find("#sideEntry-leave").css("display", space.isMember()  ? "block" : "none");
 			$(document.body).toggleClass("is-member", space.isMember());
 			$(document.body).toggleClass("is-not-member", !space.isMember());
-			$(document.body).toggleClass("is-power-member", space.isMemberAllowedToAddTools() || space.isOwner());
-			$(document.body).toggleClass("is-not-power-member", !space.isMemberAllowedToAddTools() && ! space.isOwner());
 			$(document.body).toggleClass("is-owner", space.isOwner());
 			$(document.body).toggleClass("is-not-owner", !space.isOwner());
 		});
@@ -22,8 +20,6 @@ define([ "com", "jquery", "../model/space", "../ui/ui", "handlebars!./members", 
 			if (space._context === null) {
 				return;
 			}
-			var owners = openapp.resource.context(space._context).sub(
-					openapp.ns.openapp + "owner").list();
 			var members = openapp.resource.context(space._context).sub(
 					openapp.ns.foaf + "member").list();
 			$(container).find("#memberEntries").html("");
@@ -32,24 +28,11 @@ define([ "com", "jquery", "../model/space", "../ui/ui", "handlebars!./members", 
 						.properties();
 				members[i].properties = properties;
 				members[i].data = space._context.data;
-				var memberSA = properties['http://www.w3.org/2002/07/owl#sameAs'];
-				if (typeof space._context.data[memberSA] !== "undefined"
-					&& typeof space._context.data[memberSA]['http://purl.org/dc/terms/title'] !== "undefined") {
-					//Lets check if owner
-					var isOwnerCls = "";
-					for (var j = 0;j < owners.length; j++) {
-						var ownerProperties = openapp.resource.context(owners[j]).properties();
-						var ownerSA = ownerProperties['http://www.w3.org/2002/07/owl#sameAs'];
-						if (memberSA === ownerSA) {
-							isOwnerCls = "isOwner";
-							break;
-						}
-					}
-
+				if (typeof space._context.data[properties['http://www.w3.org/2002/07/owl#sameAs']] !== "undefined"
+					&& typeof space._context.data[properties['http://www.w3.org/2002/07/owl#sameAs']]['http://purl.org/dc/terms/title'] !== "undefined") {
 					$(memberTemplate({
 						uri: properties['http://www.w3.org/2002/07/owl#sameAs'],
 						id: this._jidToId(space._context.data[properties['http://www.w3.org/2002/07/owl#sameAs']]['http://xmlns.com/foaf/0.1/jabberID'][0].value),
-						isOwner: isOwnerCls,
 						title: space._context.data[properties['http://www.w3.org/2002/07/owl#sameAs']]['http://purl.org/dc/terms/title'][0].value
 					})).appendTo($(container).find("#memberEntries"));
 				}

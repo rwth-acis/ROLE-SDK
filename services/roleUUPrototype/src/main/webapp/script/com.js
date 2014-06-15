@@ -85,9 +85,7 @@ define(function() {
 			length = components.length;
 			for (i = 0; i < length; i++) {
 				component = components[i];
-				if (typeof component[method] === "function") {
-					component[method].apply(component, Array.prototype.slice.call(arguments, 2));					
-				}
+				component[method].apply(component, Array.prototype.slice.call(arguments, 2));
 			}
 		},
 		

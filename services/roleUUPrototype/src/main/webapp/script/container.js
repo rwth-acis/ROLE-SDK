@@ -7273,6 +7273,10 @@ osapi.container.GadgetSite.prototype.render = function(
   var view = renderParams[osapi.container.RenderParam.VIEW] ||
       viewParams[osapi.container.ViewParam.VIEW] ||
       previousView;
+   if(gadgetInfo[osapi.container.MetadataResponse.VIEWS] == undefined){ //TODO JAB
+     console.log('Undefined gadgetInfo');
+      return;
+    }
   var viewInfo = gadgetInfo[osapi.container.MetadataResponse.VIEWS][view];
 
   // Allow default view if requested view is not found.

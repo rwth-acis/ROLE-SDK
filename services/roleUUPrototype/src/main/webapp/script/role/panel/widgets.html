@@ -1,16 +1,22 @@
-</a> <a class="sideItem panel-heading when-power-member when-authenticated"
-	style="cursor: pointer;" href="javascript:void(0)"
-	id="sideEntry-addWidgetURL" onmousedown="return false"
-	title="Enter the URL of a widget to be added"> <span
-	class="entry-plus-sign">+</span> Widgets
-</a>
-<span class="sideItem panel-heading when-not-power-member">Widgets</span>
 <div id="widgetEntries" class="sideBox"></div>
-<a class="sideItem when-power-member when-authenticated"
+<div
+	onmouseover="$('#sideEntry-addWidgetURL').show(); $(this).find('.sideItemHover').addClass('sideItemForce');"
+	onmouseout="$('#sideEntry-addWidgetURL').hide(); $(this).find('.sideItemHover').removeClass('sideItemForce');">
+	<a class="sideItem when-owner when-authenticated"
+		style="cursor: pointer;" href="http://www.role-widgetstore.eu/"
+		id="sideEntry-widgetStore" onmousedown="return false"
+		title="Find new widgets in the widget store">
+		<button class="sideEntrySelButton"
+			style="float: right; font-size: 10px;" title="Close">✖</button> <span
+		class="entry-plus-sign">+</span> <span class="sideItemHover">Widget</span>
+	</a> <a class="sideItem when-owner when-authenticated"
+		style="cursor: pointer; display: none;" href="javascript:void(0)"
+		id="sideEntry-addWidgetURL" onmousedown="return false"
+		title="Enter the URL of a widget to be added"> <span
+		class="entry-plus-sign">+</span> URL
+	</a>
+</div>
+<a class="sideItem when-owner when-authenticated"
 	style="cursor: pointer; display: none;" href="javascript:void(0)"
 	id="sideEntry-addSelectedWidget" onmousedown="return false"> <span
-	class="entry-plus-sign">+</span> <span class="title sideItemHover">Title</span></a>
-<a class="sideItem when-power-member when-authenticated"
-	style="cursor: pointer; display: none;" href="javascript:void(0)"
-	id="sideEntry-addSelectedWidgets" onmousedown="return false"> <span
 	class="entry-plus-sign">+</span> <span class="title sideItemHover">Title</span></a>

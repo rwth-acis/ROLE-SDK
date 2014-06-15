@@ -110,10 +110,73 @@ public final class ROLETerms extends Terms {
 			.uuid("http://purl.org/role/terms/spaceSystemData");
 
 	public static final UUID externalPassword = INSTANCE
-			.uuid("http://purl.org/role/terms/externalPassword");;
-
+			.uuid("http://purl.org/role/terms/externalPassword");
+	
 	public ROLETerms() {
 		super(INSTANCE);
 	}
+	
+//----------------------------------------------------------------	
+	/*
+	@Property(domain = { "http://purl.org/role/terms/Space",
+	"http://purl.org/role/terms/Person" })
+	public static final UUID duiOnSpace = INSTANCE
+			.uuid("http://purl.org/role/terms/duiOnSpace");
+	
+	@Property(domain = { "http://purl.org/role/terms/Space",
+	"http://purl.org/role/terms/Person" })
+	public static final UUID duiOnUser = INSTANCE
+			.uuid("http://purl.org/role/terms/duiOnUser");
+	*/
+	
+	@Type
+	public static final UUID DuiService = INSTANCE
+			.uuid("http://purl.org/role/terms/DuiService");
+	
+	@Property(range = "http://purl.org/role/terms/DuiService")
+	public static final UUID duiService = INSTANCE
+			.uuid("http://purl.org/role/terms/duiService");
+	
+	@Property(domain = { "http://purl.org/role/terms/Space",
+	"http://purl.org/role/terms/Person" })
+	public static final UUID device = INSTANCE
+			.uuid("http://purl.org/role/terms/device");
+	
+	@Property(domain = { "http://purl.org/role/terms/Space",
+	"http://purl.org/role/terms/Person" })
+	public static final UUID dc = INSTANCE
+			.uuid("http://purl.org/role/terms/deviceConfig");
+	
+	@Property(domain = { "http://purl.org/role/terms/Space",
+	"http://purl.org/role/terms/Person" })
+	public static final UUID aw = INSTANCE
+			.uuid("http://purl.org/role/terms/displayWidget");
+	
+	@Property(domain = { "http://purl.org/role/terms/Space",
+	"http://purl.org/role/terms/Person" })
+	public static final UUID cs = INSTANCE
+			.uuid("http://purl.org/role/terms/currentSpace");
+	
+	@Property
+	public static final UUID ws = INSTANCE
+			.uuid("http://purl.org/openapp/widgetState");
+	
+	@Property
+	public static final UUID as = INSTANCE
+			.uuid("http://purl.org/openapp/appState");
+	
+	@Property
+	public static final UUID pd = INSTANCE
+			.uuid("http://purl.org/openapp/previousDevice");
+	
+	@Property
+	public static final UUID pu = INSTANCE
+			.uuid("http://purl.org/openapp/previousUser");
+	
+	@Property
+	public static final UUID dp = INSTANCE.
+			uuid("http://purl.org/role/terms/deviceProfile");
+	
+
 
 }
