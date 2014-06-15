@@ -8,7 +8,7 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>role</artifactId>
-	<version>m11</version>	
+	<version>m10</version>	
 	<packaging>pom</packaging>
 	<name>ROLE Project Assembly</name>
 	<description>Assembles the ROLE SDK distribution packages.</description>
