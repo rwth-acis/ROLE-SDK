@@ -2,7 +2,9 @@ ROLE-SDK
 ========
 
 To build the SDK run
-	mvn clean package
+```
+mvn clean package
+```
 from the main folder.
 
 The result is a zip file (there is also a .tar.gz version).
