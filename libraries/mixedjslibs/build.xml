@@ -32,7 +32,7 @@
 	</target>
 	<target name="strophe.prepare" depends="strophe.check" unless="strophe.present">
 		<get
-			src="http://cloud.github.com/downloads/metajack/strophejs/strophejs-${strophe.version}.zip"
+			src="https://github.com/downloads/metajack/strophejs/strophejs-${strophe.version}.zip"
 			dest="${project.build.directory}/libs/strophejs-${strophe.version}.zip" />
 		<unzip
 			src="${project.build.directory}/libs/strophejs-${strophe.version}.zip"
