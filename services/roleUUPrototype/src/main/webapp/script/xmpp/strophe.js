@@ -1,5 +1,4 @@
 define(function() {
-
 // This code was written by Tyler Akins and has been placed in the
 // public domain.  It would be nice if you left this header intact.
 // Base64 code from Tyler Akins -- http://rumkin.com
@@ -96,7 +95,6 @@ var Base64 = (function () {
  * These are the functions you'll usually want to call
  * They take string arguments and return either hex or base-64 encoded strings
  */
-function b64_sha1(s){return binb2b64(core_sha1(str2binb(s),s.length * 8));}
 function str_sha1(s){return binb2str(core_sha1(str2binb(s),s.length * 8));}
 function b64_hmac_sha1(key, data){ return binb2b64(core_hmac_sha1(key, data));}
 function str_hmac_sha1(key, data){ return binb2str(core_hmac_sha1(key, data));}
@@ -663,6 +661,7 @@ Strophe = {
         MUC: "http://jabber.org/protocol/muc",
         SASL: "urn:ietf:params:xml:ns:xmpp-sasl",
         STREAM: "http://etherx.jabber.org/streams",
+        FRAMING: "urn:ietf:params:xml:ns:xmpp-framing",
         BIND: "urn:ietf:params:xml:ns:xmpp-bind",
         SESSION: "urn:ietf:params:xml:ns:xmpp-session",
         VERSION: "jabber:iq:version",
@@ -750,7 +749,8 @@ Strophe = {
         CONNECTED: 5,
         DISCONNECTED: 6,
         DISCONNECTING: 7,
-        ATTACHED: 8
+        ATTACHED: 8,
+        REDIRECT: 9
     },
 
     /** Constants: Log Level Constants
@@ -860,7 +860,7 @@ Strophe = {
      */
     isTagEqual: function (el, name)
     {
-        return el.tagName.toLowerCase() == name.toLowerCase();
+        return el.tagName == name;
     },
 
     /** PrivateVariable: _xmlGenerator
@@ -1098,7 +1098,7 @@ Strophe = {
             el = Strophe.xmlElement(elem.tagName);
 
             for (i = 0; i < elem.attributes.length; i++) {
-                el.setAttribute(elem.attributes[i].nodeName.toLowerCase(),
+                el.setAttribute(elem.attributes[i].nodeName,
                                 elem.attributes[i].value);
             }
 
@@ -1129,7 +1129,7 @@ Strophe = {
     {
         var i, el, j, tag, attribute, value, css, cssAttrs, attr, cssName, cssValue;
         if (elem.nodeType == Strophe.ElementType.NORMAL) {
-            tag = elem.nodeName.toLowerCase();
+            tag = elem.nodeName;
             if(Strophe.XHTML.validTag(tag)) {
                 try {
                     el = Strophe.xmlElement(tag);
@@ -1423,7 +1423,7 @@ Strophe = {
         result = "<" + nodeName;
         for (i = 0; i < elem.attributes.length; i++) {
                if(elem.attributes[i].nodeName != "_realname") {
-                 result += " " + elem.attributes[i].nodeName.toLowerCase() +
+                 result += " " + elem.attributes[i].nodeName +
                 "='" + elem.attributes[i].value
                     .replace(/&/g, "&amp;")
                        .replace(/\'/g, "&apos;")
@@ -2047,8 +2047,6 @@ Strophe.Connection = function (service, options)
     this.disconnecting = false;
     this.connected = false;
 
-    this.errors = 0;
-
     this.paused = false;
 
     this._data = [];
@@ -2104,8 +2102,6 @@ Strophe.Connection.prototype = {
         this.authenticated = false;
         this.disconnecting = false;
         this.connected = false;
-
-        this.errors = 0;
 
         this._requests = [];
         this._uniqueId = 0;
@@ -2218,7 +2214,6 @@ Strophe.Connection.prototype = {
         this.disconnecting = false;
         this.connected = false;
         this.authenticated = false;
-        this.errors = 0;
 
         // parse jid for domain
         this.domain = Strophe.getDomainFromJid(this.jid);
@@ -2418,10 +2413,31 @@ Strophe.Connection.prototype = {
             elem.setAttribute("id", id);
         }
 
+        var expectedFrom = elem.getAttribute("to");
+        var fulljid = this.jid;
+
         var handler = this.addHandler(function (stanza) {
             // remove timeout handler if there is one
             if (timeoutHandler) {
                 that.deleteTimedHandler(timeoutHandler);
+            }
+
+            var acceptable = false;
+            var from = stanza.getAttribute("from");
+            if (from === expectedFrom ||
+               (expectedFrom === null &&
+                   (from === Strophe.getBareJidFromJid(fulljid) ||
+                    from === Strophe.getDomainFromJid(fulljid) ||
+                    from === fulljid))) {
+                acceptable = true;
+            }
+
+            if (!acceptable) {
+                throw {
+                    name: "StropheError",
+                    message: "Got answer to IQ from wrong jid:" + from +
+                             "\nExpected jid: " + expectedFrom
+                };
             }
 
             var iqtype = stanza.getAttribute('type');
@@ -2436,7 +2452,7 @@ Strophe.Connection.prototype = {
             } else {
                 throw {
                     name: "StropheError",
-            message: "Got bad IQ type of " + iqtype
+                    message: "Got bad IQ type of " + iqtype
                 };
             }
         }, null, 'iq', null, id);
@@ -2595,6 +2611,12 @@ Strophe.Connection.prototype = {
         // this must be done in the Idle loop so that we don't change
         // the handlers during iteration
         this.removeHandlers.push(handRef);
+        // If a handler is being deleted while it is being added,
+        // prevent it from getting added
+        var i = this.addHandlers.indexOf(handRef);
+        if (i >= 0) {
+            this.addHandlers.splice(i, 1);
+        }
     },
 
     /** Function: disconnect
@@ -2677,6 +2699,10 @@ Strophe.Connection.prototype = {
      */
     _doDisconnect: function ()
     {
+        if (typeof this._idleTimeout == "number") {
+            clearTimeout(this._idleTimeout);
+        }
+
         // Cancel Disconnect Timeout
         if (this._disconnectTimeout !== null) {
             this.deleteTimedHandler(this._disconnectTimeout);
@@ -2756,9 +2782,9 @@ Strophe.Connection.prototype = {
             return;
         }
 
-        var typ = elem.getAttribute("type");
+        var type = elem.getAttribute("type");
         var cond, conflict;
-        if (typ !== null && typ == "terminate") {
+        if (type !== null && type == "terminate") {
             // Don't process stanzas that come in after disconnect
             if (this.disconnecting) {
                 return;
@@ -2775,7 +2801,7 @@ Strophe.Connection.prototype = {
             } else {
                 this._changeConnectStatus(Strophe.Status.CONNFAIL, "unknown");
             }
-            this.disconnect('unknown stream-error');
+            this._doDisconnect();
             return;
         }
 
@@ -2866,10 +2892,7 @@ Strophe.Connection.prototype = {
         this._authentication.legacy_auth = false;
 
         // Check for the stream:features tag
-        var hasFeatures = bodyWrap.getElementsByTagName("stream:features").length > 0;
-        if (!hasFeatures) {
-            hasFeatures = bodyWrap.getElementsByTagName("features").length > 0;
-        }
+        var hasFeatures = bodyWrap.getElementsByTagNameNS(Strophe.NS.STREAM, "features").length > 0;
         var mechanisms = bodyWrap.getElementsByTagName("mechanism");
         var matched = [];
         var i, mech, found_authentication = false;
@@ -3758,13 +3781,6 @@ Strophe.SASLMD5.prototype.onChallenge = function(connection, challenge, test_cno
 
 Strophe.Connection.prototype.mechanisms[Strophe.SASLMD5.prototype.name] = Strophe.SASLMD5;
 
-})(function () {
-    window.Strophe = arguments[0];
-    window.$build = arguments[1];
-    window.$msg = arguments[2];
-    window.$iq = arguments[3];
-    window.$pres = arguments[4];
-});
 
 /*
     This program is distributed under the terms of the MIT license.
@@ -3875,7 +3891,7 @@ Strophe.Request.prototype = {
         if (window.XMLHttpRequest) {
             xhr = new XMLHttpRequest();
             if (xhr.overrideMimeType) {
-                xhr.overrideMimeType("text/xml");
+                xhr.overrideMimeType("text/xml; charset=utf-8");
             }
         } else if (window.ActiveXObject) {
             xhr = new ActiveXObject("Microsoft.XMLHTTP");
@@ -3923,6 +3939,7 @@ Strophe.Bosh = function(connection) {
     this.hold = 1;
     this.wait = 60;
     this.window = 5;
+    this.errors = 0;
 
     this._requests = [];
 };
@@ -3970,6 +3987,7 @@ Strophe.Bosh.prototype = {
     {
         this.rid = Math.floor(Math.random() * 4294967295);
         this.sid = null;
+        this.errors = 0;
     },
 
     /** PrivateFunction: _connect
@@ -3981,6 +3999,7 @@ Strophe.Bosh.prototype = {
     {
         this.wait = wait || this.wait;
         this.hold = hold || this.hold;
+        this.errors = 0;
 
         // build the body tag
         var body = this._buildBody().attrs({
@@ -4144,7 +4163,7 @@ Strophe.Bosh.prototype = {
         Strophe.warn("request errored, status: " + reqStatus +
                      ", number of errors: " + this.errors);
         if (this.errors > 4) {
-            this._onDisconnectTimeout();
+            this._conn._onDisconnectTimeout();
         }
     },
 
@@ -4203,8 +4222,11 @@ Strophe.Bosh.prototype = {
             data.push(null);
         }
 
-        if (this._requests.length < 2 && data.length > 0 &&
-            !this._conn.paused) {
+        if (this._conn.paused) {
+            return;
+        }
+
+        if (this._requests.length < 2 && data.length > 0) {
             var body = this._buildBody();
             for (var i = 0; i < data.length; i++) {
                 if (data[i] !== null) {
@@ -4375,8 +4397,8 @@ Strophe.Bosh.prototype = {
         }
 
         // make sure we limit the number of retries
-        if (req.sends > this.maxRetries) {
-            this._onDisconnectTimeout();
+        if (req.sends > this._conn.maxRetries) {
+            this._conn._onDisconnectTimeout();
             return;
         }
 
@@ -4412,6 +4434,7 @@ Strophe.Bosh.prototype = {
 
             try {
                 req.xhr.open("POST", this._conn.service, this._conn.options.sync ? false : true);
+                req.xhr.setRequestHeader("Content-Type", "text/xml; charset=utf-8");
             } catch (e2) {
                 Strophe.error("XHR open failed.");
                 if (!this._conn.connected) {
@@ -4617,7 +4640,7 @@ Strophe.Bosh.prototype = {
 */
 
 /* jshint undef: true, unused: true:, noarg: true, latedef: true */
-/*global document, window, clearTimeout, WebSocket,
+/*global window, clearTimeout, WebSocket,
     DOMParser, Strophe, $build */
 
 /** Class: Strophe.WebSocket
@@ -4651,7 +4674,7 @@ Strophe.Bosh.prototype = {
  */
 Strophe.Websocket = function(connection) {
     this._conn = connection;
-    this.strip = "stream:stream";
+    this.strip = "wrapper";
 
     var service = connection.service;
     if (service.indexOf("ws:") !== 0 && service.indexOf("wss:") !== 0) {
@@ -4686,10 +4709,9 @@ Strophe.Websocket.prototype = {
      */
     _buildStream: function ()
     {
-        return $build("stream:stream", {
+        return $build("open", {
+            "xmlns": Strophe.NS.FRAMING,
             "to": this._conn.domain,
-            "xmlns": Strophe.NS.CLIENT,
-            "xmlns:stream": Strophe.NS.STREAM,
             "version": '1.0'
         });
     },
@@ -4704,7 +4726,7 @@ Strophe.Websocket.prototype = {
      *     true if there was a streamerror, false otherwise.
      */
     _check_streamerror: function (bodyWrap, connectstatus) {
-        var errors = bodyWrap.getElementsByTagName("stream:error");
+        var errors = bodyWrap.getElementsByTagNameNS(Strophe.NS.STREAM, "error");
         if (errors.length === 0) {
             return false;
         }
@@ -4790,35 +4812,29 @@ Strophe.Websocket.prototype = {
     },
 
     /** PrivateFunction: _handleStreamStart
-     * _Private_ function that checks the opening stream:stream tag for errors.
+     * _Private_ function that checks the opening <open /> tag for errors.
      *
      * Disconnects if there is an error and returns false, true otherwise.
      *
      *  Parameters:
-     *    (Node) message - Stanza containing the stream:stream.
+     *    (Node) message - Stanza containing the <open /> tag.
      */
     _handleStreamStart: function(message) {
         var error = false;
-        // Check for errors in the stream:stream tag
+
+        // Check for errors in the <open /> tag
         var ns = message.getAttribute("xmlns");
         if (typeof ns !== "string") {
-            error = "Missing xmlns in stream:stream";
-        } else if (ns !== Strophe.NS.CLIENT) {
-            error = "Wrong xmlns in stream:stream: " + ns;
-        }
-
-        var ns_stream = message.namespaceURI;
-        if (typeof ns_stream !== "string") {
-            error = "Missing xmlns:stream in stream:stream";
-        } else if (ns_stream !== Strophe.NS.STREAM) {
-            error = "Wrong xmlns:stream in stream:stream: " + ns_stream;
+            error = "Missing xmlns in <open />";
+        } else if (ns !== Strophe.NS.FRAMING) {
+            error = "Wrong xmlns in <open />: " + ns;
         }
 
         var ver = message.getAttribute("version");
         if (typeof ver !== "string") {
-            error = "Missing version in stream:stream";
+            error = "Missing version in <open />";
         } else if (ver !== "1.0") {
-            error = "Wrong version in stream:stream: " + ver;
+            error = "Wrong version in <open />: " + ver;
         }
 
         if (error) {
@@ -4837,13 +4853,10 @@ Strophe.Websocket.prototype = {
      * message handler. On receiving a stream error the connection is terminated.
      */
     _connect_cb_wrapper: function(message) {
-        if (message.data.indexOf("<stream:stream ") === 0 || message.data.indexOf("<?xml") === 0) {
+        if (message.data.indexOf("<open ") === 0 || message.data.indexOf("<?xml") === 0) {
             // Strip the XML Declaration, if there is one
             var data = message.data.replace(/^(<\?.*?\?>\s*)*/, "");
             if (data === '') return;
-
-            //Make the initial stream:stream selfclosing to parse it without a SAX parser.
-            data = message.data.replace(/<stream:stream (.*[^\/])>/, "<stream:stream $1/>");
 
             var streamStart = new DOMParser().parseFromString(data, "text/xml").documentElement;
             this._conn.xmlInput(streamStart);
@@ -4851,19 +4864,22 @@ Strophe.Websocket.prototype = {
 
             //_handleStreamSteart will check for XML errors and disconnect on error
             if (this._handleStreamStart(streamStart)) {
-
                 //_connect_cb will check for stream:error and disconnect on error
                 this._connect_cb(streamStart);
-
-                // ensure received stream:stream is NOT selfclosing and save it for following messages
-                this.streamStart = message.data.replace(/^<stream:(.*)\/>$/, "<stream:$1>");
             }
-        } else if (message.data === "</stream:stream>") {
+        } else if (message.data.indexOf("<close ") === 0) { //'<close xmlns="urn:ietf:params:xml:ns:xmpp-framing />') {
             this._conn.rawInput(message.data);
-            this._conn.xmlInput(document.createElement("stream:stream"));
-            this._conn._changeConnectStatus(Strophe.Status.CONNFAIL, "Received closing stream");
-            this._conn._doDisconnect();
-            return;
+            this._conn.xmlInput(message);
+            var see_uri = message.getAttribute("see-other-uri");
+            if (see_uri) {
+                this._conn._changeConnectStatus(Strophe.Status.REDIRECT, "Received see-other-uri, resetting connection");
+                this._conn.reset();
+                this._conn.service = see_uri;
+                this._connect();
+            } else {
+                this._conn._changeConnectStatus(Strophe.Status.CONNFAIL, "Received closing stream");
+                this._conn._doDisconnect();
+            }
         } else {
             var string = this._streamWrap(message.data);
             var elem = new DOMParser().parseFromString(string, "text/xml").documentElement;
@@ -4882,20 +4898,20 @@ Strophe.Websocket.prototype = {
      */
     _disconnect: function (pres)
     {
-        if (this.socket.readyState !== WebSocket.CLOSED) {
+        if (this.socket && this.socket.readyState !== WebSocket.CLOSED) {
             if (pres) {
                 this._conn.send(pres);
             }
-            var close = '</stream:stream>';
-            this._conn.xmlOutput(document.createElement("stream:stream"));
-            this._conn.rawOutput(close);
+            var close = $build("close", { "xmlns": Strophe.NS.FRAMING, });
+            this._conn.xmlOutput(close);
+            var closeString = Strophe.serialize(close);
+            this._conn.rawOutput(closeString);
             try {
-                this.socket.send(close);
+                this.socket.send(closeString);
             } catch (e) {
-                Strophe.info("Couldn't send closing stream tag.");
+                Strophe.info("Couldn't send <close /> tag.");
             }
         }
-
         this._conn._doDisconnect();
     },
 
@@ -4916,7 +4932,7 @@ Strophe.Websocket.prototype = {
      */
     _streamWrap: function (stanza)
     {
-        return this.streamStart + stanza + '</stream:stream>';
+        return "<wrapper>" + stanza + '</wrapper>';
     },
 
 
@@ -5005,13 +5021,11 @@ Strophe.Websocket.prototype = {
                 if (data[i] !== null) {
                     var stanza, rawStanza;
                     if (data[i] === "restart") {
-                        stanza = this._buildStream();
-                        rawStanza = this._removeClosingTag(stanza);
-                        stanza = stanza.tree();
+                        stanza = this._buildStream().tree();
                     } else {
                         stanza = data[i];
-                        rawStanza = Strophe.serialize(stanza);
                     }
+                    rawStanza = Strophe.serialize(stanza);
                     this._conn.xmlOutput(stanza);
                     this._conn.rawOutput(rawStanza);
                     this.socket.send(rawStanza);
@@ -5036,18 +5050,17 @@ Strophe.Websocket.prototype = {
     _onMessage: function(message) {
         var elem, data;
         // check for closing stream
-        if (message.data === "</stream:stream>") {
-            var close = "</stream:stream>";
+        var close = '<close xmlns="urn:ietf:params:xml:ns:xmpp-framing" />';
+        if (message.data === close) {
             this._conn.rawInput(close);
-            this._conn.xmlInput(document.createElement("stream:stream"));
+            this._conn.xmlInput(message);
             if (!this._conn.disconnecting) {
                 this._conn._doDisconnect();
             }
             return;
-        } else if (message.data.search("<stream:stream ") === 0) {
-            //Make the initial stream:stream selfclosing to parse it without a SAX parser.
-            data = message.data.replace(/<stream:stream (.*[^\/])>/, "<stream:stream $1/>");
-            elem = new DOMParser().parseFromString(data, "text/xml").documentElement;
+        } else if (message.data.search("<open ") === 0) {
+            // This handles stream restarts
+            elem = new DOMParser().parseFromString(message.data, "text/xml").documentElement;
 
             if (!this._handleStreamStart(elem)) {
                 return;
@@ -5084,24 +5097,9 @@ Strophe.Websocket.prototype = {
         var start = this._buildStream();
         this._conn.xmlOutput(start.tree());
 
-        var startString = this._removeClosingTag(start);
+        var startString = Strophe.serialize(start);
         this._conn.rawOutput(startString);
         this.socket.send(startString);
-    },
-
-    /** PrivateFunction: _removeClosingTag
-     *  _Private_ function to Make the first <stream:stream> non-selfclosing
-     *
-     *  Parameters:
-     *      (Object) elem - The <stream:stream> tag.
-     *
-     *  Returns:
-     *      The stream:stream tag as String
-     */
-    _removeClosingTag: function(elem) {
-        var string = Strophe.serialize(elem);
-        string = string.replace(/<(stream:stream .*[^\/])\/>$/, "<$1>");
-        return string;
     },
 
     /** PrivateFunction: _reqToData
@@ -5140,5 +5138,13 @@ Strophe.Websocket.prototype = {
     }
 };
 
-return Strophe;
+})(function () {
+    window.Strophe = arguments[0];
+    window.$build = arguments[1];
+    window.$msg = arguments[2];
+    window.$iq = arguments[3];
+    window.$pres = arguments[4];
+});
+
+        return Strophe;
 });

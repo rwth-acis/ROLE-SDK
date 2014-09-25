@@ -22,7 +22,7 @@
 		<move file="${project.build.directory}/libs/jqueryui-${jqueryui.version}" tofile="${project.build.directory}/libs/jqueryui"/>
 	</target>
 
-	<property name="strophe.version" value="1.0.2"/>
+	<property name="strophe.version" value="1.1.99"/>
 	<target name="strophe.check">
 		<condition property="strophe.present">
 			<and>
@@ -32,7 +32,7 @@
 	</target>
 	<target name="strophe.prepare" depends="strophe.check" unless="strophe.present">
 		<get
-			src="http://cloud.github.com/downloads/metajack/strophejs/strophejs-${strophe.version}.zip"
+			src="https://github.com/Gordin/strophejs/releases/download/role/strophejs-${strophe.version}.zip"
 			dest="${project.build.directory}/libs/strophejs-${strophe.version}.zip" />
 		<unzip
 			src="${project.build.directory}/libs/strophejs-${strophe.version}.zip"
