@@ -25,7 +25,8 @@ public class TestDomainInitializer extends AbstractInitializer {
 
 	@Override
 	public void initialize(Request request) {
-		URI domainUri = ((RequestImpl) request).getUriInfo().getBaseUri();
+		//URI domainUri = ((RequestImpl) request).getUriInfo().getBaseUri();
+		URI domainURI = new URI("http://cloud33.dbis.rwth-aachen.de:8073/");
 		log.info("Initializing a default domain: " + domainUri);
 		Concept domain = store().in(conserve.getRootUuid())
 				.sub(ConserveTerms.hasService).acquire(domainUri);
