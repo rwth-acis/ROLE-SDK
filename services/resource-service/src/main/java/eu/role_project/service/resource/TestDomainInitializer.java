@@ -1,6 +1,7 @@
 package eu.role_project.service.resource;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.UUID;
 
 import javax.inject.Inject;
