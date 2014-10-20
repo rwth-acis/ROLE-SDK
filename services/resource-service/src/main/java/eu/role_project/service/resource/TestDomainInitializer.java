@@ -1,7 +1,6 @@
 package eu.role_project.service.resource;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.UUID;
 
 import javax.inject.Inject;
@@ -27,12 +26,6 @@ public class TestDomainInitializer extends AbstractInitializer {
 	@Override
 	public void initialize(Request request) {
 		URI domainUri = ((RequestImpl) request).getUriInfo().getBaseUri();
-		try {
-			domainUri = new URI("http://cloud33.dbis.rwth-aachen.de:8073/");
-		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		log.info("Initializing a default domain: " + domainUri);
 		Concept domain = store().in(conserve.getRootUuid())
 				.sub(ConserveTerms.hasService).acquire(domainUri);
