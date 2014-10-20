@@ -200,10 +200,10 @@ define(
     }
   };
   domReady(function(){
-    if(navigator.userAgent.contains("Firefox") != -1) {
+    if(navigator.userAgent.indexOf("Firefox") != -1) {
       var version = parseInt(navigator.userAgent.match(/Firefox\/([0-9]+)\./)[1], 10);
       if(version < 27) return;
-    }else if(navigator.userAgent.contains("Chrome") != -1){    
+    }else if(navigator.userAgent.indexOf("Chrome") != -1){    
       var version = parseInt(navigator.userAgent.match(/Chrome\/([0-9]+)\./)[1], 10);
       if(version < 32) return;
     }else return;
