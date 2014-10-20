@@ -33,12 +33,12 @@ require(
 					meta.name = "viewport";
 					document.getElementsByTagName("head")[0].appendChild(meta);
 					
-					loadCss("//ajax.aspnetcdn.com/ajax/jquery.ui/1.8.13/themes/base/jquery-ui.css");
+					loadCss("/s/css/jquery-ui-1.8.13/themes/base/jquery-ui.css");
 					//loadCss("/s/css/default.css");
 					loadCss("/s/css/role-mobile.css");
 				}
 				else{
-					loadCss("//ajax.aspnetcdn.com/ajax/jquery.ui/1.8.13/themes/base/jquery-ui.css");
+					loadCss("/s/css/jquery-ui-1.8.13/themes/base/jquery-ui.css");
 					//loadCss("/s/css/default.css");
 					if (detectMobile.isTouch())
 						loadCss("/s/css/role-tablet.css");
