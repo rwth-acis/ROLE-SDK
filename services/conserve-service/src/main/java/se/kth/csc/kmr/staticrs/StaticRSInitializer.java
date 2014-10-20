@@ -81,7 +81,6 @@ public class StaticRSInitializer extends AbstractInitializer {
 				uriBuilder.path("d");
 				uriBuilder.path(key);
 				String href = uriBuilder.build().toString(); // uriBuilder.build().getRawPath();
-				href.replace("137.226.58.33", "cloud33.dbis.rwth-aachen.de");
 				hrefs.put(key, href);
 				log.info("Read resource " + key + ": " + stat.name
 						+ " Bound to: " + href);
