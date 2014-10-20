@@ -92,7 +92,7 @@ public class ResourceModule extends ServletModule {
 				.newMapBinder(binder(), String.class,
 						ServiceConfiguration.class);
 		final UriBuilder baseUriBuilder = UriBuilder.fromUri("http://"
-				+ "cloud33.dbis.rwth-aachen.de" //getServerHostname()
+				+ getServerHostname()
 				+ ((!"80".equals(getServerPort())) ? (":" + getServerPort())
 						: "") + "/");
 		serviceInstances.addBinding(
