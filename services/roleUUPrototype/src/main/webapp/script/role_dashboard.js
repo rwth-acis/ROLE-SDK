@@ -43,7 +43,8 @@ if(typeof window.jQQ !== 'object'){
       setup: function(version) {
           // wait for document to load...
           if(!document.body) return window.onload = function(){ window.jQQ.setup(version) };
-          var url = 'http://ajax.googleapis.com/ajax/libs/jquery/'+(version||'1.4.2')+'/jquery.min.js';
+          //var url = 'http://ajax.googleapis.com/ajax/libs/jquery/'+(version||'1.4.2')+'/jquery.min.js';
+          var url = '/s/script/vendor/jquery.'+(version||'1.4.2')+'.min.js';
           loadScript( url , function() {
               window.jQQ.isReady = true;
               // this stores the new version and gives back the old one, completely.              
