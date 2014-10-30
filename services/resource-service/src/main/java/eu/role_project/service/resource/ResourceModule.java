@@ -51,6 +51,7 @@ import se.kth.csc.kmr.conserve.security.oauth.OAuthSessionPrincipal;
 import se.kth.csc.kmr.conserve.security.oauth.OAuthStoreImpl;
 import se.kth.csc.kmr.conserve.security.openid.OpenID;
 import se.kth.csc.kmr.conserve.security.openid.OpenIDModule;
+import se.kth.csc.kmr.conserve.security.oauth2.OAuth2Module;
 import se.kth.csc.kmr.conserve.security.session.SessionListener;
 import se.kth.csc.kmr.conserve.security.session.SessionLogin;
 import se.kth.csc.kmr.conserve.util.Base64UUID;
@@ -83,6 +84,7 @@ public class ResourceModule extends ServletModule {
 		install(new ContempModule());
 		install(new OAuth1Module());
 		install(new OpenIDModule());
+		install(new OAuth2Module());
 
 		log.info("Configuring Resource module");
 

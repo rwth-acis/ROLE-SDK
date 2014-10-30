@@ -54,7 +54,7 @@
 		<dependency>
 			<groupId>se.kth.csc.kmr</groupId>
 			<artifactId>conserve</artifactId>
-			<version>0.2-SNAPSHOT</version>
+			<version>0.3-SNAPSHOT</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.json</groupId>

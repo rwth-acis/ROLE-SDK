@@ -1,0 +1,10 @@
+### Eclipse ###
+.project
+.settings/
+.classpath
+
+### Java ###
+*.class
+
+### build ###
+target/

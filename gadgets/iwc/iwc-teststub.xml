@@ -46,8 +46,8 @@
 	
 	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css"/>
 	
-	<script type="application/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-	<script type="application/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"</script>
+	<script type="application/javascript" src="/s/script/vendor/jquery.1.7.1.min.js"></script>
+	<script type="application/javascript" src="/s/css/jquery-ui-1.8.16/ui/jquery-ui.js"</script>
 	
 	<script src="http://open-app.googlecode.com/files/openapp.js"></script>
 	<script src="http://dbis.rwth-aachen.de/gadgets/iwc/lib/iwc.js"></script>

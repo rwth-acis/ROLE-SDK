@@ -9,7 +9,7 @@
 		</condition>
 	</target>
 	<target name="jsdoctoolkit.prepare" depends="jsdoctoolkit.check" unless="jsdoctoolkit.present">
-		<get src="http://jsdoc-toolkit.googlecode.com/files/jsdoc_toolkit-${jsdoctoolkit.version}.zip" dest="${project.build.directory}/jsdoc_toolkit-${jsdoctoolkit.version}.zip" />
+		<get src="https://jsdoc-toolkit.googlecode.com/files/jsdoc_toolkit-${jsdoctoolkit.version}.zip" dest="${project.build.directory}/jsdoc_toolkit-${jsdoctoolkit.version}.zip" />
 		<unzip src="${project.build.directory}/jsdoc_toolkit-${jsdoctoolkit.version}.zip" dest="${project.build.directory}">
 		</unzip>
 		<move file="${project.build.directory}/jsdoc_toolkit-${jsdoctoolkit.version}/jsdoc-toolkit" tofile="${project.build.directory}/jsdoc-toolkit" />
