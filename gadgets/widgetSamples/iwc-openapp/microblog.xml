@@ -45,7 +45,7 @@
 			}
 		</style>
 		
-		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/themes/cupertino/jquery-ui.css" type="text/css" media="all" />
+		<link rel="stylesheet" href="/s/css/jquery-ui-1.8.10/themes/base/jquery-ui.css" type="text/css" media="all" />
 		
 		<script type="text/javascript" src="/s/script/vendor/jquery.1.7.1.min.js"></script>
 		<script type="text/javascript" src="/s/css/jquery-ui-1.8.10/ui/jquery-ui.js"></script>
@@ -93,7 +93,7 @@
 				// ROLE IWC: differentiate between different types of intents.
 				// In this example we are only interested in those intents having intent.action specified as 'ACTION_UPDATE' and
 				// containing an element 'microblog' in intent.categories.
-				if(intent.action == "ACTION_UPDATE" && $.inArray("microblog",intent.categories) > -1){
+				if (intent.action == "ACTION_UPDATE" && $.inArray("microblog",intent.categories) > -1) {
 					
 					// 
 					renderEntry(intent.data);
