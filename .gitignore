@@ -3,6 +3,10 @@
 .settings/
 .classpath
 
+### IntelliJ ###
+.idea
+/*.iml
+
 ### Java ###
 *.class
 
