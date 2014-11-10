@@ -15,7 +15,6 @@
 	<modules>
 		<module>libraries</module>
 		<module>services</module>
-		<module>ple</module>
 		<module>assembly</module>
 	</modules>
 </project>
