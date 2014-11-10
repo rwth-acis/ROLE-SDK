@@ -5,7 +5,8 @@
 
 ### IntelliJ ###
 .idea
-/*.iml
+*.iml
+overlays/
 
 ### Java ###
 *.class
