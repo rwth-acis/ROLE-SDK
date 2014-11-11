@@ -137,7 +137,7 @@ public class OAuth2Endpoints {
 
 				String firstName = (String) finalResult.get("given_name");
 				String lastName = (String) finalResult.get("family_name");
-				String email = (String) finalResult.get("id");
+				String email = (String) finalResult.get("email");
 
 				// String userName = verified.getIdentifier();
 				String userName = "mailto:" + email;
@@ -158,11 +158,21 @@ public class OAuth2Endpoints {
 									.createURI("http://purl.org/dc/terms/title"),
 							valueFactory.createLiteral(firstName + " "
 									+ lastName)));
+
+					// email
 					graph.add(valueFactory.createStatement(
 							userUri,
 							valueFactory
 									.createURI("http://xmlns.com/foaf/0.1/mbox"),
 							valueFactory.createURI("mailto:" + email)));
+
+					// access_token
+					graph.add(valueFactory.createStatement(
+							userUri,
+							valueFactory
+									.createURI("http://xmlns.com/foaf/0.1/openid"),
+							valueFactory.createLiteral(accessToken)));
+
 					store().in(user).as(ConserveTerms.metadata)
 							.type("application/json").graph(graph);
 

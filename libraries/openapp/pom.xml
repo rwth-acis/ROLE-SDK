@@ -1,118 +1,118 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-                <groupId>eu.role-project</groupId>
-                <artifactId>role-libraries</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
-                <relativePath>../pom.xml</relativePath>
-        </parent>
-	<version>0.0.1-SNAPSHOT</version>
-	<artifactId>openapplication-library</artifactId>
-	<packaging>jar</packaging>
-	<name>OpenApp</name>
-	<description>
-		JavaScript API for OpenApp.
-	</description>
-	<build>
-		<resources>
-			<resource>
-				<directory>src/main/javascript</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>run-compressor</id>
-						<phase>compile</phase>
-						<configuration>
-							<tasks>
-								<property name="project.build.directory"
-									value="${project.build.directory}"/>
-								<ant antfile="${basedir}/build.xml"
-									target="closure.prepare" inheritAll="true"
-									inheritRefs="true" />
-								<mkdir dir="${project.build.directory}/processed/main/webapp" />
-								<java jar="${project.build.directory}/compiler.jar"
-										fork="true" failonerror="true">
-									<arg value="--js" />
-									<arg value="${basedir}/src/main/javascript/openapp.js" />
-									<arg value="--js" />
-									<arg value="${basedir}/src/main/javascript/openapp/event.js" />
-									<arg value="--js" />
-									<arg value="${basedir}/src/main/javascript/openapp/io.js" />
-									<arg value="--js" />
-									<arg value="${basedir}/src/main/javascript/openapp/ns.js" />
-									<arg value="--js" />
-									<arg value="${basedir}/src/main/javascript/openapp/resource.js" />
-									<arg value="--js" />
-									<arg value="${basedir}/src/main/javascript/openapp/oo.js" />
-									<arg value="--js" />
-									<arg value="${basedir}/src/main/javascript/openapp/param.js" />
-									<arg value="--js_output_file" />
-									<arg value="${project.build.directory}/classes/openapp.js" />
-									<arg value="--formatting" />
-									<arg value="pretty_print" />
-									<arg value="--compilation_level" />
-									<arg value="SIMPLE_OPTIMIZATIONS" />
-									<arg value="--language_in" />
-									<arg value="ECMASCRIPT5" />
-									<arg value="--output_wrapper" />
-									<arg value="(function(){%output%})();" />
-								</java>
-							</tasks>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>run-jsdoc</id>
-						<phase>site</phase>
-						<configuration>
-							<tasks>
-								<property name="project.build.directory"
-									value="${project.build.directory}"/>
-								<ant antfile="${basedir}/build.xml"
-									target="jsdoctoolkit.prepare" inheritAll="true"
-									inheritRefs="true" />
-								<taskdef name="jsdoctoolkit"
-									classname="uk.co.darrenhurley.ant.tasks.JsDocToolkit" />
-								<mkdir dir="${project.reporting.outputDirectory}/jsdoc" />
-								<jsdoctoolkit jsdochome="${project.build.directory}/jsdoc-toolkit/"
-										template="jsdoc"
-										outputdir="${project.reporting.outputDirectory}/jsdoc">
-									<fileset dir="${basedir}/src/main/javascript">
-										<include name="**/*.js" />
-									</fileset>
-								</jsdoctoolkit>
-							</tasks>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>org.jsdoctoolkit</groupId>
-						<artifactId>jsdoctoolkit-ant-task</artifactId>
-						<version>1.0</version>
-						<exclusions>
-							<exclusion>
-								<groupId>ant</groupId>
-								<artifactId>ant-contrib</artifactId>
-							</exclusion>
-						</exclusions>
-					</dependency>
-				</dependencies>
-			</plugin>
-		</plugins>
-	</build>
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>eu.role-project</groupId>
+        <artifactId>role-libraries</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>openapplication-library</artifactId>
+    <packaging>jar</packaging>
+    <name>OpenApp</name>
+    <description>
+        JavaScript API for OpenApp.
+    </description>
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/javascript</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>run-compressor</id>
+                        <phase>compile</phase>
+                        <configuration>
+                            <tasks>
+                                <property name="project.build.directory"
+                                          value="${project.build.directory}"/>
+                                <ant antfile="${basedir}/build.xml"
+                                     target="closure.prepare" inheritAll="true"
+                                     inheritRefs="true"/>
+                                <mkdir dir="${project.build.directory}/processed/main/webapp"/>
+                                <java jar="${project.build.directory}/compiler.jar"
+                                      fork="true" failonerror="true">
+                                    <arg value="--js"/>
+                                    <arg value="${basedir}/src/main/javascript/openapp.js"/>
+                                    <arg value="--js"/>
+                                    <arg value="${basedir}/src/main/javascript/openapp/event.js"/>
+                                    <arg value="--js"/>
+                                    <arg value="${basedir}/src/main/javascript/openapp/io.js"/>
+                                    <arg value="--js"/>
+                                    <arg value="${basedir}/src/main/javascript/openapp/ns.js"/>
+                                    <arg value="--js"/>
+                                    <arg value="${basedir}/src/main/javascript/openapp/resource.js"/>
+                                    <arg value="--js"/>
+                                    <arg value="${basedir}/src/main/javascript/openapp/oo.js"/>
+                                    <arg value="--js"/>
+                                    <arg value="${basedir}/src/main/javascript/openapp/param.js"/>
+                                    <arg value="--js_output_file"/>
+                                    <arg value="${project.build.directory}/classes/openapp.js"/>
+                                    <arg value="--formatting"/>
+                                    <arg value="pretty_print"/>
+                                    <arg value="--compilation_level"/>
+                                    <arg value="SIMPLE_OPTIMIZATIONS"/>
+                                    <arg value="--language_in"/>
+                                    <arg value="ECMASCRIPT5"/>
+                                    <arg value="--output_wrapper"/>
+                                    <arg value="(function(){%output%})();"/>
+                                </java>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>run-jsdoc</id>
+                        <phase>site</phase>
+                        <configuration>
+                            <tasks>
+                                <property name="project.build.directory"
+                                          value="${project.build.directory}"/>
+                                <ant antfile="${basedir}/build.xml"
+                                     target="jsdoctoolkit.prepare" inheritAll="true"
+                                     inheritRefs="true"/>
+                                <taskdef name="jsdoctoolkit"
+                                         classname="uk.co.darrenhurley.ant.tasks.JsDocToolkit"/>
+                                <mkdir dir="${project.reporting.outputDirectory}/jsdoc"/>
+                                <jsdoctoolkit jsdochome="${project.build.directory}/jsdoc-toolkit/"
+                                              template="jsdoc"
+                                              outputdir="${project.reporting.outputDirectory}/jsdoc">
+                                    <fileset dir="${basedir}/src/main/javascript">
+                                        <include name="**/*.js"/>
+                                    </fileset>
+                                </jsdoctoolkit>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jsdoctoolkit</groupId>
+                        <artifactId>jsdoctoolkit-ant-task</artifactId>
+                        <version>1.0</version>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>ant</groupId>
+                                <artifactId>ant-contrib</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
 </project>

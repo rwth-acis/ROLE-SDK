@@ -14,7 +14,7 @@ import javax.ws.rs.core.UriBuilder;
 
 import net.sf.ehcache.constructs.web.filter.SimpleCachingHeadersPageCachingFilter;
 
-import org.cometd.server.CometdServlet;
+import org.cometd.server.CometDServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -325,7 +325,7 @@ public class ResourceModule extends ServletModule {
 		Map<String, String> h2Params = new HashMap<String, String>();
 		h2Params.put("webAllowOthers", "true");
 		serve("/a/h2*").with(new org.h2.server.web.WebServlet(), h2Params);
-		serve("/cometd/*").with(new CometdServlet());
+		serve("/cometd/*").with(new CometDServlet());
 		serve("/s/*").with(new WebAppServlet());
 		Map<String, String> pageCacheParams = new HashMap<String, String>();
 		pageCacheParams.put("suppressStackTrace", "false");

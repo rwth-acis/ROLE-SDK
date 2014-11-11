@@ -19,17 +19,12 @@
  */
 package se.kth.csc.kmr.conserve.core;
 
-import javax.servlet.ServletContextAttributeEvent;
-import javax.servlet.ServletContextAttributeListener;
-
-import org.cometd.bayeux.server.BayeuxServer;
-import org.cometd.bayeux.server.SecurityPolicy;
-import org.cometd.bayeux.server.ServerChannel;
-import org.cometd.bayeux.server.ServerMessage;
-import org.cometd.bayeux.server.ServerSession;
-import org.eclipse.jetty.util.log.Log;
+import org.cometd.bayeux.server.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.servlet.ServletContextAttributeEvent;
+import javax.servlet.ServletContextAttributeListener;
 
 public class ServerAttributeListener implements ServletContextAttributeListener {
 
@@ -41,7 +36,7 @@ public class ServerAttributeListener implements ServletContextAttributeListener 
 	@Override
 	public void attributeAdded(ServletContextAttributeEvent event) {
 		if (BayeuxServer.ATTRIBUTE.equals(event.getName())) {
-			Log.info("Setting up Bayeux server");
+			log.info("Setting up Bayeux server");
 
 			// Grab the Bayeux object
 			bayeux = (BayeuxServer) event.getValue();

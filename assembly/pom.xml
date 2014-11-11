@@ -1,128 +1,129 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>eu.role-project</groupId>
-		<artifactId>role-project</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
-	</parent>
-	<artifactId>role</artifactId>
-	<version>m10</version>	
-	<packaging>pom</packaging>
-	<name>ROLE Project Assembly</name>
-	<description>Assembles the ROLE SDK distribution packages.</description>
-	<build>
-		<filters>
-		</filters>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.2.1</version>
-				<configuration>
-					<descriptors>
-						<descriptor>src/main/assembly/sdk.xml</descriptor>
-					</descriptors>
-					<tarLongFileMode>gnu</tarLongFileMode>
-					<filters>
-					</filters>
-				</configuration>
-				<executions>
-					<execution>
-						<id>make-assembly</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.geronimo.genesis.plugins</groupId>
-				<artifactId>tools-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>verify-legal-files</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>verify-legal-files</goal>
-						</goals>
-						<configuration>
-							<strict>false</strict>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>run-jsdoc</id>
-						<phase>compile</phase>
-						<configuration>
-							<tasks>
-								<property name="project.build.directory" value="${project.build.directory}" />
-								<mkdir dir="${project.build.directory}" />
-								<ant antfile="${basedir}/build.xml" target="jsdoctoolkit.prepare"
-									inheritAll="true" inheritRefs="true" />
-								<taskdef name="jsdoctoolkit"
-									classname="uk.co.darrenhurley.ant.tasks.JsDocToolkit" />
-								<mkdir dir="${project.reporting.outputDirectory}/jsdoc" />
-								<copy
-									todir="${project.build.directory}/jsdoc-toolkit/templates/outline">
-									<fileset dir="${basedir}/src/main/jsdoc-template/outline" />
-								</copy>
-								<jsdoctoolkit jsdochome="${project.build.directory}/jsdoc-toolkit/"
-									template="outline" outputdir="${project.build.directory}/doc/api/javascript">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>eu.role-project</groupId>
+        <artifactId>role-project</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <artifactId>role</artifactId>
+    <version>m10</version>
+    <packaging>pom</packaging>
+    <name>ROLE Project Assembly</name>
+    <description>Assembles the ROLE SDK distribution packages.</description>
+    <build>
+        <filters>
+        </filters>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.2.1</version>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/main/assembly/sdk.xml</descriptor>
+                    </descriptors>
+                    <tarLongFileMode>gnu</tarLongFileMode>
+                    <filters>
+                    </filters>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.geronimo.genesis.plugins</groupId>
+                <artifactId>tools-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>verify-legal-files</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>verify-legal-files</goal>
+                        </goals>
+                        <configuration>
+                            <strict>false</strict>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>run-jsdoc</id>
+                        <phase>compile</phase>
+                        <configuration>
+                            <tasks>
+                                <property name="project.build.directory" value="${project.build.directory}"/>
+                                <mkdir dir="${project.build.directory}"/>
+                                <ant antfile="${basedir}/build.xml" target="jsdoctoolkit.prepare"
+                                     inheritAll="true" inheritRefs="true"/>
+                                <taskdef name="jsdoctoolkit"
+                                         classname="uk.co.darrenhurley.ant.tasks.JsDocToolkit"/>
+                                <mkdir dir="${project.reporting.outputDirectory}/jsdoc"/>
+                                <copy
+                                        todir="${project.build.directory}/jsdoc-toolkit/templates/outline">
+                                    <fileset dir="${basedir}/src/main/jsdoc-template/outline"/>
+                                </copy>
+                                <jsdoctoolkit jsdochome="${project.build.directory}/jsdoc-toolkit/"
+                                              template="outline"
+                                              outputdir="${project.build.directory}/doc/api/javascript">
 
-									<!-- JSDoc for OpenApp -->
-									<fileset
-										dir="${basedir}/../libraries/openapp/src/main/javascript">
-										<include name="**/*.js" />
-									</fileset>
+                                    <!-- JSDoc for OpenApp -->
+                                    <fileset
+                                            dir="${basedir}/../libraries/openapp/src/main/javascript">
+                                        <include name="**/*.js"/>
+                                    </fileset>
 
-									<!-- JSDoc for IWC -->
-									<fileset dir="${basedir}/../libraries/iwc/src/main/javascript">
-										<include name="**/*.js" />
-									</fileset>
+                                    <!-- JSDoc for IWC -->
+                                    <fileset dir="${basedir}/../libraries/iwc/src/main/javascript">
+                                        <include name="**/*.js"/>
+                                    </fileset>
 
-								</jsdoctoolkit>
-							</tasks>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>org.jsdoctoolkit</groupId>
-						<artifactId>jsdoctoolkit-ant-task</artifactId>
-						<version>1.0</version>
-						<exclusions>
-							<exclusion>
-								<groupId>ant</groupId>
-								<artifactId>ant-contrib</artifactId>
-							</exclusion>
-						</exclusions>
-					</dependency>
-				</dependencies>
-			</plugin>
-		</plugins>
-	</build>
-	<dependencies>
-		<dependency>
-			<groupId>eu.role-project</groupId>
-			<artifactId>role-uu-prototype</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<type>war</type>
-		</dependency>
-		<dependency>
-			<groupId>org.mortbay.jetty</groupId>
-			<artifactId>jetty-runner</artifactId>
-			<version>7.4.2.v20110526</version>
-		</dependency>
-	</dependencies>
+                                </jsdoctoolkit>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jsdoctoolkit</groupId>
+                        <artifactId>jsdoctoolkit-ant-task</artifactId>
+                        <version>1.0</version>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>ant</groupId>
+                                <artifactId>ant-contrib</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>eu.role-project</groupId>
+            <artifactId>role-uu-prototype</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-runner</artifactId>
+            <version>9.3.0.M1</version>
+        </dependency>
+    </dependencies>
 </project>
