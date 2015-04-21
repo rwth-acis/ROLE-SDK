@@ -67,7 +67,7 @@ define([ "com", "jquery", "handlebars!./widget", "../model/space", "rave", "./in
 				});
 				
 				
-				// Bazaar wishing functionality
+			/*	// Bazaar wishing functionality
 				if($(widgetUI).find(".integratedWishingElement").bazaarWishing) {
 					// integrated wishing libraries already loaded...
 					$(widgetUI).find(".integratedWishingElement").bazaarWishing({softwareUrl : widget._widget.widgetUrl});
@@ -82,7 +82,7 @@ define([ "com", "jquery", "handlebars!./widget", "../model/space", "rave", "./in
 				$(widgetUI).on("click", ".widget-toolbar-wish-btn", function() {
 					// wishing without making an screenshot
 					$(widgetUI).find(".integratedWishingElement").bazaarWishing('toggle', false);
-				});
+				});*/
 				
 				
 				
