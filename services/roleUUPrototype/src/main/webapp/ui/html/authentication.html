@@ -5,9 +5,8 @@
 <link rel="stylesheet/less" type="text/css" href="/s/css/role.less">
 <script src="/s/script/vendor/less.js" type="text/javascript"></script>
 <script src="/d/openapp"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
-<script src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+<script src="/s/script/vendor/jquery.js"></script>
+<script src="/s/script/vendor/jquery.tmpl.js"></script>
 <script src="/s/script/vendor/jquery.url.norequirejs.js" type="text/javascript"></script>
 </head>
 <body>
@@ -43,28 +42,44 @@
     </script>
 	<script id="authenticationTemplate_OpenID" type="text/x-jquery-tmpl">
 		<h2>Sign in using&hellip;</h2>
-		{{each $data["http://www.w3.org/2002/07/owl#sameAs"]}}
-			{{if typeof openidProviders[$value.value] !== "undefined"}}
-				{{each($i, provider) [openidProviders[$value.value]]}}
-					<a href="/o/openid/request?openid=${encodeURIComponent($value.value)}&context=${contextUriEnc}&return=${returnUriEnc}"><h3>
-						<img src="${provider.image}" width="${provider.imageWidth}" height="${provider.imageHeight}">${provider.title}</h3></a>
-				{{/each}}
-			{{/if}}
-		{{/each}}
+		
+		<p class="messageOAuth2"></p>
+    	<a href="/o/oauth2/request?discovery=https://accounts.google.com/.well-known/openid-configuration&client_id=263505441471-qh264egece36h6aclabdf27cic8cl505.apps.googleusercontent.com&client_secret=wZfRO-eURr_hmeKL1F1nZFm1&return=${returnUriEnc}"><h3>
+		<img src="/s/images/googleicon.png" width="15px" height="15px">Google</h3></a> 
+		
+		<div id="selectdiv">
+		<select id="oidcselect">
+			<option> Loading provider ... </option>
+		</select>
+		<button id="gobutton"> Go </button>
+		</div>
+		<div>
+		<br>
+    		<a href="#" id="formToggle"><b>Add your own provider</b> <img id="addarrow" src="/s/images/rightarrow.svg" height="12px"></a>
+    		  <form id="oidcForm" style="display:none">
+    			<br>
+    			<div>
+	    			<input type="text" id="oidcConfig" name="config" placeholder="Configuration URL" />
+	    			<input type="text" id="oidcName" name="name" placeholder="Name" />
+	    		</div>
+	    		<br>
+    			<input type="checkbox" id="oidcDynamic" name="dynreg"> Try to dynamically register client (only check if you're sure there is no ROLE-SDK client registered on your provider yet)
+    			<br>
+    			<br>
+    			<div>
+	    			<input type="text" id="clientId" name="clientid" placeholder="Client ID" />
+	    			<input type="text" id="clientSecret" name="clientsecret" placeholder="Client Secret" />
+    			</div>
+    			<br>
+    			<input type="button" id="oidcSubmit" value="Submit" />
+    		</form>
+    	</div>
     </script>
 
 	<div id="pageContent">
 	</div>
 	
 	<script>
-		var openidProviders = {
-			"https://www.google.com/accounts/o8/id": {
-				title: "Google",
-				image: "/s/images/googleicon.gif",
-				imageWidth: "15",
-				imageHeight: "15"
-			}
-		};
 		var contextUri, contextUriEnc;
 		var returnUri = decodeURIComponent($.url().param("return") || "");
 		var returnUriEnc = encodeURIComponent(returnUri);
@@ -140,6 +155,94 @@
 			}
 			document.title = $("h1").text();
 		}, {});
+			
+	</script>
+	<script>	
+		function getProviders(){
+			$.ajax({
+				method:"GET",
+				url:"/o/oauth2/provider/",
+				statusCode: {
+					404: function(){
+							$("#oidcselect").html("<option> Failed to load Provider data </option>");
+						},
+					200: function(data){
+							var string="";
+							$.each(data,function(i){
+								string += '<option value="'+data[i].config+'">'+data[i].title+'</option>'
+							});
+							$("#oidcselect").html(string);
+						}
+					}
+				});
+			}
+		(function($){
+			$.fn.serializeObject = function()
+			{
+			    var o = {};
+			    var a = this.serializeArray();
+			    $.each(a, function() {
+			        if (o[this.name] !== undefined) {
+			            if (!o[this.name].push) {
+			                o[this.name] = [o[this.name]];
+			            }
+			            o[this.name].push(this.value || '');
+			        } else {
+			            o[this.name] = this.value || '';
+			        }
+			    });
+			    return o;
+			};
+		})(jQuery);
+		
+		function postProvider(){
+			var postData = $("#oidcForm").serializeObject();
+			$.ajax({
+				type:"POST",
+				url:"/o/oauth2/provider/",
+				statusCode: {
+					409: function(data){
+							$("#oidcinfo").html("The provider already exists as "+data.name+".");
+						},
+					200: function(data){
+							$("#oidcinfo").html("Provider added successfully");
+							getProviders();
+						}
+				},
+				dataType:"json",
+				data: JSON.stringify(postData)
+			});
+		}
+		$(document).ready(function(){
+				$("body").on("click","#formToggle",function(){
+					if( $("#oidcForm").css("display") == "none"){
+						$("#addarrow").attr("src","/s/images/downarrow.svg");
+						$("#oidcForm").css("display","block");
+					}else{
+						$("#addarrow").attr("src","/s/images/rightarrow.svg");
+						$("#oidcForm").css("display","none");
+					}
+				});
+				$("body").on("click","#oidcSubmit",function(){
+					postProvider();
+				});
+				
+				$("body").on("click","#oidcDynamic",function(){
+					var cb = $("#oidcDynamic").is(":checked");
+					$("#clientId,#clientSecret").prop("disabled", cb);
+				});
+				
+				$("body").on("click","#gobutton",function(){
+					window.location.assign("/o/oauth2/request?discovery="+document.getElementById("oidcselect").value);	
+				});
+				
+			});
+		$(window).load(function(){
+					var myvar;
+					
+					myvar = setTimeout(getProviders(), 3000);
+				});
+		
 	</script>
 </body>
 </html>

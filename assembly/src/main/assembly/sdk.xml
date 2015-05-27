@@ -14,7 +14,7 @@
 				</outputFileNameMapping> -->
 			<useTransitiveDependencies>false</useTransitiveDependencies>
 			<includes>
-				<include>org.mortbay.jetty:jetty-runner</include>
+				<include>org.eclipse.jetty:jetty-runner</include>
 			</includes>
 		</dependencySet>
 		<dependencySet>
