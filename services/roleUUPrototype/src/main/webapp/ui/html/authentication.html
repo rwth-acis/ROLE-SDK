@@ -81,13 +81,14 @@ if(location.search.indexOf('access_token=')>=0){
     			<br>
     			<br>
     			<div>
-	    			<input type="text" id="clientId" name="clientid" placeholder="Client ID" />
-	    			<input type="text" id="clientSecret" name="clientsecret" placeholder="Client Secret" />
+	    			<input type="text" id="clientId" name="client_id" placeholder="Client ID" />
+	    			<input type="text" id="clientSecret" name="client_secret" placeholder="Client Secret" />
     			</div>
     			<br>
     			<input type="button" id="oidcSubmit" value="Submit" />
     		</form>
     	</div>
+		
     </script>
 
 	<div id="pageContent">
@@ -169,11 +170,9 @@ if(location.search.indexOf('access_token=')>=0){
 			}
 			document.title = $("h1").text();
 		}, {});
-			
-	</script>
-	<script>	
-		function getProviders(){
-			$.ajax({
+	function getProviders(){
+				$("#oidcselect").addClass("test");
+				$.ajax({
 				method:"GET",
 				url:"/o/oauth2/provider/",
 				statusCode: {
@@ -186,52 +185,56 @@ if(location.search.indexOf('access_token=')>=0){
 								string += '<option value="'+data[i].config+'">'+data[i].title+'</option>'
 							});
 							if(data.length === 0){
-								string = "<option> No provider found </option>";
+								string="<option>No provider found</option>";
+								$("#gobutton").prop("disabled",true);
 							}
 							$("#oidcselect").html(string);
+							}
 						}
-					}
-				});
-			}
-		(function($){
-			$.fn.serializeObject = function()
-			{
-			    var o = {};
-			    var a = this.serializeArray();
-			    $.each(a, function() {
-			        if (o[this.name] !== undefined) {
-			            if (!o[this.name].push) {
-			                o[this.name] = [o[this.name]];
-			            }
-			            o[this.name].push(this.value || '');
-			        } else {
-			            o[this.name] = this.value || '';
-			        }
-			    });
-			    return o;
-			};
-		})(jQuery);
+					});
+				}
+				(function($){
+					$.fn.serializeObject = function()
+					{
+						var o = {};
+						var a = this.serializeArray();
+						$.each(a, function() {
+							if (o[this.name] !== undefined) {
+								if (!o[this.name].push) {
+									o[this.name] = [o[this.name]];
+								}
+								o[this.name].push(this.value || '');
+							} else {
+								o[this.name] = this.value || '';
+							}
+						});
+						return o;
+						};
+					})(jQuery);
 		
-		function postProvider(){
-			var postData = $("#oidcForm").serializeObject();
-			$.ajax({
-				type:"POST",
-				url:"/o/oauth2/provider/",
-				statusCode: {
-					409: function(data){
-							$("#oidcinfo").html("The provider already exists as "+data.name+".");
+				function postProvider(){
+					var postData = $("#oidcForm").serializeObject();
+					$.ajax({
+						type:"POST",
+						url:"/o/oauth2/provider/",
+						statusCode: {
+							409: function(data){
+									$("#oidcinfo").html("The provider already exists as "+data.name+".");
+								},
+							200: function(data){
+									$("#oidcinfo").html("Provider added successfully");
+									getProviders();
+								}
 						},
-					200: function(data){
-							$("#oidcinfo").html("Provider added successfully");
-							getProviders();
-						}
-					
-				},
-				dataType:"json",
-				data: JSON.stringify(postData)
-			});
-		}
+						dataType:"json",
+						data: JSON.stringify(postData)
+						});
+					}		
+	</script>
+	<script>	
+		
 		$(document).ready(function(){
+				
 				$("body").on("click","#formToggle",function(){
 					if( $("#oidcForm").css("display") == "none"){
 						$("#addarrow").attr("src","/s/images/downarrow.svg");
@@ -253,13 +256,14 @@ if(location.search.indexOf('access_token=')>=0){
 				$("body").on("click","#gobutton",function(){
 					window.location.assign("/o/oauth2/request?discovery="+document.getElementById("oidcselect").value);	
 				});
+			
+				var myvar;
+				myvar = setTimeout(function(){getProviders()},3000);
 				
 			});
-		$(window).load(function(){
-					var myvar;
-					
-					myvar = setTimeout(getProviders(), 3000);
-				});
+
+
+
 		
 	</script>
 </body>
