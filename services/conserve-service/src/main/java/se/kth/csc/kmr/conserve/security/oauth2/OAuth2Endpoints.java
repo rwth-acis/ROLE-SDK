@@ -18,7 +18,6 @@
  * #L%
  */
 package se.kth.csc.kmr.conserve.security.oauth2;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -224,6 +223,7 @@ public class OAuth2Endpoints {
 			Object obj = JSONValue.parse(EntityUtils.toString(response.getEntity()));
 			JSONObject tokenResult = (JSONObject) obj;
 			String accessToken = (String) tokenResult.get("access_token");
+			long expiresIn = Long.parseLong(tokenResult.get("expires_in").toString());
 			HttpGet userinfoRequest = new HttpGet(userEP);
 			userinfoRequest.setHeader("Authorization", "Bearer " + accessToken);
 			HttpResponse userinfoResponse;
@@ -278,10 +278,13 @@ public class OAuth2Endpoints {
 					.put(ConserveTerms.reference, user.getUuid());
 			NewCookie cookie = new NewCookie("conserve_session",
 					session.getId(), "/", uriInfo.getBaseUri().getHost(),
-					"conserve session id", 1200000, false);
+					"conserve session id", (int) expiresIn, false);
 			UriBuilder spacereturn = UriBuilder.fromUri(uriInfo.getBaseUri().toString());
+			spacereturn.path(":authentication");
+			spacereturn.queryParam("access_token", accessToken);
+			spacereturn.queryParam("userinfo_endpoint", userEP);
 			if(stateObj.get("return_url") != null){
-				spacereturn.path((String) stateObj.get("return_url"));
+				spacereturn.queryParam("return",(String) stateObj.get("return_url"));
 			}
 			return Response.seeOther(spacereturn.build()).cookie(cookie)
 					.header("Cache-Control", "no-store").build();

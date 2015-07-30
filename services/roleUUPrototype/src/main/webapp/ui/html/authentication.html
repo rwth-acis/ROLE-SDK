@@ -3,6 +3,20 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="stylesheet/less" type="text/css" href="/s/css/role.less">
+<script>
+if(location.search.indexOf('access_token=')>=0){
+    var at_regex = new RegExp("[\\?&]access_token=([^&#]*)"),
+    results = at_regex.exec(location.search);
+    localStorage.setItem("access_token",decodeURIComponent(results[1].replace(/\+/g, " ")));
+    var uep_regex = new RegExp("[\\?&]userinfo_endpoint=([^&#]*)"),
+    results = uep_regex.exec(location.search);
+    localStorage.setItem("userinfo_endpoint",decodeURIComponent(results[1].replace(/\+/g, " ")));
+    var return_regex = new RegExp("[\\?&]return=([^&#]*)"),
+    results = return_regex.exec(location.search);
+    results = decodeURIComponent(results[1].replace(/\+/g, " "));
+    window.location = results;
+}
+</script>
 <script src="/s/script/vendor/less.js" type="text/javascript"></script>
 <script src="/d/openapp"></script>
 <script src="/s/script/vendor/jquery.js"></script>
@@ -171,6 +185,9 @@
 							$.each(data,function(i){
 								string += '<option value="'+data[i].config+'">'+data[i].title+'</option>'
 							});
+							if(data.length === 0){
+								string = "<option> No provider found </option>";
+							}
 							$("#oidcselect").html(string);
 						}
 					}
@@ -208,6 +225,7 @@
 							$("#oidcinfo").html("Provider added successfully");
 							getProviders();
 						}
+					
 				},
 				dataType:"json",
 				data: JSON.stringify(postData)
