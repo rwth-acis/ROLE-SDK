@@ -120,9 +120,7 @@ public class OAuth2Endpoints {
 
 	private static final SecureRandom RAND = new SecureRandom();
 	
-	private static final String REGDATA = "{'redirect_uris':['http://role-sandbox.eu/o/oauth2/authorize'],'client_name':'ROLE-SDK',"
-											+"'response_types':['code'],'grant_types':['authorization_code']}";
-
+	
 	private ContempDSL store() {
 		return (ContempDSL) store;
 	}
@@ -184,7 +182,7 @@ public class OAuth2Endpoints {
 					if(return_url!=null){
 						state.put("return_url",return_url);
 					}
-					authorizeUriBuilder.queryParam("state",Base64.encodeBase64String(state.toString().getBytes()));
+					authorizeUriBuilder.queryParam("state",Base64.encodeBase64URLSafeString(state.toString().getBytes()));
 					return Response.seeOther(authorizeUriBuilder.build()).build();
 	
 				}
@@ -233,7 +231,14 @@ public class OAuth2Endpoints {
 			String firstName = (String) finalResult.get("given_name");
 			String lastName = (String) finalResult.get("family_name");
 			String email = (String) finalResult.get("email");
-			String userName = "mailto:" + email;
+			String userName;
+			
+			if(userEP.indexOf("google")>=0) userName = "mailto:" + email;
+			else{
+				String sub = (String) finalResult.get("sub");
+				userName = userEP+":"+sub;
+				userName = Base64.encodeBase64URLSafeString(userName.getBytes());
+			}
 
 			Concept user = store().in(userContext).sub().get(userName);
 			if (user == null) {
@@ -460,11 +465,14 @@ public class OAuth2Endpoints {
 
 	public JSONObject attemptDynRegistration(String uri){
 		try{
+			String regData = "{'redirect_uris':['"+uriInfo.getBaseUriBuilder().path("o/oauth2/authorize").build().toString()+"'],'client_name':'ROLE-SDK',"
+					+"'response_types':['code'],'grant_types':['authorization_code']}";
+
 			HttpClient client = new DefaultHttpClient();
 			HttpPost post = new HttpPost(uri);
 			post.setHeader("Content-Type","application/json");
 			post.setHeader("Accept","application/json");
-			StringEntity data = new StringEntity(REGDATA);
+			StringEntity data = new StringEntity(regData);
 			post.setEntity(data);
 			HttpResponse response = client.execute(post);
 			Object obj = JSONValue.parse(EntityUtils.toString(response.getEntity()));

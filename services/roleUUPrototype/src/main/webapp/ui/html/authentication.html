@@ -13,7 +13,11 @@ if(location.search.indexOf('access_token=')>=0){
     localStorage.setItem("userinfo_endpoint",decodeURIComponent(results[1].replace(/\+/g, " ")));
     var return_regex = new RegExp("[\\?&]return=([^&#]*)"),
     results = return_regex.exec(location.search);
-    results = decodeURIComponent(results[1].replace(/\+/g, " "));
+    if(results != null){
+    	results = decodeURIComponent(results[1].replace(/\+/g, " "));
+    }else{
+    	results = "/";
+    }
     window.location = results;
 }
 </script>
@@ -61,7 +65,7 @@ if(location.search.indexOf('access_token=')>=0){
     	<a href="/o/oauth2/request?discovery=https://accounts.google.com/.well-known/openid-configuration&client_id=263505441471-qh264egece36h6aclabdf27cic8cl505.apps.googleusercontent.com&client_secret=wZfRO-eURr_hmeKL1F1nZFm1&return=${returnUriEnc}"><h3>
 		<img src="/s/images/googleicon.png" width="15px" height="15px">Google</h3></a> 
 		
-		<div id="selectdiv">
+		<div id="selectdiv" style="width:100%">
 		<select id="oidcselect">
 			<option> Loading provider ... </option>
 		</select>
@@ -187,6 +191,9 @@ if(location.search.indexOf('access_token=')>=0){
 							if(data.length === 0){
 								string="<option>No provider found</option>";
 								$("#gobutton").prop("disabled",true);
+							}
+							else{
+								$("#gobutton").prop("disabled",false);
 							}
 							$("#oidcselect").html(string);
 							}
