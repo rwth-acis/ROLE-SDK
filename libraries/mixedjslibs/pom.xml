@@ -1,61 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-                <groupId>eu.role-project</groupId>
-                <artifactId>role-libraries</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
-                <relativePath>../pom.xml</relativePath>
-        </parent>
-	<version>0.0.1-SNAPSHOT</version>
-	<artifactId>mixedjslibs-library</artifactId>
-	<packaging>war</packaging>
-	<name>mixedjslibs</name>
-	<description>
-		Various JavaScript libraries.
-	</description>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.1.1</version>
-				<configuration>
-					<failOnMissingWebXml>false</failOnMissingWebXml>
-					<webResources>
-			            <resource>
-        			      <!-- this is relative to the pom.xml directory -->
-        			      <directory>${project.build.directory}/libs</directory>
-						  <targetPath>libs</targetPath>
-           				</resource>
-          			</webResources>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>run-compressor</id>
-						<phase>compile</phase>
-						<configuration>
-							<tasks>
-								<mkdir dir="${project.build.directory}/libs"/>
-								<property name="project.build.directory"
-									value="${project.build.directory}"/>
-								<ant antfile="${basedir}/build.xml"
-									target="mixedjslibs" inheritAll="true"
-									inheritRefs="true" />
-							</tasks>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>eu.role-project</groupId>
+        <artifactId>role-libraries</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>mixedjslibs-library</artifactId>
+    <packaging>war</packaging>
+    <name>mixedjslibs</name>
+    <description>
+        Various JavaScript libraries.
+    </description>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.1.1</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <webResources>
+                        <resource>
+                            <!-- this is relative to the pom.xml directory -->
+                            <directory>${project.build.directory}/libs</directory>
+                            <targetPath>libs</targetPath>
+                        </resource>
+                    </webResources>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>run-compressor</id>
+                        <phase>compile</phase>
+                        <configuration>
+                            <tasks>
+                                <mkdir dir="${project.build.directory}/libs"/>
+                                <property name="project.build.directory"
+                                          value="${project.build.directory}"/>
+                                <ant antfile="${basedir}/build.xml"
+                                     target="mixedjslibs" inheritAll="true"
+                                     inheritRefs="true"/>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
