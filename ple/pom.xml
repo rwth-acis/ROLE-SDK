@@ -145,5 +145,17 @@
 			</snapshots>
 			<layout>default</layout>
 		</repository>
+		<repository>
+			<id>rwth-acis</id>
+			<name>RWTH ACIS Maven Repository</name>
+			<url>http://role.dbis.rwth-aachen.de:9911/archiva/repository/internal/</url>
+			<layout>default</layout>
+			<snapshots>
+			    <enabled>true</enabled>
+			</snapshots>
+			<releases>
+			    <enabled>true</enabled>
+			</releases>
+		</repository>
 	</repositories>
 </project>
