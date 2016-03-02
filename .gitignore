@@ -1,1 +1,12 @@
-target/
+**/target/
+
+# Eclipse:
+.project
+
+# IntelliJ IDEA
+.idea/
+.settings/
+*.iml
+
+# Backups
+*~
