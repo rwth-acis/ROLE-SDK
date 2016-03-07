@@ -221,6 +221,24 @@ define([ "com", "jquery" ], function(com, $) {
 			return ca || aa || ww;
 		}
 	},
+	
+	getWidgetHeight: function(widget, ignoreCacheUpdate) {
+		ignoreCacheUpdate !== true && this._updateLayoutCache();
+		var wid = widget.getRegionWidgetId();
+		
+		var aa = (this._alayout[wid] || {}).h;
+		var ca = (this._clayout[wid] || {}).h;
+		var ww;
+		if (widget._widget.metadata.modulePrefs) {
+			ww = widget._widget.metadata.modulePrefs.height;
+		};
+		ww = ww != null && ww > 0 ? ww : null;
+		if (this._space.isOwner()) {
+			return aa || ca || ww;
+		} else {
+			return ca || aa || ww;
+		}
+	},
 
 	getWidgetOrder: function(widget, ignoreCacheUpdate) {
 		ignoreCacheUpdate !== true && this._updateLayoutCache();
@@ -246,6 +264,11 @@ define([ "com", "jquery" ], function(com, $) {
 		this._saveActivityLayout();
 	},
 		
+	setWidgetHeight: function(widget, height) {
+		widget.__height = height;
+		this._saveActivityLayout();
+	},
+	
 	_updateLayoutCache: function() {
 		//From activity resource
 		var properties = openapp.resource.context(this._context).properties();
