@@ -164,9 +164,7 @@ define([ "com", "jquery", "handlebars!./ui", "handlebars!./panel", "handlebars!.
 					if (typeof widget !== "undefined") {
 						widget.minimize();
 						$(".widget-wrapper").find("iframe").attr("width", "100%");
-						$(".widget-wrapper-canvas").find("iframe").attr("width", "100%");	
-						$(".widget-wrapper").find("iframe").attr("height", "100%");
-						$(".widget-wrapper-canvas").find("iframe").attr("height", "100%");
+						$(".widget-wrapper-canvas").find("iframe").attr("width", "100%");						
 					}
 					$('#widget-' + currentCanvas + '-wrapper').removeClass("widget-wrapper-canvas");
 					$("#sideEntry-" + currentCanvas).removeClass("sideEntrySel");

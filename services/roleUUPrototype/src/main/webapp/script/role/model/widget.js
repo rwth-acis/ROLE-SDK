@@ -64,13 +64,6 @@ define([ "com", "jquery" ], function(com, $) {
 	setWidth: function(w) {
 		this._activity.setWidgetWidth(this, w);
 	},
-	getHeight: function() {
-		return this._activity.getWidgetHeight(this);
-	},
-	
-	setHeight: function(w) {
-		this._activity.setWidgetHeight(this, w);
-	},
 /*	getWidth: function() {
 		//Fetch from tool resource.
 		var properties = openapp.resource.context(this._context).properties();

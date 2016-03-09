@@ -170,8 +170,6 @@ define([ "com", "jquery", "../model/space", "../model/widget", "./activity", "ra
 	_fixIframes : function() {
 		$(".widget-wrapper").find("iframe").attr("width", "100%");
 		$(".widget-wrapper-canvas").find("iframe").attr("width", "100%");
-		$(".widget-wrapper").find("iframe").attr("height", "100%");
-		$(".widget-wrapper-canvas").find("iframe").attr("height", "100%");
 		//$("html").css("overflow", "auto");
 	},
 	
