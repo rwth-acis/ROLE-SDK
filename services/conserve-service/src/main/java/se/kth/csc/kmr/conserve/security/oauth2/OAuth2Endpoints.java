@@ -142,7 +142,7 @@ public class OAuth2Endpoints {
 				if(provider != null && client_secret == null && client_id == null){
 					List<Content> contents = store.getContents(provider.getUuid());
 					for(Content x : contents){
-						if(x.getType()=="application/json"){
+						if(x.getType().equals("application/json")){
 							Blob asdf = x.getData();
 							byte[] bdata = asdf.getBytes(1, (int) asdf.length());
 							String z = new String(bdata);
@@ -318,7 +318,7 @@ public class OAuth2Endpoints {
 				JSONObject obj = new JSONObject();
 				List<Content> contents = store.getContents(s.getUuid());
 				for(Content x : contents){
-					if(x.getType()=="application/json"){
+					if(x.getType().equals("application/json")){
 						Blob asdf = x.getData();
 						byte[] bdata = asdf.getBytes(1, (int) asdf.length());
 						String z = new String(bdata);
