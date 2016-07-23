@@ -19,6 +19,10 @@
 				<include name="*.jar" />
 			</patternset>
 		</unzip>
+		<move todir="${project.build.directory}">
+			<fileset dir="${project.build.directory}" includes="closure-compiler*.jar" />
+			<mapper type="merge" to="compiler.jar"/>
+		</move>
 	</target>
 
 	<property name="jsdoctoolkit.version" value="2.4.0"/>
