@@ -244,31 +244,6 @@ public class OAuth2Endpoints {
 			if (user == null) {
 				user = store().in(userContext).sub(userPredicate)
 						.create(userName);
-
-				Graph graph = new GraphImpl();
-				ValueFactory valueFactory = graph.getValueFactory();
-				org.openrdf.model.URI userUri = valueFactory
-						.createURI(store().in(user).uri().toString());
-				graph.add(valueFactory.createStatement(
-						userUri,
-						valueFactory
-								.createURI("http://purl.org/dc/terms/title"),
-						valueFactory.createLiteral(firstName + " "
-								+ lastName)));
-				// email
-				graph.add(valueFactory.createStatement(
-						userUri,
-						valueFactory
-								.createURI("http://xmlns.com/foaf/0.1/mbox"),
-						valueFactory.createURI("mailto:" + email)));
-				// access_token
-				graph.add(valueFactory.createStatement(
-						userUri,
-						valueFactory
-								.createURI("http://xmlns.com/foaf/0.1/openid"),
-						valueFactory.createLiteral(accessToken)));
-				store().in(user).as(ConserveTerms.metadata)
-						.type("application/json").graph(graph);
 				requestNotifier.setResolution(
 						Resolution.StandardType.CONTEXT,
 						store.getConcept(userContext));
@@ -277,6 +252,33 @@ public class OAuth2Endpoints {
 				requestNotifier.doPost();
 
 			}
+
+			// update user claims (name, email, access_token)
+			Graph graph = new GraphImpl();
+			ValueFactory valueFactory = graph.getValueFactory();
+			org.openrdf.model.URI userUri = valueFactory
+					.createURI(store().in(user).uri().toString());
+			graph.add(valueFactory.createStatement(
+					userUri,
+					valueFactory
+							.createURI("http://purl.org/dc/terms/title"),
+					valueFactory.createLiteral(firstName + " "
+							+ lastName)));
+			// email
+			graph.add(valueFactory.createStatement(
+					userUri,
+					valueFactory
+							.createURI("http://xmlns.com/foaf/0.1/mbox"),
+					valueFactory.createURI("mailto:" + email)));
+			// access_token
+			graph.add(valueFactory.createStatement(
+					userUri,
+					valueFactory
+							.createURI("http://xmlns.com/foaf/0.1/openid"),
+					valueFactory.createLiteral(accessToken)));
+			store().in(user).as(ConserveTerms.metadata)
+					.type("application/json").graph(graph);
+
 			Concept session = store().in(sessionContext).sub()
 					.create(randomString());
 			store().in(session)
