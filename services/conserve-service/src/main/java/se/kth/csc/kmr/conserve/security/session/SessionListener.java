@@ -19,12 +19,14 @@
  */
 package se.kth.csc.kmr.conserve.security.session;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +39,7 @@ import se.kth.csc.kmr.conserve.Control;
 import se.kth.csc.kmr.conserve.Request;
 import se.kth.csc.kmr.conserve.core.AbstractListener;
 import se.kth.csc.kmr.conserve.core.ConserveTerms;
+import se.kth.csc.kmr.conserve.dsl.ContentDSL;
 import se.kth.csc.kmr.conserve.iface.jaxrs.RequestImpl;
 import se.kth.csc.kmr.conserve.security.SecurityInfo;
 import se.kth.csc.kmr.conserve.util.Base64UUID;
@@ -72,11 +75,15 @@ public class SessionListener extends AbstractListener {
 				Concept session = store.getConcept(sessionContext,
 						sessionCookieValue);
 				if (session != null) {
-					List<Control> sessionReferences = store.getControls(
-							session.getUuid(), ConserveTerms.reference);
-					if (sessionReferences != null && sessionReferences.size() != 0) {
-						agent = sessionReferences.get(0).getObject();
-						log.info("Agent found: " + agent.toString());
+					ContentDSL expiresOn = (ContentDSL) store().in(session).as(ConserveTerms.expiresOn).get();
+					if (new Date().getTime() <= Long.parseLong(expiresOn.string())) {
+						// prolong session
+						expiresOn.string(Long.toString(new Date().getTime() + 24*60*60*1000));
+						List<Control> sessionReferences = store().in(session).get(ConserveTerms.reference);
+						if (sessionReferences != null && sessionReferences.size() != 0) {
+							agent = sessionReferences.get(0).getObject();
+							log.info("Agent found: " + agent.toString());
+						}
 					}
 				}
 			}

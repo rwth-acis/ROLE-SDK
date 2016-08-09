@@ -211,6 +211,7 @@ public class SessionLogin {
 		Concept session = store().in(sessionContext).sub()
 				.create(randomString());
 		store().in(session).put(ConserveTerms.reference, user.getUuid());
+		//TODO set session expiresOn in store
 
 		NewCookie cookie = new NewCookie("conserve_session", session.getId(),
 				"/", uriInfo.getBaseUri().getHost(), "contemp session id",
