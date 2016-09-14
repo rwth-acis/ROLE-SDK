@@ -379,5 +379,9 @@
 				<updatePolicy>interval:1</updatePolicy>
 			</releases>
 		</repository>
+		<repository>
+			<id>repository.jboss.org</id>
+			<url>https://repository.jboss.org/nexus/content/groups/public/</url>
+		</repository>
 	</repositories>
 </project>
