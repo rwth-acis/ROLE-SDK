@@ -18,4 +18,13 @@
 		<module>ple</module>
 		<module>assembly</module>
 	</modules>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>caja</groupId>
+				<artifactId>caja</artifactId>
+				<version>r4884</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>
