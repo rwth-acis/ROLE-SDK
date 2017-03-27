@@ -18,62 +18,45 @@
  * #L%
  */
 package se.kth.csc.kmr.conserve.security.oauth2;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.security.SecureRandom;
-import java.util.UUID;
-import java.util.List;
-import java.sql.Blob;
 
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.CookieParam;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.NewCookie;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.core.Response.Status;
-import  javax.ws.rs.core.Context;
-import org.apache.commons.lang.StringEscapeUtils;
+import com.google.common.io.CharStreams;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
-import javax.ws.rs.core.UriBuilder;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONTokener;
+import org.json.JSONException;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
-import org.json.simple.JSONArray;
 import org.openrdf.model.Graph;
 import org.openrdf.model.ValueFactory;
 import org.openrdf.model.impl.GraphImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import se.kth.csc.kmr.conserve.Concept;
-import se.kth.csc.kmr.conserve.Content;
 import se.kth.csc.kmr.conserve.Contemp;
+import se.kth.csc.kmr.conserve.Content;
 import se.kth.csc.kmr.conserve.Resolution;
 import se.kth.csc.kmr.conserve.core.ConserveTerms;
 import se.kth.csc.kmr.conserve.dsl.ContempDSL;
 import se.kth.csc.kmr.conserve.iface.internal.RequestNotifier;
 import se.kth.csc.kmr.conserve.util.TemplateManager;
 
-import com.google.common.io.CharStreams;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
+import javax.ws.rs.core.Response.Status;
+import java.io.IOException;
+import java.security.SecureRandom;
+import java.sql.Blob;
+import java.util.List;
+import java.util.UUID;
 
 
 @Path("/o/oauth2")
@@ -307,6 +290,81 @@ public class OAuth2Endpoints {
 	}
 	
 	@GET
+	@POST
+	@Path("authorizeImplicit")
+	public Response credulousAuthorize(@HeaderParam("access_token") String accessToken,
+								   @QueryParam("userinfo_endpoint") String userEP) {
+		try {
+			// get userinfo from endpoint
+			HttpClient client = new DefaultHttpClient();
+			HttpGet userinfoRequest = new HttpGet(userEP);
+			userinfoRequest.setHeader("Authorization", "Bearer " + accessToken);
+			HttpResponse userinfoResponse;
+			userinfoResponse = client.execute(userinfoRequest);
+			if(userinfoResponse.getStatusLine().getStatusCode() == 401)
+				return Response.status(401).entity("Could not retrieve userinfo").build();
+			Object userinfoObj = JSONValue.parse(EntityUtils.toString(userinfoResponse.getEntity()));
+			JSONObject finalResult = (JSONObject) userinfoObj;
+			String firstName = (String) finalResult.get("given_name");
+			String lastName = (String) finalResult.get("family_name");
+			String email = (String) finalResult.get("email");
+			String sub = (String) finalResult.get("sub");
+			String userName = userEP + ":" + sub;
+			userName = Base64.encodeBase64URLSafeString(userName.getBytes());
+
+			// create user if necessary
+			Concept user = store().in(userContext).sub().get(userName);
+			Content userContent;
+			org.json.JSONObject userMetadata;
+			if (user == null) {
+				user = store().in(userContext).sub(userPredicate)
+						.create(userName);
+				userContent = (Content) store().in(user).as(ConserveTerms.metadata).type("application/json");
+				userMetadata = new org.json.JSONObject();
+				requestNotifier.setResolution(
+						Resolution.StandardType.CONTEXT,
+						store.getConcept(userContext));
+				requestNotifier.setResolution(
+						Resolution.StandardType.CREATED, user);
+				requestNotifier.doPost();
+			} else {
+				userContent = store().in(user).as(ConserveTerms.metadata).get();
+				userMetadata = new org.json.JSONObject(store().as(userContent).string());
+			}
+
+			// update user claims (name, email, access_token)
+			Graph g = new GraphImpl();
+			ValueFactory vf = g.getValueFactory();
+			org.openrdf.model.URI userUri = vf.createURI(store().in(user).uri().toString());
+			g.add(vf.createStatement(userUri,
+				vf.createURI("http://purl.org/dc/terms/title"), vf.createLiteral(firstName + " " + lastName)));
+			// email
+			g.add(vf.createStatement(userUri,
+				vf.createURI("http://xmlns.com/foaf/0.1/mbox"), vf.createURI("mailto:" + email)));
+			// access_token
+			g.add(vf.createStatement(userUri,
+					vf.createURI("http://xmlns.com/foaf/0.1/openid"), vf.createLiteral(accessToken)));
+			store().in(user).as(ConserveTerms.metadata)
+					.type("application/json").graph(g);
+
+			// Create new session in store
+			Concept session = store().in(sessionContext).sub().create(randomString());
+			store().in(session).put(ConserveTerms.reference, user.getUuid());
+
+			// return cookie
+			NewCookie cookie = new NewCookie("conserve_session",
+					session.getId(), "/", uriInfo.getBaseUri().getHost(),
+					"conserve session id", 1000 * 60 * 60 * 24 * 7, false);
+			return Response.ok().cookie(cookie).build();
+		} catch(JSONException ex) {
+			ex.printStackTrace();
+		} catch(IOException ex) {
+			ex.printStackTrace();
+		}
+		return Response.serverError().build();
+	}
+
+		@GET
 	@Path("provider")
 	public Response getProvider(){
 		try{
