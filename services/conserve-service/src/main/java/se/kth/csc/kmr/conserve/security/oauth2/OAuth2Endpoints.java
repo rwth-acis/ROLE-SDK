@@ -53,6 +53,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.Status;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.SecureRandom;
 import java.sql.Blob;
 import java.util.List;
@@ -295,6 +297,10 @@ public class OAuth2Endpoints {
 	public Response credulousAuthorize(@HeaderParam("access_token") String accessToken,
 								   @QueryParam("userinfo_endpoint") String userEP) {
 		try {
+			// whitelist oidc provider
+			String oidchost = new URI(userEP).getHost();
+			if(!oidchost.endsWith("learning-layers.eu") && !oidchost.endsWith("googleapis.com"))
+				return Response.status(400).entity("Oidc provider "+oidchost+" not supported").build();
 			// get userinfo from endpoint
 			HttpClient client = new DefaultHttpClient();
 			HttpGet userinfoRequest = new HttpGet(userEP);
@@ -360,6 +366,8 @@ public class OAuth2Endpoints {
 			ex.printStackTrace();
 		} catch(IOException ex) {
 			ex.printStackTrace();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
 		}
 		return Response.serverError().build();
 	}
