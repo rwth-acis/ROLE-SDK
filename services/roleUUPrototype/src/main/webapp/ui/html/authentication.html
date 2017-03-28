@@ -81,7 +81,7 @@ if(location.search.indexOf('access_token=')>=0){
 	    			<input type="text" id="oidcName" name="name" placeholder="Name" />
 	    		</div>
 	    		<br>
-    			<input type="checkbox" id="oidcDynamic" name="dynreg"> Try to dynamically register client (only check if you're sure there is no ROLE-SDK client registered on your provider yet)
+    			<input type="checkbox" id="oidcDynamic" name="dynreg"> Try to dynamically register client (only check if you are sure there is no ROLE-SDK client registered on your provider yet)
     			<br>
     			<br>
     			<div>
@@ -261,7 +261,7 @@ if(location.search.indexOf('access_token=')>=0){
 				});
 				
 				$("body").on("click","#gobutton",function(){
-					window.location.assign("/o/oauth2/request?discovery="+document.getElementById("oidcselect").value);	
+					window.location.assign("/o/oauth2/request?discovery="+document.getElementById("oidcselect").value+"&return="+returnUri);
 				});
 			
 				var myvar;

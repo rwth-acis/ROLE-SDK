@@ -27,6 +27,7 @@ import se.kth.csc.kmr.conserve.Responder;
 import se.kth.csc.kmr.conserve.core.ConserveTerms;
 import se.kth.csc.kmr.conserve.core.Contapp;
 import se.kth.csc.kmr.conserve.core.ContempModule;
+import se.kth.csc.kmr.conserve.iface.jaxrs.AllowCorsFilter;
 import se.kth.csc.kmr.conserve.iface.jaxrs.PostRequestFilter;
 import se.kth.csc.kmr.conserve.iface.jaxrs.RequestImpl;
 import se.kth.csc.kmr.conserve.logic.AuthenticationResponder;
@@ -322,6 +323,7 @@ public class ResourceModule extends ServletModule {
 				}).in(Scopes.SINGLETON);
 
 		filter("/*").through(PostRequestFilter.class);
+		filter("/*").through(AllowCorsFilter.class);
 		Map<String, String> h2Params = new HashMap<String, String>();
 		h2Params.put("webAllowOthers", "true");
 		serve("/a/h2*").with(new org.h2.server.web.WebServlet(), h2Params);
