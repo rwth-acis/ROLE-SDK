@@ -19,6 +19,10 @@
 				<include name="*.jar" />
 			</patternset>
 		</unzip>
+		<move todir="${project.build.directory}">
+			<fileset dir="${project.build.directory}" includes="closure-compiler*.jar" />
+			<mapper type="merge" to="compiler.jar"/>
+		</move>
 	</target>
 
 	<property name="jsdoctoolkit.version" value="2.4.0"/>
@@ -31,7 +35,7 @@
 	</target>
 	<target name="jsdoctoolkit.prepare" depends="jsdoctoolkit.check" unless="jsdoctoolkit.present">
 		<get
-			src="http://jsdoc-toolkit.googlecode.com/files/jsdoc_toolkit-${jsdoctoolkit.version}.zip"
+			src="https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/jsdoc-toolkit/jsdoc_toolkit-${jsdoctoolkit.version}.zip"
 			dest="${project.build.directory}/jsdoc_toolkit-${jsdoctoolkit.version}.zip" />
 		<unzip
 			src="${project.build.directory}/jsdoc_toolkit-${jsdoctoolkit.version}.zip"

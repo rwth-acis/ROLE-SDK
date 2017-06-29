@@ -16,7 +16,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>2.1-beta-1</version>
+				<version>2.6</version>
 				<configuration>
 					<webResources>
 						<resource>
@@ -144,6 +144,22 @@
 				<checksumPolicy>warn</checksumPolicy>
 			</snapshots>
 			<layout>default</layout>
+		</repository>
+		<repository>
+			<id>rwth-acis</id>
+			<name>RWTH ACIS Maven Repository</name>
+			<url>http://role.dbis.rwth-aachen.de:9911/archiva/repository/internal/</url>
+			<layout>default</layout>
+			<snapshots>
+			    <enabled>true</enabled>
+			</snapshots>
+			<releases>
+			    <enabled>true</enabled>
+			</releases>
+		</repository>
+		<repository>
+			<id>repository.jboss.org</id>
+			<url>https://repository.jboss.org/nexus/content/groups/public/</url>
 		</repository>
 	</repositories>
 </project>

@@ -8,9 +8,9 @@
 	<description>The ROLE Project</description>
 	<packaging>pom</packaging>
         <scm>
-                <connection>scm:svn:https://role-project.svn.sourceforge.net/svnroot/role-project/trunk</connection>
-                <developerConnection>scm:svn:https://role-project.svn.sourceforge.net/svnroot/role-project/trunk</developerConnection>
-                <url>https://role-project.svn.sourceforge.net/svnroot/role-project/trunk</url>
+                <connection>scm:git:git://github.com/rwth-acis/ROLE-SDK.git</connection>
+                <developerConnection>scm:git:git@github.com:rwth-acis/ROLE-SDK.git</developerConnection>
+                <url>https://github.com/rwth-acis/ROLE-SDK</url>
         </scm>
 	<modules>
 		<module>libraries</module>
@@ -18,4 +18,13 @@
 		<module>ple</module>
 		<module>assembly</module>
 	</modules>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>caja</groupId>
+				<artifactId>caja</artifactId>
+				<version>r4884</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>

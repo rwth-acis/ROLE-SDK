@@ -18,14 +18,21 @@ public class UserService extends ResourceResponder {
 
 	public static final UUID ID = UUID
 			.fromString("237b34eb-b71b-4b69-a68b-c97249f759f6");
-
+	
+	public static final UUID providerId = UUID.fromString("911a07a5-f5dd-403d-9b74-0d4921c19fda");
+	
 	@Override
 	public void initialize(Request request) {
 		// Initialize the "users" context
 		log.info("Initializing /users");
+		
+		if(store()
+				.in(app.getRootUuid(request))
+				.sub(ROLETerms.userService)
+				.get("people") == null){
 		Concept users = store().in(app.getRootUuid(request))
 				.sub(ROLETerms.userService).acquire(ID, "people");
-
+		Concept provider = store().in(app.getRootUuid(request)).sub().acquire(providerId,"provider");
 		Concept secretAuth = store().in(users)
 				.sub(ConserveTerms.authentication)
 				.acquire("urn:uuid:f8ef80e1-dcd2-4e07-94d8-deda60e8366a");
@@ -39,6 +46,7 @@ public class UserService extends ResourceResponder {
 				"http://kmr.csc.kth.se/rdf/conserve/auth/OpenID");
 		store().in(googleAuth).put(ConserveTerms.reference,
 				"https://www.google.com/accounts/o8/id");
+		}
 	}
 
 }

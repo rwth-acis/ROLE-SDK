@@ -1,0 +1,13 @@
+**/target/
+
+# Eclipse:
+.project
+
+# IntelliJ IDEA
+.idea/
+.settings/
+*.iml
+
+# Backups
+*~
+.DS_Store

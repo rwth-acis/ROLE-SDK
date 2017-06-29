@@ -14,7 +14,7 @@ import javax.ws.rs.core.UriBuilder;
 
 import net.sf.ehcache.constructs.web.filter.SimpleCachingHeadersPageCachingFilter;
 
-import org.cometd.server.CometdServlet;
+import org.cometd.server.CometDServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +27,7 @@ import se.kth.csc.kmr.conserve.Responder;
 import se.kth.csc.kmr.conserve.core.ConserveTerms;
 import se.kth.csc.kmr.conserve.core.Contapp;
 import se.kth.csc.kmr.conserve.core.ContempModule;
+import se.kth.csc.kmr.conserve.iface.jaxrs.AllowCorsFilter;
 import se.kth.csc.kmr.conserve.iface.jaxrs.PostRequestFilter;
 import se.kth.csc.kmr.conserve.iface.jaxrs.RequestImpl;
 import se.kth.csc.kmr.conserve.logic.AuthenticationResponder;
@@ -51,6 +52,7 @@ import se.kth.csc.kmr.conserve.security.oauth.OAuthSessionPrincipal;
 import se.kth.csc.kmr.conserve.security.oauth.OAuthStoreImpl;
 import se.kth.csc.kmr.conserve.security.openid.OpenID;
 import se.kth.csc.kmr.conserve.security.openid.OpenIDModule;
+import se.kth.csc.kmr.conserve.security.oauth2.OAuth2Module;
 import se.kth.csc.kmr.conserve.security.session.SessionListener;
 import se.kth.csc.kmr.conserve.security.session.SessionLogin;
 import se.kth.csc.kmr.conserve.util.Base64UUID;
@@ -83,6 +85,7 @@ public class ResourceModule extends ServletModule {
 		install(new ContempModule());
 		install(new OAuth1Module());
 		install(new OpenIDModule());
+		install(new OAuth2Module());
 
 		log.info("Configuring Resource module");
 
@@ -320,10 +323,11 @@ public class ResourceModule extends ServletModule {
 				}).in(Scopes.SINGLETON);
 
 		filter("/*").through(PostRequestFilter.class);
+		filter("/*").through(AllowCorsFilter.class);
 		Map<String, String> h2Params = new HashMap<String, String>();
 		h2Params.put("webAllowOthers", "true");
 		serve("/a/h2*").with(new org.h2.server.web.WebServlet(), h2Params);
-		serve("/cometd/*").with(new CometdServlet());
+		serve("/cometd/*").with(new CometDServlet());
 		serve("/s/*").with(new WebAppServlet());
 		Map<String, String> pageCacheParams = new HashMap<String, String>();
 		pageCacheParams.put("suppressStackTrace", "false");
