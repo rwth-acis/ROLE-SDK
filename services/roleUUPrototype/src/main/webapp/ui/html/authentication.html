@@ -60,7 +60,8 @@ if(location.search.indexOf('access_token=')>=0){
     </script>
 	<script id="authenticationTemplate_OpenID" type="text/x-jquery-tmpl">
 		<h2>Sign in using&hellip;</h2>
-		
+		<!-- Authentication providers can be registered here, they are setup for a standard test deployment and refer back to localhost--> 
+		<!-- For a custom deployment register or reuse an existing client at one of the providers and enter the details here -->
 		<p class="messageOAuth2"></p>
     	<a href="/o/oauth2/request?discovery=https://accounts.google.com/.well-known/openid-configuration&client_id=263505441471-qh264egece36h6aclabdf27cic8cl505.apps.googleusercontent.com&client_secret=wZfRO-eURr_hmeKL1F1nZFm1&return=${returnUriEnc}"><h3>
 		<img src="/s/images/googleicon.png" width="15px" height="15px">Google</h3></a> 
