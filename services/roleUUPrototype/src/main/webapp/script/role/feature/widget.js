@@ -170,6 +170,12 @@ define([ "com", "jquery", "../model/space", "../model/widget", "./activity", "ra
 	_fixIframes : function() {
 		$(".widget-wrapper").find("iframe").attr("width", "100%");
 		$(".widget-wrapper-canvas").find("iframe").attr("width", "100%");
+		$(".widget-wrapper").find("iframe").parent().attr("height", "100%");
+		$(".widget-wrapper").find("iframe").parent().each(function() {
+			$(this).attr("style", "min-height:"+$(this).find("iframe").attr("height")+"px");
+		});
+		$(".widget-wrapper").find("iframe").attr("style", "height: calc(100% - 25px);display:block;position:absolute;top:0;left:0px; right:15px;bottom:10;margin-top:25px;margin-right:40px;");
+		$(".widget-wrapper-canvas").find("iframe").attr("height", "100%");
 		//$("html").css("overflow", "auto");
 	},
 	

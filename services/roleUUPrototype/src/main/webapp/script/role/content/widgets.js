@@ -95,7 +95,7 @@ define([ "com", "jquery", "handlebars!./widget", "../model/space", "rave", "./in
 						widgetdiv.css("width", ""+w+"px");
 					}
 					widgetdiv.resizable({
-						handles : "e",
+						handles : "e, s, se",
 						resize : function() {
 							//$(this).css("overflow", "hidden");
 						},
