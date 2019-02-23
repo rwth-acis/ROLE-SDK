@@ -11,14 +11,10 @@
 		</condition>
 	</target>
 	<target name="jqueryui.prepare" depends="jqueryui.check" unless="jqueryui.present">
-		<get
-			src="http://requirejs.org/jqueryui-amd/jqueryui-${jqueryui.version}.zip"
-			dest="${project.build.directory}/libs/jqueryui-${jqueryui.version}.zip" />
 		<unzip
-			src="${project.build.directory}/libs/jqueryui-${jqueryui.version}.zip"
+			src="${project.build.directory}/../libs/jqueryui-${jqueryui.version}.zip"
 			dest="${project.build.directory}/libs/">
 		</unzip>
-		<delete file="${project.build.directory}/libs/jqueryui-${jqueryui.version}.zip" />
 		<move file="${project.build.directory}/libs/jqueryui-${jqueryui.version}" tofile="${project.build.directory}/libs/jqueryui"/>
 	</target>
 
